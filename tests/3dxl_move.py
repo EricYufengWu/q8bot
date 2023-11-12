@@ -1,4 +1,5 @@
 # Note: this program assumes the DXL motors are set to "Time-based Profile" in the Drive Mode register (ADDR 10)!
+# This is different from the Deansoft config - "Velocity-based Profile" in Drive Mode (default, 0x00)
 
 import os, time
 
@@ -30,7 +31,7 @@ ADDR_PROFILE_ACCELERATION   = 108
 ADDR_PROFILE_VELOCITY       = 112
 ADDR_GOAL_POSITION          = 116
 ADDR_PRESENT_POSITION       = 132
-BAUDRATE                    = 57600
+BAUDRATE                    = 1000000
 
 # DYNAMIXEL Protocol Version (1.0 / 2.0)
 # https://emanual.robotis.com/docs/en/dxl/protocol2/
@@ -38,15 +39,15 @@ PROTOCOL_VERSION            = 2.0
 
 # Use the actual port assigned to the U2D2.
 # ex) Windows: "COM*", Linux: "/dev/ttyUSB*", Mac: "/dev/tty.usbserial-*"
-DEVICENAME                  = 'COM3'
+DEVICENAME                  = 'COM10'
 
 TORQUE_ENABLE               = 1     # Value for enabling the torque
 TORQUE_DISABLE              = 0     # Value for disabling the torque
 DXL_MOVING_STATUS_THRESHOLD = 20    # Dynamixel moving status threshold
 
 # Custom instances
-JOINTS                      = [11, 12]
-GEAR_RATIO                  = 1.0   # 5 (output gear) to 4 (DXL input gear)
+JOINTS                      = [13, 14, 15]
+GEAR_RATIO                  = 1.2   # 5 (output gear) to 4 (DXL input gear)
 
 # Initialize PortHandler instance
 # Set the port path
@@ -59,7 +60,7 @@ portHandler = PortHandler(DEVICENAME)
 packetHandler = PacketHandler(PROTOCOL_VERSION)
 
 # To implement:
-# 1. Friendly unit input, DXL unit convertion
+# 1. Friendly unit input, DXL unit convertion, gear ratio (5:4)
 # 2. duration input to acc/vel
 # 3. option to specify motion profile
 
@@ -107,16 +108,16 @@ for joint in JOINTS:
     
 # Main Control Loop
 while 1:
-    command = input("pos1, pos2, dur: ")
+    command = input("pos1, pos2, pos3, dur: ")
     if command == "exit":
         break
     
     # Process commands
     try:
         split_cmd = command.split(',')
-        pos_1, pos_2, dur_cmd = split_cmd
+        pos_1, pos_2, pos_3, dur_cmd = split_cmd
         goal_pos = []
-        for i in range(len(JOINTS)):
+        for i in range(3):
             goal_pos.append(angle_friendly_to_dxl(float(split_cmd[i])))
     except:
         print("bad command")
@@ -125,12 +126,27 @@ while 1:
     # Set Dynamixel time-based profiles
     dur_ms = int(float(dur_cmd) * 1000)
     print("dur_ms: ", dur_ms)
-    for i in range(len(JOINTS)):
+    for i in range(3):
         packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
         packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
+        # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
+        # if dxl_comm_result != COMM_SUCCESS:
+        #     print("joint ", JOINTS[i], ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
+        # elif dxl_error != 0:
+        #     print("joint ", JOINTS[i], ": %s" % packetHandler.getRxPacketError(dxl_error))
+        # else:
+        #     print("Joint {} move succesful".format(JOINTS[i]))
+    # for i in range(3):
+    #     dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
+    #     if dxl_comm_result != COMM_SUCCESS:
+    #         print("joint ", JOINTS[i], ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
+    #     elif dxl_error != 0:
+    #         print("joint ", JOINTS[i], ": %s" % packetHandler.getRxPacketError(dxl_error))
+    #     else:
+    #         print("Joint {} move succesful".format(JOINTS[i]))
     
     # Move Dynamixel motors
-    for i in range(len(JOINTS)):
+    for i in range(3):
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         if dxl_comm_result != COMM_SUCCESS:
             print("joint ", JOINTS[i], ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
