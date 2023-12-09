@@ -117,7 +117,7 @@ while(1):
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.04)
-        goal_pos = [angle_friendly_to_dxl(45), angle_friendly_to_dxl(45)]
+        goal_pos = [angle_friendly_to_dxl(60), angle_friendly_to_dxl(60)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.5)
