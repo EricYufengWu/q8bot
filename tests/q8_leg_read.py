@@ -39,7 +39,8 @@ DXL_MOVING_STATUS_THRESHOLD = 20    # Dynamixel moving status threshold
 
 # Custom instances
 JOINTS                      = [11, 12]
-GEAR_RATIO                  = 1.0   # 5 (output gear) to 4 (DXL input gear)
+GEAR_RATIO                  = 1.0
+dxl_position                = [0,0]
 
 # Initialize PortHandler and PacketHandler instance
 portHandler = PortHandler(DEVICENAME)
@@ -77,47 +78,22 @@ else:
     getch()
     quit()
     
-# Enable Dynamixel Torque
+# Disable Dynamixel Torque
 for joint in JOINTS:
-    dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, joint, ADDR_TORQUE_ENABLE, TORQUE_ENABLE)
+    dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, joint, ADDR_TORQUE_ENABLE, TORQUE_DISABLE)
     if dxl_comm_result != COMM_SUCCESS:
         print("joint ", joint, ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
     elif dxl_error != 0:
         print("joint ", joint, ": %s" % packetHandler.getRxPacketError(dxl_error))
-    else:
-        print("Joint {} has been successfully connected".format(joint))
+print("Torque off")
 
 # Main Loop
 while(1):
-    print("Press any key to continue (or press ESC to quit)")
-    if getch() == '\x1b':    #esc key
-        break
-
-    time.sleep(4)
-
-    for x in range(5):
-        # Set Dynamixel time-based profiles
-        dur_ms = 500
-        for i in range(len(JOINTS)):
-            packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
-            packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
-        # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(80), angle_friendly_to_dxl(80)]
-        for i in range(len(JOINTS)):
-            dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
-        time.sleep(0.5)
-
-        # Set Dynamixel time-based profiles
-        dur_ms = 0
-        for i in range(len(JOINTS)):
-            packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
-            packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
-        # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(-10), angle_friendly_to_dxl(-10)]
-        for i in range(len(JOINTS)):
-            dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
-        time.sleep(0.04)
-        goal_pos = [angle_friendly_to_dxl(60), angle_friendly_to_dxl(60)]
-        for i in range(len(JOINTS)):
-            dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
-        time.sleep(0.5)
+    for i in range(len(JOINTS)):
+        try:
+            dxl_position[i], dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, JOINTS[i], ADDR_PRESENT_POSITION)
+        except:
+            print("joint ", joint, ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
+            print("joint ", joint, ": %s" % packetHandler.getRxPacketError(dxl_error))
+    print("[ID:011] PresPos:%.1f  [ID:012]  PresPos:%.1f" % (angle_dxl_to_friendly(dxl_position[0]), angle_dxl_to_friendly(dxl_position[1])))
+    time.sleep(0.01)

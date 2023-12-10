@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-09 Prior Documentation.md",
+                "file": "Useful Resources.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2023-12-09 Prior Documentation.md",
+                "file": "Useful Resources.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2023-12-09 Prior Documentation.md",
+                "file": "Useful Resources.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2023-12-09 Prior Documentation.md"
+                "file": "Useful Resources.md"
               }
             }
           }
@@ -148,8 +148,8 @@
   },
   "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
-    "Pasted image 20231209151333.png.md",
     "2023-12-09 Prior Documentation.md",
+    "Pasted image 20231209151333.png.md",
     "Useful Resources.md",
     "Rev0_PCB.png",
     "2023-12-09 Low-level IK Development.md",
