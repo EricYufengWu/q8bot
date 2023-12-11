@@ -102,7 +102,7 @@ while(1):
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
         # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(80), angle_friendly_to_dxl(80)]
+        goal_pos = [angle_friendly_to_dxl(10 + 360), angle_friendly_to_dxl(170 + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.5)
@@ -113,11 +113,11 @@ while(1):
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
         # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(-10), angle_friendly_to_dxl(-10)]
+        goal_pos = [angle_friendly_to_dxl(97.5 + 360), angle_friendly_to_dxl(82.5 + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.04)
-        goal_pos = [angle_friendly_to_dxl(60), angle_friendly_to_dxl(60)]
+        goal_pos = [angle_friendly_to_dxl(30 + 360), angle_friendly_to_dxl(150 + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.5)

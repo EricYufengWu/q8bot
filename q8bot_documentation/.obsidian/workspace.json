@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-09 Low-level IK Development.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-09 Low-level IK Development.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-09 Low-level IK Development.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Useful Resources.md"
+                "file": "2023-12-09 Low-level IK Development.md"
               }
             }
           }
@@ -149,28 +149,28 @@
   "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
     "2023-12-09 Prior Documentation.md",
-    "Pasted image 20231209151333.png.md",
-    "Useful Resources.md",
-    "Rev0_PCB.png",
+    "A9R777nm0_myrvrl_1028.tmp",
+    "~ai-579f0bd4-b976-48ab-86ab-91f3c3d34049_.tmp",
+    "A9R1jcnuqi_b56yxm_lbk.tmp",
+    "FK_diagram_1.jpg",
     "2023-12-09 Low-level IK Development.md",
+    "Useful Resources.md",
+    "~K_diagram_2.tmp",
+    "FK_diagram_2.jpg.~tmp",
+    "FK_diagram_2.jpg",
+    "~K_diagram_1.tmp",
+    "FK_diagram_1.jpg.~tmp",
+    "A9R1i37tvy_myrvrj_1028.tmp",
+    "~ai-5e4dba77-6101-401a-ab39-d416db6dba68_.tmp",
+    "A9Rtrzihw_b56yxj_lbk.tmp",
+    "Pasted image 20231209151333.png.md",
+    "Rev0_PCB.png",
     "Pasted image 20231209151333.png",
-    "IMG_0997.mp4",
-    "IMG_1149.MOV",
-    "IMG_0967.MP4",
-    "desktop.ini",
-    "IMG_0966.MOV",
-    "IMG_0965.MOV",
-    "IMG_0964.MP4",
-    "IMG_0963.MOV",
-    "IMG_0962.MP4",
     "IMG_0949.JPEG",
     "IMG_0947.JPEG",
-    "IMG_0937.MOV",
     "IMG_0937.JPEG",
     "IMG_0936.JPEG",
     "IMG_1152.JPEG",
-    "IMG_1151.JPEG",
-    "IMG_1150.JPEG",
-    "IMG_1149.JPEG"
+    "IMG_1151.JPEG"
   ]
 }
