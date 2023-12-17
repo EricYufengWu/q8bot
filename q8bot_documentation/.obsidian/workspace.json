@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-09 Low-level IK Development.md",
+                "file": "Useful Resources.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2023-12-09 Low-level IK Development.md",
+                "file": "Useful Resources.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2023-12-09 Low-level IK Development.md",
+                "file": "Useful Resources.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2023-12-09 Low-level IK Development.md"
+                "file": "Useful Resources.md"
               }
             }
           }
@@ -148,31 +148,31 @@
   },
   "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
+    "2023-12-16 Rev0 Assembly Test.md",
+    "2023-12-09 Prior Documentation.md",
+    "2023-12-09 Low-level IK Development.md",
+    "IMG_1183.JPEG",
+    "IMG_1182.JPEG",
+    "IMG_1181.JPEG",
+    "Resources/CamposBourbonnaisBonevBigras.pdf",
+    "Resources/Kinematic Analysis of Five-Bar Mechanism.pdf",
+    "Resources",
+    "Resource",
+    "New folder",
+    "IMG_1150.JPEG",
+    "IMG_1151.JPEG",
+    "IMG_1152.JPEG",
+    "2023-12-14 Thought on Expanding the System.md",
     "~K_diagram_1.tmp",
     "IK_diagram_1.jpg.~tmp",
     "A9R1ch0hnh_1xymeml_xlg.tmp",
     "~ai-8fa4a9e6-a7bf-4490-9874-80118a86926c_.tmp",
     "A9R1co8awt_f3drw2_x1g.tmp",
     "IK_diagram_1.jpg",
-    "A9Ruc3bcu_1xymel1_xlg.tmp",
-    "~ai-9485edc8-dbfe-4c67-a28c-ac5cc2375301_.tmp",
-    "A9Rbieo1r_f3drvh_x1g.tmp",
-    "desktop.ini",
-    "2023-12-14 Thought on Expanding the System.md",
     "Useful Resources.md",
-    "2023-12-09 Low-level IK Development.md",
-    "2023-12-09 Prior Documentation.md",
-    "A9R777nm0_myrvrl_1028.tmp",
-    "~ai-579f0bd4-b976-48ab-86ab-91f3c3d34049_.tmp",
     "FK_diagram_1.jpg",
     "FK_diagram_2.jpg",
     "Pasted image 20231209151333.png.md",
-    "Rev0_PCB.png",
-    "Pasted image 20231209151333.png",
-    "IMG_0949.JPEG",
-    "IMG_0947.JPEG",
-    "IMG_0937.JPEG",
-    "IMG_0936.JPEG",
-    "IMG_1152.JPEG"
+    "Rev0_PCB.png"
   ]
 }

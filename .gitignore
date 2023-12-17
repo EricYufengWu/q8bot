@@ -1,5 +1,6 @@
 # Custom files to be ignored
 DynamixelSDK/
+q8bot_documentation/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
