@@ -1,9 +1,8 @@
 # Note: this program assumes the DXL motors are set to "Time-based Profile" in the Drive Mode register (ADDR 10)!
 
-import os, time, math
-import numpy as np
-from scipy.optimize import fsolve
+import time
 from dynamixel_sdk import *
+from kinematics_solver import *
 
 PROTOCOL_VERSION            = 2.0
 
@@ -29,15 +28,6 @@ ZERO_OFFSET                 = 4096  # Increase avoid dealing with large numbers 
 pos_raw                     = [0, 0]
 pos_deg                     = [0, 0]
 
-# Leg params
-q1                          = 0
-q2                          = 0
-d                           = 19.5
-l1                          = 25
-l1p                         = 25
-l2                          = 35
-l2p                         = 35
-
 # Helper Functions
 def angle_dxl_to_friendly(angle_dxl):
     # Friendly units = deg
@@ -53,25 +43,11 @@ def angle_friendly_to_dxl(angle_friendly):
     angle_dxl = int(angle_friendly / friendly_per_dxl + 0.5)
     return angle_dxl
 
-def deg_to_rad(angle_deg):
-    return angle_deg * math.pi / 180
-
-def fk_func(x, *angle):
-    Q1, Q2 = angle
-    Xa = l1 * math.cos(Q1) + d
-    Ya = l1 * math.sin(Q1)
-    Xb = l1p * math.cos(Q2)
-    Yb = l1p * math.sin(Q2)
-    return [x[0]*x[0] - 2*x[0]*Xa + Xa**2 + x[1]*x[1] - 2*x[1]*Ya + Ya**2 - l2**2,
-            x[0]*x[0] - 2*x[0]*Xb + Xb**2 + x[1]*x[1] - 2*x[1]*Yb + Yb**2 - l2p**2]
-
-def fk_solve(ang_list, prev_est):
-    angle = (deg_to_rad(ang_list[0]), deg_to_rad(ang_list[1]))
-    x, y = fsolve(fk_func, prev_est, args=angle)
-    return x, y
-
 # Main code
 def main():
+    # Initialize kinematics solver
+    leg = k_solver()
+
     # Initialize PortHandler and PacketHandler instance
     portHandler = PortHandler(DEVICENAME)
     packetHandler = PacketHandler(PROTOCOL_VERSION)
@@ -92,9 +68,6 @@ def main():
             print("joint ", joint, ": %s" % packetHandler.getRxPacketError(dxl_error))
     print("Torque off")
 
-    # The starting estimate for fsolve
-    prev_solve = [10, 60]
-
     while(1):
         for i in range(len(JOINTS)):
             try:
@@ -104,9 +77,8 @@ def main():
             except:
                 print("joint ", joint, ": %s" % packetHandler.getTxRxResult(dxl_comm_result))
                 print("joint ", joint, ": %s" % packetHandler.getRxPacketError(dxl_error))
-        pos_x, pos_y = fk_solve(pos_deg, prev_solve)
+        pos_x, pos_y = leg.fk_solve(pos_deg[0], pos_deg[1])
         print("[ID:011] PresPos:%.1f  [ID:012] PresPos:%.1f  [X,Y] %.1f, %.1f" % (pos_deg[0], pos_deg[1], pos_x, pos_y))
-        prev_solve = [pos_x, pos_y]
         time.sleep(0.01)
 
 if __name__ == "__main__":
