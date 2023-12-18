@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-17 More Python Dev.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-17 More Python Dev.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-17 More Python Dev.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Useful Resources.md"
+                "file": "2023-12-17 More Python Dev.md"
               }
             }
           }
@@ -148,8 +148,11 @@
   },
   "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
-    "2023-12-16 Rev0 Assembly Test.md",
+    "IMG_1217.mp4",
     "2023-12-09 Prior Documentation.md",
+    "2023-12-17 More Python Dev.md",
+    "Useful Resources.md",
+    "2023-12-16 Rev0 Assembly Test.md",
     "2023-12-09 Low-level IK Development.md",
     "IMG_1183.JPEG",
     "IMG_1182.JPEG",
@@ -169,7 +172,6 @@
     "~ai-8fa4a9e6-a7bf-4490-9874-80118a86926c_.tmp",
     "A9R1co8awt_f3drw2_x1g.tmp",
     "IK_diagram_1.jpg",
-    "Useful Resources.md",
     "FK_diagram_1.jpg",
     "FK_diagram_2.jpg",
     "Pasted image 20231209151333.png.md",
