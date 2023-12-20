@@ -1,7 +1,9 @@
 from dynamixel_sdk import *
 
+DEFAULT_JOINTLIST = [i + 11 for i in range(8)]
+
 class q8_dynamixel:
-    def __init__(self, port, joint_list = [11, 12], baud = 1000000):
+    def __init__(self, port, joint_list = DEFAULT_JOINTLIST, baud = 1000000):
         self.DEVICENAME = port
         self.BAUDRATE = baud
         self.JOINTS = joint_list
@@ -54,7 +56,7 @@ class q8_dynamixel:
                 return False
         return True
 
-    def move_leg(self, leg_pos, dur = 0):
+    def move_all(self, joints_pos, dur = 0):
         # Expects a pair of positions in deg. For example: [0, 90]
         if dur != self.prev_profile:
             self._set_profile(dur)
@@ -63,7 +65,7 @@ class q8_dynamixel:
                 self.JOINTS[j], 
                 self.ADDR_GOAL_POSITION, 
                 self.BYTE_LEN, 
-                self.param_goal_position(self._deg_to_dxl(leg_pos[j])))
+                self.param_goal_position(self._deg_to_dxl(joints_pos[j])))
         self.groupBulkWrite.txPacket()
         self.groupBulkWrite.clearParam()
         return

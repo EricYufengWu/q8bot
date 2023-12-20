@@ -116,8 +116,9 @@ def main():
                 ADDR_BYTE_LEN))
             
         pos_x, pos_y = leg.fk_solve(pos_deg[0], pos_deg[1])
-        print("[ID:011] PresPos:%.1f  [ID:012] PresPos:%.1f  [X,Y] %.1f, %.1f" % (pos_deg[0], pos_deg[1], pos_x, pos_y))
-
+        print("[ID:011] %.1f  [ID:012] %.1f  [ID:013] %.1f  [ID:014] %.1f  [ID:015] %.1f  [ID:016] %.1f  [ID:017] %.1f  [ID:018] %.1f" % 
+              (pos_deg[0], pos_deg[1], pos_deg[2], pos_deg[3], pos_deg[4], pos_deg[5], pos_deg[6], pos_deg[7]))
+        
         time.sleep(0.01)
 
 if __name__ == "__main__":

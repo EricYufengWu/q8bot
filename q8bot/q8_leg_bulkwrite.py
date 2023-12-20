@@ -27,7 +27,7 @@ JUMP_REST = [30, 150]
 
 # Main code
 def main():
-    leg = q8_dynamixel('COM3')
+    leg = q8_dynamixel('COM3', joint_list = [11, 12])
     leg.enable_torque()
 
     # Main Loop
@@ -37,11 +37,11 @@ def main():
             break
 
         time.sleep(2)
-        leg.move_leg(JUMP_LOW, 500)
+        leg.move_all(JUMP_LOW, 500)
         time.sleep(0.5)
-        leg.move_leg(JUMP_HIGH, 0)
+        leg.move_all(JUMP_HIGH, 0)
         time.sleep(0.08)
-        leg.move_leg(JUMP_REST, 0)
+        leg.move_all(JUMP_REST, 0)
         time.sleep(0.5)
     
     leg.disable_torque()

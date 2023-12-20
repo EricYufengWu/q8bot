@@ -13,6 +13,7 @@ class k_solver:
         self.l2 = l2
         self.l1p = l1p
         self.l2p = l2p
+        self.prev_ik = [45, 135]
         self.prev_est = [self.d/2, (self.l1 + self.l2)]
 
     # Check whether a solution exist. To be completed later.
@@ -23,17 +24,21 @@ class k_solver:
 
     # Solve inverse kinematics at an given end effector position
     def ik_solve(self, x, y, deg = True, rounding = 3):
-        c1 = math.sqrt((x - self.d)**2 + y**2)
-        c2 = math.sqrt(x**2 + y**2)
-        a1 = math.acos((c1**2 + self.d**2 - c2**2) / (2*c1*self.d))
-        a2 = math.acos((c2**2 + self.d**2 - c1**2) / (2*c2*self.d))
-        b1 = math.acos((c1**2 + self.l1**2 - self.l2**2) / (2*c1*self.l1))
-        b2 = math.acos((c2**2 + self.l1p**2 - self.l2p**2) / (2*c2*self.l1p))
-        q1 = math.pi - a1 - b1
-        q2 = a2 + b2
-        if deg:
-            q1, q2 = q1*180/math.pi, q2*180/math.pi
-        return round(q1, rounding), round(q2, rounding)
+        try:
+            c1 = math.sqrt((x - self.d)**2 + y**2)
+            c2 = math.sqrt(x**2 + y**2)
+            a1 = math.acos((c1**2 + self.d**2 - c2**2) / (2*c1*self.d))
+            a2 = math.acos((c2**2 + self.d**2 - c1**2) / (2*c2*self.d))
+            b1 = math.acos((c1**2 + self.l1**2 - self.l2**2) / (2*c1*self.l1))
+            b2 = math.acos((c2**2 + self.l1p**2 - self.l2p**2) / (2*c2*self.l1p))
+            q1 = math.pi - a1 - b1
+            q2 = a2 + b2
+            if deg:
+                q1, q2 = q1*180/math.pi, q2*180/math.pi
+            self.prev_ik = [q1, q2]
+            return round(q1, rounding), round(q2, rounding), True
+        except:
+            return self.prev_ik[0], self.prev_ik[1], False
     
     # Check whether a solution exist. To be completed later.
     def fk_check(self):
