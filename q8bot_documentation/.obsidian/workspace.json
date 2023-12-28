@@ -13,13 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "Useful Resources.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b9056de2a112e295",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Useful Resources.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "Useful Resources.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "Useful Resources.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md"
+                "file": "Useful Resources.md"
               }
             }
           }
@@ -146,10 +159,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8773f9afcca7dd7a",
+  "active": "b9056de2a112e295",
   "lastOpenFiles": [
-    "2023-12-17 More Python Dev.md",
     "2023-12-18 Q8 Full Robot Motor Setup.md",
+    "2023-12-17 More Python Dev.md",
     "IMG_1217.mp4",
     "2023-12-09 Prior Documentation.md",
     "Useful Resources.md",

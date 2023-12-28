@@ -24,6 +24,7 @@ class q8_dynamixel:
         self.ADDR_PROFILE_VELOCITY = 112
         self.ADDR_GOAL_POSITION = 116
         self.ADDR_PRESENT_POSITION = 132
+        self.ADDR_PRESENT_INPUT_VOLTAGE = 144
         
         # Initialize PortHandler and PacketHandler instance
         self.portHandler = PortHandler(self.DEVICENAME)
@@ -58,17 +59,50 @@ class q8_dynamixel:
 
     def move_all(self, joints_pos, dur = 0):
         # Expects a pair of positions in deg. For example: [0, 90]
-        if dur != self.prev_profile:
-            self._set_profile(dur)
-        for j in range(len(self.JOINTS)):
-            self.groupBulkWrite.addParam(
-                self.JOINTS[j], 
-                self.ADDR_GOAL_POSITION, 
-                self.BYTE_LEN, 
-                self.param_goal_position(self._deg_to_dxl(joints_pos[j])))
-        self.groupBulkWrite.txPacket()
-        self.groupBulkWrite.clearParam()
-        return
+        try:
+            if dur != self.prev_profile:
+                self._set_profile(dur)
+            for j in range(len(self.JOINTS)):
+                self.groupBulkWrite.addParam(
+                    self.JOINTS[j], 
+                    self.ADDR_GOAL_POSITION, 
+                    self.BYTE_LEN, 
+                    self.param_goal_position(self._deg_to_dxl(joints_pos[j])))
+            self.groupBulkWrite.txPacket()
+            self.groupBulkWrite.clearParam()
+        except:
+            return False
+        return True
+    
+    def bulkread(self, addr, len = 4):
+        try:
+            self.groupBulkRead.txRxPacket()
+            value = []
+            for joint in self.JOINTS:
+                self.groupBulkRead.isAvailable(joint, addr, len)
+                value.append(self.groupBulkRead.getData(joint, addr, len))
+        except:
+            return [], False
+        return value, True
+    
+    def joint_read4(self, joint, addr):
+        value, dxl_comm_result, dxl_error =  self.packetHandler.read4ByteTxRx(
+            self.portHandler, 
+            joint, 
+            addr)
+        return value
+    
+    def joint_read2(self, joint, addr):
+        value, dxl_comm_result, dxl_error =  self.packetHandler.read2ByteTxRx(
+            self.portHandler, 
+            joint, 
+            addr)
+        return value
+
+    def check_voltage(self):
+        voltage = self.joint_read2(self.JOINTS[0], 
+                                   self.ADDR_PRESENT_INPUT_VOLTAGE)
+        return voltage / 10
     
     #-------------------#
     # Private Functions #
