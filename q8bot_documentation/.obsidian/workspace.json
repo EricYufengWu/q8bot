@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2024-02-03.md",
                 "mode": "source",
                 "source": false
               }
@@ -25,14 +25,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2023-12-28 Power Draw Test.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -82,7 +81,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "e86b2a521494693d",
@@ -98,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2024-02-03.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Useful Resources.md",
+                "file": "2024-02-03.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Useful Resources.md"
+                "file": "2024-02-03.md"
               }
             }
           }
@@ -159,13 +158,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b9056de2a112e295",
+  "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
+    "Useful Resources.md",
+    "2024-02-03.md",
+    "2023-12-28 Power Draw Test.md",
     "2023-12-18 Q8 Full Robot Motor Setup.md",
     "2023-12-17 More Python Dev.md",
     "IMG_1217.mp4",
     "2023-12-09 Prior Documentation.md",
-    "Useful Resources.md",
     "2023-12-16 Rev0 Assembly Test.md",
     "2023-12-09 Low-level IK Development.md",
     "IMG_1183.JPEG",

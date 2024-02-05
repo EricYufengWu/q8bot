@@ -15,6 +15,7 @@ JUMP_LOW = [11, 169, 11, 169, 11, 169, 11, 169]
 JUMP_HIGH = [95, 85, 95, 85, 95, 85, 95, 85]
 JUMP_REST = [30, 150, 30, 150, 30, 150, 30, 150]
 
+
 def jump():
     q8.move_all(JUMP_REST, 700)
     time.sleep(0.3)
@@ -34,9 +35,10 @@ leg = k_solver()
 q8 = q8_dynamixel('COM3')
 q8.enable_torque()
 
-pos_x = leg.d/2
-pos_y = (leg.l1 + leg.l2) * 0.75
-q1, q2, success = leg.ik_solve(pos_x, pos_y)
+pos_x_idle = leg.d/2
+pos_y_idle = (leg.l1 + leg.l2) * 0.667
+pos_x, pos_y = pos_x_idle, pos_y_idle
+q1, q2, sucess = leg.ik_solve(pos_x, pos_y)
 cmd_pos = []
 for i in range(4):
     cmd_pos.append(q1)
