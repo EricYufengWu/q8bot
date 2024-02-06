@@ -81,72 +81,72 @@ def movement_tick(move_list):
     new_list = move_list[1:] + [move_list[0]]
     return pos, new_list
 
-# Main code
-def main():
-    movement = False
-    ongoing = False
-    exit = False
+# # Main code
+# def main():
+movement = False
+ongoing = False
+exit = False
 
-    pygame.init()
-    window = pygame.display.set_mode((300, 300))
-    clock = pygame.time.Clock()
+pygame.init()
+window = pygame.display.set_mode((300, 300))
+clock = pygame.time.Clock()
 
-    leg = k_solver()
-    q8 = q8_dynamixel('COM3')
-    q8.enable_torque()
+leg = k_solver()
+q8 = q8_dynamixel('COM3')
+q8.enable_torque()
 
-    pos_x = leg.d/2
-    pos_y = (leg.l1 + leg.l2) * 0.667
-    q1_idle, q2_idle, success = leg.ik_solve(pos_x, pos_y)
-    q8.move_mirror([q1_idle, q2_idle], 1000)
-    time.sleep(2)
+pos_x = leg.d/2
+pos_y = (leg.l1 + leg.l2) * 0.667
+q1_idle, q2_idle, success = leg.ik_solve(pos_x, pos_y)
+q8.move_mirror([q1_idle, q2_idle], 1000)
+time.sleep(2)
 
-    while True:
-        clock.tick(SPEED)
-        pygame.event.get()
-        keys = pygame.key.get_pressed()
+while True:
+    clock.tick(SPEED)
+    pygame.event.get()
+    keys = pygame.key.get_pressed()
 
-        if movement:
-            if keys[pygame.K_w]:
-                if not ongoing:
-                    move_list = movement_start(leg, 'f')
-                pos, move_list = movement_tick(move_list)
-                q8.move_all(pos, 0)
-            elif keys[pygame.K_s]:
-                if not ongoing:
-                    move_list = movement_start(leg, 'b')
-                pos, move_list = movement_tick(move_list)
-                q8.move_all(pos, 0)
-            elif keys[pygame.K_a]:
-                if not ongoing:
-                    move_list = movement_start(leg, 'l')
-                pos, move_list = movement_tick(move_list)
-                q8.move_all(pos, 0)
-            elif keys[pygame.K_d]:
-                if not ongoing:
-                    move_list = movement_start(leg, 'r')
-                pos, move_list = movement_tick(move_list)
-                q8.move_all(pos, 0)
-            else:
-                q8.move_mirror([q1_idle, q2_idle], 0)
-                ongoing = False
-                movement = False
+    if movement:
+        if keys[pygame.K_w]:
+            if not ongoing:
+                move_list = movement_start(leg, 'f')
+            pos, move_list = movement_tick(move_list)
+            q8.move_all(pos, 0)
+        elif keys[pygame.K_s]:
+            if not ongoing:
+                move_list = movement_start(leg, 'b')
+            pos, move_list = movement_tick(move_list)
+            q8.move_all(pos, 0)
+        elif keys[pygame.K_a]:
+            if not ongoing:
+                move_list = movement_start(leg, 'l')
+            pos, move_list = movement_tick(move_list)
+            q8.move_all(pos, 0)
+        elif keys[pygame.K_d]:
+            if not ongoing:
+                move_list = movement_start(leg, 'r')
+            pos, move_list = movement_tick(move_list)
+            q8.move_all(pos, 0)
         else:
-            if (keys[pygame.K_w] or keys[pygame.K_a] or 
-                keys[pygame.K_s] or keys[pygame.K_d]):
-                movement = True
-            elif keys[pygame.K_b]:
-                voltage = q8.check_voltage()
-                print("Battery Voltage: %.1f" % (voltage))
-                time.sleep(0.2)
-            elif keys[pygame.K_j]:
-                print("Jump")
-                time.sleep(0.2)
-            elif keys[pygame.K_ESCAPE]:
-                break
+            q8.move_mirror([q1_idle, q2_idle], 0)
+            ongoing = False
+            movement = False
+    else:
+        if (keys[pygame.K_w] or keys[pygame.K_a] or 
+            keys[pygame.K_s] or keys[pygame.K_d]):
+            movement = True
+        elif keys[pygame.K_b]:
+            voltage = q8.check_voltage()
+            print("Battery Voltage: %.1f" % (voltage))
+            time.sleep(0.2)
+        elif keys[pygame.K_j]:
+            print("Jump")
+            time.sleep(0.2)
+        elif keys[pygame.K_ESCAPE]:
+            break
 
-    q8.disable_torque()
-    pygame.quit()
+q8.disable_torque()
+pygame.quit()
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
