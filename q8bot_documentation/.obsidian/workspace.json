@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2024-02-03.md",
+                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
                 "mode": "source",
                 "source": false
               }
@@ -97,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2024-02-03.md",
+                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2024-02-03.md",
+                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2024-02-03.md"
+                "file": "2023-12-18 Q8 Full Robot Motor Setup.md"
               }
             }
           }
@@ -160,8 +160,8 @@
   },
   "active": "8773f9afcca7dd7a",
   "lastOpenFiles": [
-    "Useful Resources.md",
     "2024-02-03.md",
+    "Useful Resources.md",
     "2023-12-28 Power Draw Test.md",
     "2023-12-18 Q8 Full Robot Motor Setup.md",
     "2023-12-17 More Python Dev.md",

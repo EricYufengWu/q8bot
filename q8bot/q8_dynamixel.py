@@ -58,7 +58,7 @@ class q8_dynamixel:
         return True
 
     def move_all(self, joints_pos, dur = 0):
-        # Expects a pair of positions in deg. For example: [0, 90]
+        # Expects 8 positions in deg. For example: [0, 90, 0, 90, 0, 90, 0, 90]
         try:
             if dur != self.prev_profile:
                 self._set_profile(dur)
@@ -73,6 +73,14 @@ class q8_dynamixel:
         except:
             return False
         return True
+    
+    def move_mirror(self, joint_pos, dur = 0):
+        # Expects a pair of pos for one leg, which will be mirrored 4times.
+        mirrored_pos = []
+        for i in range(4):
+            mirrored_pos.append(joint_pos[0])
+            mirrored_pos.append(joint_pos[1])
+        return self.move_all(mirrored_pos, dur)
     
     def bulkread(self, addr, len = 4):
         try:
