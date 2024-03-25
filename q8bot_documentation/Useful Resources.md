@@ -21,3 +21,10 @@ The latter is cheaper but is now obsolete. The new alternative, though still che
 
 Quadruped's gait:
 https://www.animatornotebook.com/learn/quadrupeds-gaits
+
+
+### Battery Source
+Obtronic or Illumn: They make Lithium-Ion battery for flashlights and are US-based companies with decent reviews online.
+
+### ESP Now
+https://randomnerdtutorials.com/esp-now-esp32-arduino-ide/

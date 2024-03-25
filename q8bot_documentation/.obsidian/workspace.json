@@ -13,25 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-02-24  ESP Now.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "b9056de2a112e295",
+            "id": "cde364518cb7a43d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-28 Power Draw Test.md",
+                "file": "2024-02-24  ESP Now.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -97,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-02-24  ESP Now.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-02-24  ESP Now.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md"
+                "file": "2024-02-24  ESP Now.md"
               }
             }
           }
@@ -158,10 +159,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8773f9afcca7dd7a",
+  "active": "cde364518cb7a43d",
   "lastOpenFiles": [
-    "2024-02-03.md",
     "Useful Resources.md",
+    "2024-02-24  ESP Now.md",
+    "2024-02-03.md",
     "2023-12-28 Power Draw Test.md",
     "2023-12-18 Q8 Full Robot Motor Setup.md",
     "2023-12-17 More Python Dev.md",
