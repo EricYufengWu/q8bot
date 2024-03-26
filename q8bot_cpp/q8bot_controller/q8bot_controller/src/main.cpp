@@ -29,9 +29,6 @@ String cmd;
 // peerInfo
 esp_now_peer_info_t peerInfo;
 
-// var for testing
-uint8_t count = 0;
-
 // callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   // Serial.print("\r\nLast Packet Send Status:\t");
@@ -42,7 +39,6 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
-  // Serial1.begin(115200);
   Serial.setTimeout(100);
  
   // Set device as a Wi-Fi Station
