@@ -2,16 +2,7 @@
 #include <WiFi.h>
 #include "ESPNowW.h"
 
-// Structure example to receive data
-// Must match the sender structure
-typedef struct struct_message {
-  float pos[8];
-  uint16_t dur;
-  bool torque = false;
-} struct_message;
-
-// Create a struct_message called myData
-// struct_message myData;
+// Create a char array to store incoming message
 char myData[100];
 
 // Flag for knowing whether there's incoming data
@@ -32,14 +23,6 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
   memcpy(&myData, incomingData, sizeof(myData));
   // Serial.print("Received a packet with size of: ");
   // Serial.println(len);
-
-  // for (int i = 0; i < 8; i++){
-  //   Serial.print(myData.pos[i]);
-  //   Serial.print(" ");
-  // }
-  // Serial.print(myData.dur);
-  // Serial.print(" ");
-  // Serial.println(myData.torque);
 
   Serial.println(myData);
 }
@@ -62,6 +45,5 @@ void setup() {
 }
 
 void loop() {
-  // Serial.println("Looping");
   delay(10);
 }

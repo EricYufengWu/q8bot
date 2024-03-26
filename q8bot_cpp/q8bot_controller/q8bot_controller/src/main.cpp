@@ -34,16 +34,16 @@ uint8_t count = 0;
 
 // callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  Serial.print("\r\nLast Packet Send Status:\t");
-  // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-  Serial.println(!status);
+  // Serial.print("\r\nLast Packet Send Status:\t");
+  // // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+  // Serial.println(!status);
 }
  
 void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
   // Serial1.begin(115200);
-  Serial.setTimeout(10);
+  Serial.setTimeout(100);
  
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -57,7 +57,7 @@ void setup() {
   // Once ESPNow is successfully Init, we will register for Send CB to
   // get the status of Trasnmitted packet
   esp_now_register_send_cb(OnDataSent);
-  
+
   // Register peer
   memcpy(peerInfo.peer_addr, receiver_mac, 6);
   peerInfo.channel = 0;  
@@ -72,41 +72,12 @@ void setup() {
 
 void loop() {
   if(Serial.available()){
-    // Motor position
-    // for(int i = 0; i < 8; i++){
-    //   cmd = Serial.readStringUntil(',');
-    //   myData.pos[i] = cmd.toFloat();
-    // }
-    // // Move duration
-    // cmd = Serial.readStringUntil(',');
-    // myData.dur = cmd.toInt();
-    // // Torque on/off
-    // cmd = Serial.readStringUntil(',');
-    // myData.torque = cmd.toInt();
-
-    // cmd = Serial.readStringUntil(';');
     uint8_t size_t = Serial.readBytesUntil(';', myData, sizeof(myData));
-    Serial.print(size_t);
-    Serial.print(" ");
-    Serial.println(myData);
-    // cmd.toCharArray(myData, sizeof(cmd));
-    // Serial.print(myData);
-    // Serial.print(" Size:");
-    // Serial.println(sizeof(myData));
+    myData[size_t] = '\0';
+    // Serial.println(myData);
 
     esp_err_t result = esp_now_send(receiver_mac, (uint8_t *) &myData, 
                                     sizeof(myData));
-  } else{
-    if (count < 100){
-      count++;
-    } else{
-      count = 0;
-    }
-    myData[0] = count;
-    // cmd.toCharArray(myData, sizeof(cmd));
-    esp_err_t result = esp_now_send(receiver_mac, (uint8_t *) &myData, 
-                                    sizeof(myData));
-    delay(9);
   }
   delay(1);
 }

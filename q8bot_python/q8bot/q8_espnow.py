@@ -42,18 +42,19 @@ class q8_espnow:
         # self._start_comm()
 
     def enable_torque(self):
-        self.serialHandler.write("0,0,0,0,0,0,0,0,0,1,".encode())
+        self.serialHandler.write("0,0,0,0,0,0,0,0,0,1;".encode())
         self.torque_on = True
         return True
     
     def disable_torque(self):
-        self.serialHandler.write("0,0,0,0,0,0,0,0,0,0,".encode())
+        self.serialHandler.write("0,0,0,0,0,0,0,0,0,0;".encode())
         self.torque_on = False
         return True
 
     def move_all(self, joints_pos, dur = 0):
         # Expects 8 positions in deg. For example: [0, 90, 0, 90, 0, 90, 0, 90]
         try:
+            # cmd = ",".join(map(str, joints_pos)) + "," + f"{dur}," + f"{int(self.torque_on)};" 
             cmd = ",".join(map(str, joints_pos)) + "," + f"{dur}," + f"{int(self.torque_on)};" 
             print(cmd)
             self.serialHandler.write(cmd.encode())
