@@ -21,7 +21,7 @@ typedef struct struct_message {
 char myData[100];
 
 // Receiver MAC Address (Seeed XIAO) EC:DA:3B:36:10:F0
-uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
+uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x81, 0x40};
 
 // String for storing serial command
 String cmd;

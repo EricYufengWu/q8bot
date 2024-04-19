@@ -92,7 +92,7 @@ window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
 leg = k_solver()
-q8 = q8_espnow('COM3')
+q8 = q8_espnow('COM10')
 q8.enable_torque()
 
 pos_x = leg.d/2
