@@ -25,6 +25,30 @@
             "state": {
               "type": "markdown",
               "state": {
+                "file": "2024-03-07 Rev1 Symmetric Battery Design.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b7a2d5a6b1a6ed6f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2024-04-04 Altium DBLIB Learning.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "5a09a3ca8bb8d1cc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
                 "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
                 "mode": "source",
                 "source": false
@@ -32,7 +56,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -159,39 +183,44 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "cde364518cb7a43d",
+  "active": "5a09a3ca8bb8d1cc",
   "lastOpenFiles": [
-    "2024-03-25 ESP Now.md",
-    "desktop.ini",
-    "2024-02-24  ESP Now.md",
-    "Useful Resources.md",
-    "2024-02-03.md",
+    "2023-12-16 Rev0 Assembly Test.md",
+    "2024-02-05 Rev0 Tethered Prototype Complete.md",
     "2023-12-28 Power Draw Test.md",
     "2023-12-18 Q8 Full Robot Motor Setup.md",
-    "2023-12-17 More Python Dev.md",
+    "20240205-rev0-demo.mp4",
+    "20240205-rev0-assembled5.jpg",
+    "2024-03-28 V2 PCB.md",
+    "2024-04-04 Altium DBLIB Learning.md",
+    "2024-03-26 DXL ESP32C3.md",
+    "202412218-motorsetup.jpg",
+    "20240205-rev0-assembled4.jpg",
+    "20240205-rev0-assembled3.jpg",
+    "20240205-rev0-assembled2.jpg",
+    "20240205-rev0-assembled1.jpg",
+    "2024-03-07 Rev1 Symmetric Battery Design.md",
+    "20240307-chassis-2.jpg",
+    "20240307-chassis-1.jpg",
+    "20240327-eletcronicstest.jpg",
+    "Rev0_PCB.png",
+    "Pasted image 20231209151333.png.md",
     "IMG_1217.mp4",
+    "2024-02-03.md",
+    "2023-12-14 Thought on Expanding the System.md",
     "2023-12-09 Prior Documentation.md",
-    "2023-12-16 Rev0 Assembly Test.md",
     "2023-12-09 Low-level IK Development.md",
-    "IMG_1183.JPEG",
-    "IMG_1182.JPEG",
-    "IMG_1181.JPEG",
+    "2023-12-17 More Python Dev.md",
+    "2024-02-24  ESP Now.md",
+    "2024-03-25 ESP Now.md",
+    "desktop.ini",
+    "Useful Resources.md",
     "Resources/CamposBourbonnaisBonevBigras.pdf",
     "Resources/Kinematic Analysis of Five-Bar Mechanism.pdf",
     "Resources",
     "Resource",
     "New folder",
-    "IMG_1150.JPEG",
-    "IMG_1151.JPEG",
-    "IMG_1152.JPEG",
-    "2023-12-14 Thought on Expanding the System.md",
     "~K_diagram_1.tmp",
-    "IK_diagram_1.jpg.~tmp",
-    "A9R1ch0hnh_1xymeml_xlg.tmp",
-    "IK_diagram_1.jpg",
-    "FK_diagram_1.jpg",
-    "FK_diagram_2.jpg",
-    "Pasted image 20231209151333.png.md",
-    "Rev0_PCB.png"
+    "IK_diagram_1.jpg.~tmp"
   ]
 }

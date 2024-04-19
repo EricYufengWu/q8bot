@@ -11,7 +11,7 @@ ID = 12
 Baud Rate = 1000000
 Drive Mode = Time-based Profile
 Operating Mode = Extended Position control
-When linkage points forward, position should read 450.
+When linkage points downward, position should read 450.
 
 J3 (top right vertical): 
 ID = 13
@@ -25,7 +25,7 @@ ID = 14
 Baud Rate = 1000000
 Drive Mode = Time-based Profile, Reverse mode
 Operating Mode = Extended Position control
-When linkage points forward, position should read 450.
+When linkage points downward, position should read 450.
 
 J5 (top left vertical): 
 ID = 15
@@ -39,7 +39,7 @@ ID = 16
 Baud Rate = 1000000
 Drive Mode = Time-based Profile
 Operating Mode = Extended Position control
-When linkage points forward, position should read 450.
+When linkage points downward, position should read 450.
 
 J7 (top right vertical): 
 ID = 17
@@ -53,4 +53,6 @@ ID = 18
 Baud Rate = 1000000
 Drive Mode = Time-based Profile, Reverse mode
 Operating Mode = Extended Position control
-When linkage points forward, position should read 450.
+When linkage points downward, position should read 450.
+
+![[202412218-motorsetup.jpg]]
