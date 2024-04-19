@@ -54,9 +54,8 @@
   } __attribute__((packed)) InfoBulkWriteInst_t;
 */
 
-const uint8_t DXL_1_ID = 11;
-const uint8_t DXL_2_ID = 12;
-const uint8_t DXL_ID_CNT = 2;
+const uint8_t DXL_ID_CNT = 8;
+const uint8_t DXL[DXL_ID_CNT] = {11, 12, 13, 14, 15, 16, 17, 18};
 const uint8_t DXL_DIR_PIN = 8;
 const float DXL_PROTOCOL_VERSION = 2.0;
 const uint16_t user_pkt_buf_cap = 128;
@@ -72,13 +71,13 @@ struct bw_data_xel{
   int32_t goal_position;
 } __attribute__((packed));
 
-struct br_data_xel br_data_xel_1;
-struct br_data_xel br_data_xel_2;
+struct br_data_xel br_data_xel[DXL_ID_CNT];
+// struct br_data_xel br_data_xel_2;
 DYNAMIXEL::InfoBulkReadInst_t br_infos;
 DYNAMIXEL::XELInfoBulkRead_t info_xels_br[DXL_ID_CNT];
 
-struct bw_data_xel bw_data_xel_1;
-struct bw_data_xel bw_data_xel_2;
+struct bw_data_xel bw_data_xel[DXL_ID_CNT];
+// struct bw_data_xel bw_data_xel_2;
 DYNAMIXEL::InfoBulkWriteInst_t bw_infos;
 DYNAMIXEL::XELInfoBulkWrite_t info_xels_bw[DXL_ID_CNT];
 
@@ -94,12 +93,11 @@ void setup() {
   DEBUG_SERIAL.begin(115200);
   dxl.begin(1000000);
   
-  dxl.torqueOff(DXL_1_ID);
-  dxl.torqueOff(DXL_2_ID);
-  dxl.setOperatingMode(DXL_1_ID, OP_EXTENDED_POSITION);
-  dxl.setOperatingMode(DXL_2_ID, OP_EXTENDED_POSITION);
-  dxl.torqueOn(DXL_1_ID);
-  dxl.torqueOn(DXL_2_ID);
+  for (int i = 0; i < DXL_ID_CNT; i++){
+    dxl.torqueOff(DXL[i]);
+    dxl.setOperatingMode(DXL[i], OP_EXTENDED_POSITION);
+    dxl.torqueOn(DXL[i]);
+  }
   
   // fill the members of structure for bulkRead using external user packet buffer
   br_infos.packet.p_buf = user_pkt_buf;
@@ -108,24 +106,13 @@ void setup() {
   br_infos.p_xels = info_xels_br;
   br_infos.xel_count = 0;
 
-  // info_xels_br[0].id = DXL_1_ID;
-  // info_xels_br[0].addr = 126; // Present Current of X serise.
-  // info_xels_br[0].addr_length = 2+4; // Present Current + Present Velocity
-  // info_xels_br[0].p_recv_buf = (uint8_t*)&br_data_xel_1;
-  // br_infos.xel_count++;
-
-  info_xels_br[0].id = DXL_1_ID;
-  info_xels_br[0].addr = 126; // Present Position of X serise.
-  info_xels_br[0].addr_length = 2+4+4; // Present Position + Present Velocity
-  info_xels_br[0].p_recv_buf = (uint8_t*)&br_data_xel_1;
-  br_infos.xel_count++;
-
-  info_xels_br[1].id = DXL_2_ID;
-  info_xels_br[1].addr = 126; // Present Position of X serise.
-  info_xels_br[1].addr_length = 2+4+4; // Present Position + Present Velocity
-  info_xels_br[1].p_recv_buf = (uint8_t*)&br_data_xel_2;
-  br_infos.xel_count++;
-  
+  for (int i = 0; i < DXL_ID_CNT; i++){
+    info_xels_br[i].id = DXL[i];
+    info_xels_br[i].addr = 126; // Present Position of X serise.
+    info_xels_br[i].addr_length = 2+4+4; // Present Current + Position + Velocity
+    info_xels_br[i].p_recv_buf = reinterpret_cast<uint8_t*>(&br_data_xel[i]);
+    br_infos.xel_count++;
+  }
   br_infos.is_info_changed = true;
 
   // Fill the members of structure for bulkWrite using internal packet buffer
@@ -134,27 +121,21 @@ void setup() {
   bw_infos.p_xels = info_xels_bw;
   bw_infos.xel_count = 0;
 
-  bw_data_xel_1.goal_position = 0;
-  info_xels_bw[0].id = DXL_1_ID;
-  info_xels_bw[0].addr = 116; // Goal Position of X serise.
-  info_xels_bw[0].addr_length = 4; // Goal Velocity
-  info_xels_bw[0].p_data = (uint8_t*)&bw_data_xel_1;
-  bw_infos.xel_count++;
-
-  bw_data_xel_2.goal_position = 0;
-  info_xels_bw[1].id = DXL_2_ID;
-  info_xels_bw[1].addr = 116; // Goal Position of X serise.
-  info_xels_bw[1].addr_length = 4; // Goal Position
-  info_xels_bw[1].p_data = (uint8_t*)&bw_data_xel_2;
-  bw_infos.xel_count++;
-
+  for (int i = 0; i < DXL_ID_CNT; i++){
+    bw_data_xel[i].goal_position = 0;
+    info_xels_bw[i].id = DXL[i];
+    info_xels_bw[i].addr = 116; // Goal Position of X serise.
+    info_xels_bw[i].addr_length = 4; // Goal Velocity
+    info_xels_bw[i].p_data = reinterpret_cast<uint8_t*>(&bw_data_xel[i]);
+    bw_infos.xel_count++;
+  }
   bw_infos.is_info_changed = true;
 
   // for Time-based Extended Pos, Profile velocity is the move duration (ms).
-  dxl.writeControlTableItem(PROFILE_VELOCITY, DXL_1_ID, 1000);
-  dxl.writeControlTableItem(PROFILE_VELOCITY, DXL_2_ID, 1000);
-  dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL_1_ID, 300);
-  dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL_2_ID, 300);
+  for (int i = 0; i < DXL_ID_CNT; i++){
+    dxl.writeControlTableItem(PROFILE_VELOCITY, DXL[i], 1000);
+    dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL[i], 300);
+  }
 }
 
 void loop() {
@@ -162,50 +143,43 @@ void loop() {
   static uint32_t try_count = 0;
   uint8_t recv_cnt;
   
-  bw_data_xel_1.goal_position+=512;
-  bw_data_xel_2.goal_position+=1024;
-  if(bw_data_xel_1.goal_position >= 2047){
-    bw_data_xel_1.goal_position = 0;
-  }
-  if(bw_data_xel_2.goal_position >= 4095){
-    bw_data_xel_2.goal_position = 0;
+  for (int i = 0; i < DXL_ID_CNT; i++){
+    bw_data_xel[i].goal_position+=1024;
+    if(bw_data_xel[i].goal_position >= 4095){
+      bw_data_xel[i].goal_position = 0;
+    }
   }
   bw_infos.is_info_changed = true;
 
+  // Bulk Write
   DEBUG_SERIAL.print("\n>>>>>> Bulk Instruction Test : ");
   DEBUG_SERIAL.println(try_count++);
   if(dxl.bulkWrite(&bw_infos) == true){
     DEBUG_SERIAL.println("[BulkWrite] Success");
-    DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.println(bw_infos.p_xels[0].id);
-    DEBUG_SERIAL.print("\t Goal Position: ");DEBUG_SERIAL.println(bw_data_xel_1.goal_position);
-
-    DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.println(bw_infos.p_xels[1].id);
-    DEBUG_SERIAL.print("\t Goal Position: ");DEBUG_SERIAL.println(bw_data_xel_2.goal_position);
-  }else{
+    for (int i = 0; i < DXL_ID_CNT; i++){
+      DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.print(bw_infos.p_xels[i].id);
+      DEBUG_SERIAL.print("\t Goal Position: ");DEBUG_SERIAL.println(bw_data_xel[i].goal_position);
+    }
+  } else{
     DEBUG_SERIAL.print("[BulkWrite] Fail, Lib error code: ");
-    DEBUG_SERIAL.print(dxl.getLastLibErrCode());
+    DEBUG_SERIAL.println(dxl.getLastLibErrCode());
   }
-  DEBUG_SERIAL.println();
-
+  
   delay(1000);
 
+  // Bulk Read
   recv_cnt = dxl.bulkRead(&br_infos);
   if(recv_cnt > 0){
     DEBUG_SERIAL.print("[BulkRead] Success, Received ID Count: ");
     DEBUG_SERIAL.println(recv_cnt);
-
-    DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.print(br_infos.p_xels[0].id);
-    DEBUG_SERIAL.print(", Error: ");DEBUG_SERIAL.println(br_infos.p_xels[0].error);
-    // DEBUG_SERIAL.print("\t Present Current: ");DEBUG_SERIAL.println(br_data_xel_1.present_current);
-    // DEBUG_SERIAL.print("\t Present Velocity: ");DEBUG_SERIAL.println(br_data_xel_1.present_velocity);
-    DEBUG_SERIAL.print("\t Present Position: ");DEBUG_SERIAL.println(br_data_xel_1.present_position);
-
-    DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.print(br_infos.p_xels[1].id);
-    DEBUG_SERIAL.print(", Error: ");DEBUG_SERIAL.println(br_infos.p_xels[1].error);
-    // DEBUG_SERIAL.print("\t Present Current: ");DEBUG_SERIAL.println(br_data_xel_2.present_current);
-    // DEBUG_SERIAL.print("\t Present Velocity: ");DEBUG_SERIAL.println(br_data_xel_2.present_velocity);   
-    DEBUG_SERIAL.print("\t Present Position: ");DEBUG_SERIAL.println(br_data_xel_2.present_position);
-  }else{
+    for (int i = 0; i < DXL_ID_CNT; i++){
+      DEBUG_SERIAL.print("  ID: ");DEBUG_SERIAL.print(br_infos.p_xels[i].id);
+      // DEBUG_SERIAL.print(", Error: ");DEBUG_SERIAL.println(br_infos.p_xels[i].error);
+      // DEBUG_SERIAL.print("\t Present Current: ");DEBUG_SERIAL.println(br_data_xel_1.present_current);
+      // DEBUG_SERIAL.print("\t Present Velocity: ");DEBUG_SERIAL.println(br_data_xel_1.present_velocity);
+      DEBUG_SERIAL.print("\t Present Position: ");DEBUG_SERIAL.println(br_data_xel[i].present_position);
+    }
+  } else{
     DEBUG_SERIAL.print("[BulkRead] Fail, Lib error code: ");
     DEBUG_SERIAL.println(dxl.getLastLibErrCode());
   }
