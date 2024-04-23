@@ -15,7 +15,6 @@ bool incoming = false;
 HardwareSerial ser(0);
 Dynamixel2Arduino q8dxl(ser, 8);
 q8Dynamixel q8(q8dxl);
-using namespace ControlTableItem;
 
 void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
   // ESPNow callback function to receive data
@@ -37,9 +36,9 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial){
-    delay(100);
-  }
+  // while(!Serial){
+  //   delay(100);
+  // }
 
   Serial.println("q8bot ESPNOW receiver:");
   WiFi.mode(WIFI_MODE_STA);

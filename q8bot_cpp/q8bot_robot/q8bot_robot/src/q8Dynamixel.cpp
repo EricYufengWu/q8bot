@@ -19,11 +19,12 @@ q8Dynamixel::q8Dynamixel(Dynamixel2Arduino& dxl) : _dxl(dxl) {
 void q8Dynamixel::begin(){
   _dxl.begin(_baudrate);
   _dxl.setPortProtocolVersion(_protocolVersion);
+  setOpMode();
 
   // for Time-based Extended Pos, Profile velocity is the move duration (ms).
   for (int i = 0; i < _idCount; i++){
-    _dxl.writeControlTableItem(PROFILE_VELOCITY, _DXL[i], 2000);
-    _dxl.writeControlTableItem(PROFILE_ACCELERATION, _DXL[i], 200);
+    _dxl.writeControlTableItem(PROFILE_VELOCITY, _DXL[i], 1000);
+    _dxl.writeControlTableItem(PROFILE_ACCELERATION, _DXL[i], 300);
   }
 }
 
@@ -43,18 +44,26 @@ void q8Dynamixel::disableTorque(){
   }
 }
 
-void q8Dynamixel::setOperatingMode(){
+void q8Dynamixel::setOpMode(){
   // Set the correct operating mode for all Dynamixels
-  enableTorque();
+  disableTorque();
   for (int i = 0; i < _idCount; i++){
     _dxl.setOperatingMode(_DXL[i], OP_EXTENDED_POSITION);
   }
-  disableTorque();
+  enableTorque();
 }
 
 void q8Dynamixel::moveAll(float deg){
   // Temporary function for testing only. Replace with bw in final code
   for (int i = 0; i < _idCount; i++){
-    _dxl.setGoalPosition(11, deg, UNIT_DEGREE);
+    _dxl.setGoalPosition(_DXL[i], deg, UNIT_DEGREE);
   }
+}
+
+int32_t q8Dynamixel::_deg2Dxl(float deg){
+  return 0;
+}
+
+float q8Dynamixel::_dxl2Deg(int32_t dxlRaw){
+  return 0.0;
 }

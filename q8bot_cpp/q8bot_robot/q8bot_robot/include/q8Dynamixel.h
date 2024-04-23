@@ -19,17 +19,18 @@ class q8Dynamixel
     bool checkComms(uint8_t ID);
     void enableTorque();
     void disableTorque();
-    void setOperatingMode();
+    void setOpMode();
     void moveAll(float deg);
 
   private:
     Dynamixel2Arduino& _dxl; // Member variable to store the object of Dynamixel2Arduino
-
     uint32_t _baudrate = 1000000;
     float _protocolVersion = 2.0;
     static const uint8_t _idCount = 8;
     const uint8_t _DXL[_idCount] = {11, 12, 13, 14, 15, 16, 17, 18};
     const uint8_t _directionPin = 8;
+    int32_t _deg2Dxl(float deg);
+    float _dxl2Deg(int32_t dxlRaw);
 };
 
 #endif
