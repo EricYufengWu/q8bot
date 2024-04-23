@@ -53,7 +53,14 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   q8.moveAll(0.0);
-  delay(2000);
+  delay(4000);
   q8.moveAll(45.0);
   delay(2000);
+  q8.bulkWrite(1024);
+  delay(2000);
+  q8.moveAll(0.0);
+
+  while(1){
+    delay(50);
+  }
 }

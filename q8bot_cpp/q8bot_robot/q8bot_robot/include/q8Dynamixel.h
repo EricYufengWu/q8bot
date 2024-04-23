@@ -21,16 +21,35 @@ class q8Dynamixel
     void disableTorque();
     void setOpMode();
     void moveAll(float deg);
+    void bulkWrite(int32_t val);
 
   private:
     Dynamixel2Arduino& _dxl; // Member variable to store the object of Dynamixel2Arduino
+
     uint32_t _baudrate = 1000000;
     float _protocolVersion = 2.0;
     static const uint8_t _idCount = 8;
     const uint8_t _DXL[_idCount] = {11, 12, 13, 14, 15, 16, 17, 18};
     const uint8_t _directionPin = 8;
+    static const uint16_t _user_pkt_buf_cap = 128;
+    uint8_t _user_pkt_buf[_user_pkt_buf_cap];
     int32_t _deg2Dxl(float deg);
     float _dxl2Deg(int32_t dxlRaw);
+
+    // Struct definitions for br (bulk read) and bw (bulk write)
+    struct br_data_xel{
+      int32_t present_position;
+    } __attribute__((packed));
+    struct bw_data_xel{
+      int32_t goal_position;
+    } __attribute__((packed));
+
+    struct br_data_xel _br_data_xel[_idCount];
+    DYNAMIXEL::InfoBulkReadInst_t _br_infos;
+    DYNAMIXEL::XELInfoBulkRead_t _info_xels_br[_idCount];
+    struct bw_data_xel _bw_data_xel[_idCount]; 
+    DYNAMIXEL::InfoBulkWriteInst_t _bw_infos;
+    DYNAMIXEL::XELInfoBulkWrite_t _info_xels_bw[_idCount];
 };
 
 #endif
