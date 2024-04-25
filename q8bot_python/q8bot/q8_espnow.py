@@ -54,8 +54,8 @@ class q8_espnow:
     def move_all(self, joints_pos, dur = 0):
         # Expects 8 positions in deg. For example: [0, 90, 0, 90, 0, 90, 0, 90]
         try:
-            # cmd = ",".join(map(str, joints_pos)) + "," + f"{dur}," + f"{int(self.torque_on)};" 
             cmd = ",".join(map(str, joints_pos)) + "," + f"{dur}," + f"{int(self.torque_on)};" 
+            # cmd = f"{int(self.torque_on)}," + f"{dur}," + ",".join(map(str, joints_pos)) + ";"
             print(cmd)
             self.serialHandler.write(cmd.encode())
         except:

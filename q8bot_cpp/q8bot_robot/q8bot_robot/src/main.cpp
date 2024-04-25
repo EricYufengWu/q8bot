@@ -4,10 +4,6 @@
 #include <ESPNowW.h>
 #include "q8Dynamixel.h"
 
-/*==================================*/
-/*========== Definitions ===========*/
-/*==================================*/
-
 // ESPNow
 char myData[100];
 bool incoming = false;
@@ -27,18 +23,14 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
   memcpy(&myData, incomingData, sizeof(myData));
   // Serial.print("Received a packet with size of: ");
   // Serial.println(len);
-  Serial.println(myData);
+  q8.parseData(myData);
 }
-
-/*==================================*/
-/*=========== Main Code ============*/
-/*==================================*/
 
 void setup() {
   Serial.begin(115200);
-  // while(!Serial){
-  //   delay(100);
-  // }
+  while(!Serial){
+    delay(100);
+  }
 
   Serial.println("q8bot ESPNOW receiver:");
   WiFi.mode(WIFI_MODE_STA);
@@ -52,13 +44,19 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  q8.moveAll(0.0);
-  delay(4000);
-  q8.moveAll(45.0);
-  delay(2000);
-  q8.bulkWrite(1024);
-  delay(2000);
-  q8.moveAll(0.0);
+  while (!q8.commStart()){
+    delay(100);
+  }
+  Serial.println("Robot start!");
+
+  // q8.bulkWrite(0);
+  // delay(4000);
+  // q8.bulkWrite(512);
+  // delay(2000);
+  // q8.bulkWrite(1024);
+  // delay(2000);
+  // q8.moveAll(0.0);
+  // delay(2000);
 
   while(1){
     delay(50);

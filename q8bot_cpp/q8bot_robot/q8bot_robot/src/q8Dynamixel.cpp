@@ -53,15 +53,16 @@ void q8Dynamixel::begin(){
   }
   _bw_infos.is_info_changed = true;
 
-  // for Time-based Extended Pos, Profile velocity is the move duration (ms).
-  for (int i = 0; i < _idCount; i++){
-    _dxl.writeControlTableItem(PROFILE_VELOCITY, _DXL[i], 1000);
-    _dxl.writeControlTableItem(PROFILE_ACCELERATION, _DXL[i], 300);
-  }
+  setProfile(1000);
 }
 
 bool q8Dynamixel::checkComms(uint8_t ID){
   return _dxl.ping(ID);
+}
+
+bool q8Dynamixel::commStart(){
+  // Replace this with an actual check of ESPNow comms later
+  return _torqueFlag;
 }
 
 void q8Dynamixel::enableTorque(){
@@ -76,23 +77,39 @@ void q8Dynamixel::disableTorque(){
   }
 }
 
+void q8Dynamixel::toggleTorque(bool flag){
+  if(flag){
+    enableTorque();
+  } else{
+    disableTorque();
+  }
+}
+
 void q8Dynamixel::setOpMode(){
-  // Set the correct operating mode for all Dynamixels
-  disableTorque();
-  for (int i = 0; i < _idCount; i++){
-    _dxl.setOperatingMode(_DXL[i], OP_EXTENDED_POSITION);
+  // Set operating mode. Torque off first if needed.
+  if (!_torqueFlag){
+    for (int i = 0; i < _idCount; i++){
+      _dxl.setOperatingMode(_DXL[i], OP_EXTENDED_POSITION);
+    }
+  } else{
+    disableTorque();
+    for (int i = 0; i < _idCount; i++){
+      _dxl.setOperatingMode(_DXL[i], OP_EXTENDED_POSITION);
+    }
+    enableTorque();
   }
-  enableTorque();
 }
 
-void q8Dynamixel::moveAll(float deg){
-  // Temporary function for testing only. Replace with bw in final code
+void q8Dynamixel::setProfile(uint16_t dur){
+  // for Time-based Extended Pos, Profile velocity is the move duration (ms).
   for (int i = 0; i < _idCount; i++){
-    _dxl.setGoalPosition(_DXL[i], deg, UNIT_DEGREE);
+    _dxl.writeControlTableItem(PROFILE_VELOCITY, _DXL[i], dur);
+    _dxl.writeControlTableItem(PROFILE_ACCELERATION, _DXL[i], dur / 3);
   }
 }
 
-void q8Dynamixel::bulkWrite(int32_t val){
+void q8Dynamixel::moveSingle(int32_t val){
+  // 8 motors move to the same position
   for (int i = 0; i < _idCount; i++){
     _bw_data_xel[i].goal_position = val;
   }
@@ -101,10 +118,63 @@ void q8Dynamixel::bulkWrite(int32_t val){
   _dxl.bulkWrite(&_bw_infos);
 }
 
+void q8Dynamixel::bulkWrite(int32_t values[8]){
+  // 8 motors move to their respective positions
+  for (int i = 0; i < _idCount; i++){
+    _bw_data_xel[i].goal_position = values[i];
+  }
+  _bw_infos.is_info_changed = true;
+
+  _dxl.bulkWrite(&_bw_infos);
+}
+
+void q8Dynamixel::parseData(const char* myData) {
+  char* token = strtok(const_cast<char*>(myData), ",");
+  int index = 0;
+  
+  while (token != nullptr && index < 8) {
+    _posArray[index++] = _deg2Dxl(std::atof(token));
+    token = strtok(nullptr, ",");
+  }
+  if (token != nullptr) {
+    _profile = std::atoi(token);
+    token = strtok(nullptr, ",");
+    if (_profile != _prevProfile){
+      Serial.print("Profile changed: "); Serial.println(_profile);
+      setProfile(_profile);
+      _prevProfile = _profile;
+    }
+  }
+  if (token != nullptr) {
+    _torqueFlag = (std::atoi(token) == 1);
+    if (_torqueFlag != _prevTorqueFlag){
+      Serial.println(_torqueFlag ? "Torque on" : "Torque off");
+      toggleTorque(_torqueFlag);
+      _prevTorqueFlag = _torqueFlag;
+    }
+  }
+  if (_posArray[0] != 0){
+    // moveSingle(_posArray[0]);
+    bulkWrite(_posArray);
+  }
+  // // Print values
+  // for (int i = 0; i < 8; i++){
+  //   Serial.print(" Motor "); Serial.print(_DXL[i]); Serial.print(": "); Serial.print(_posArray[i]);
+  // }
+  // Serial.print(" Duration: "); Serial.print(_profile);
+  // Serial.print(" Torque: "); Serial.println(_torqueFlag);
+}
+
 int32_t q8Dynamixel::_deg2Dxl(float deg){
-  return 0;
+  // Dynamixel joint 0 to 360 deg is 0 to 4096
+  const float friendlyPerDxl = 360.0 / 4096.0 / _gearRatio;
+  int angleDxl = static_cast<int>(deg / friendlyPerDxl + 0.5) + _zeroOffset;
+  return angleDxl;
 }
 
 float q8Dynamixel::_dxl2Deg(int32_t dxlRaw){
-  return 0.0;
+  // Dynamixel joint 0 to 360 deg is 0 to 4096
+  const float friendlyPerDxl = 360.0 / 4096.0 / _gearRatio;
+  float angleFriendly = (dxlRaw - _zeroOffset) * friendlyPerDxl;
+  return angleFriendly;
 }

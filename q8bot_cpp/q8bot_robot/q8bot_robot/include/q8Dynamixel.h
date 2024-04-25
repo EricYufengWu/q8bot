@@ -17,11 +17,15 @@ class q8Dynamixel
     q8Dynamixel(Dynamixel2Arduino& dxl);
     void begin();
     bool checkComms(uint8_t ID);
+    bool commStart();
     void enableTorque();
     void disableTorque();
+    void toggleTorque(bool flag);
     void setOpMode();
-    void moveAll(float deg);
-    void bulkWrite(int32_t val);
+    void setProfile(uint16_t dur);
+    void moveSingle(int32_t val);
+    void bulkWrite(int32_t values[8]);
+    void parseData(const char* myData);
 
   private:
     Dynamixel2Arduino& _dxl; // Member variable to store the object of Dynamixel2Arduino
@@ -33,6 +37,13 @@ class q8Dynamixel
     const uint8_t _directionPin = 8;
     static const uint16_t _user_pkt_buf_cap = 128;
     uint8_t _user_pkt_buf[_user_pkt_buf_cap];
+    const int16_t _zeroOffset = 4096;
+    const uint8_t _gearRatio = 1;
+    int32_t _posArray[8];
+    uint16_t _profile = 0;
+    uint16_t _prevProfile;
+    bool _torqueFlag = false;
+    bool _prevTorqueFlag = false;
     int32_t _deg2Dxl(float deg);
     float _dxl2Deg(int32_t dxlRaw);
 
