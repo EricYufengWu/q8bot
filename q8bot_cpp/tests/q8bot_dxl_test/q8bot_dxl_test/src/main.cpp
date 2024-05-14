@@ -20,9 +20,9 @@ Dynamixel2Arduino dxl(MySerial0, DXL_DIR_PIN);
 void setup() {
   Serial.begin(115200);
 
-  while(!Serial){
-    delay(100);
-  }
+  // while(!Serial){
+  //   delay(100);
+  // }
 
   // Set Port baudrate to 57600bps. This has to match with DYNAMIXEL baudrate.
   dxl.begin(1000000);

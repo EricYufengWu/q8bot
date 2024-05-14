@@ -28,9 +28,9 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial){
-    delay(100);
-  }
+  // while(!Serial){
+  //   delay(100);
+  // }
 
   Serial.println("q8bot ESPNOW receiver:");
   WiFi.mode(WIFI_MODE_STA);
@@ -59,6 +59,7 @@ void loop() {
   // delay(2000);
 
   while(1){
-    delay(50);
+    Serial.print("Battery: "); Serial.println(static_cast<float>(q8.checkVoltage()) / 10.0);
+    delay(10000);
   }
 }

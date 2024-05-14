@@ -55,4 +55,4 @@ Drive Mode = Time-based Profile, Reverse mode
 Operating Mode = Extended Position control
 When linkage points downward, position should read 450.
 
-![[202412218-motorsetup.jpg]]
+![[202312218-motorsetup.jpg]]

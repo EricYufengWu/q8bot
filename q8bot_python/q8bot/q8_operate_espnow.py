@@ -7,7 +7,23 @@ from q8_espnow import *
 # User-modifiable constants
 SPEED = 100
 
+# Jumping parameters
+JUMP_LOW = [11, 169, 11, 169, 11, 169, 11, 169] 
+JUMP_HIGH = [95, 85, 95, 85, 95, 85, 95, 85]
+JUMP_REST = [30, 150, 30, 150, 30, 150, 30, 150]
+
 # Helper Functions
+def jump():
+    q8.move_all(JUMP_REST, 700)
+    time.sleep(0.3)
+    q8.move_all(JUMP_LOW, 500)
+    time.sleep(0.5)
+    q8.move_all(JUMP_HIGH, 0)
+    time.sleep(0.1)
+    q8.move_all(JUMP_REST, 0)
+    time.sleep(0.5)
+    return
+
 def generate_diag_amber(leg, dir, y0 = 40, x0 = 9.75, yrange = 20.0, 
                         xrange = 20.0, lift_count = 10, len_factor = 3):
     # Generate two sets of single-leg position lists (forward + backward). 
@@ -92,7 +108,8 @@ window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
 leg = k_solver()
-q8 = q8_espnow('COM10')
+q8 = q8_espnow('COM10')  # ESP1
+# q8 = q8_espnow('COM4')     # ESP2
 q8.enable_torque()
 
 pos_x = leg.d/2
@@ -141,7 +158,9 @@ while True:
             time.sleep(0.2)
         elif keys[pygame.K_j]:
             print("Jump")
-            time.sleep(0.2)
+            jump()
+            time.sleep(0.5)
+            q8.move_mirror([q1_idle, q2_idle], 500)
         elif keys[pygame.K_ESCAPE]:
             break
 

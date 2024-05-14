@@ -65,6 +65,10 @@ bool q8Dynamixel::commStart(){
   return _torqueFlag;
 }
 
+uint16_t q8Dynamixel::checkVoltage(){
+  return _dxl.readControlTableItem(PRESENT_INPUT_VOLTAGE, _DXL[0]);
+}
+
 void q8Dynamixel::enableTorque(){
   for (int i = 0; i < _idCount; i++){
     _dxl.torqueOn(_DXL[i]);
@@ -151,12 +155,10 @@ void q8Dynamixel::parseData(const char* myData) {
       Serial.println(_torqueFlag ? "Torque on" : "Torque off");
       toggleTorque(_torqueFlag);
       _prevTorqueFlag = _torqueFlag;
+      return;
     }
   }
-  if (_posArray[0] != 0){
-    // moveSingle(_posArray[0]);
-    bulkWrite(_posArray);
-  }
+  bulkWrite(_posArray);
   // // Print values
   // for (int i = 0; i < 8; i++){
   //   Serial.print(" Motor "); Serial.print(_DXL[i]); Serial.print(": "); Serial.print(_posArray[i]);

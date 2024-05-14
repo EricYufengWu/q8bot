@@ -49,7 +49,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-05-01 V3 PCB TODO.md",
                 "mode": "source",
                 "source": false
               }
@@ -122,7 +122,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-05-01 V3 PCB TODO.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -139,7 +139,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md",
+                "file": "2024-05-01 V3 PCB TODO.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -162,7 +162,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2023-12-18 Q8 Full Robot Motor Setup.md"
+                "file": "2024-05-01 V3 PCB TODO.md"
               }
             }
           }
@@ -185,33 +185,39 @@
   },
   "active": "5a09a3ca8bb8d1cc",
   "lastOpenFiles": [
-    "2023-12-16 Rev0 Assembly Test.md",
+    "Rev1_Video/q8_operate_espnow.py - q8bot_python - Visual Studio Code 2024-05-13 17-27-48.mp4",
+    "Rev1_Video",
+    "New folder",
+    "2024-05-01 More PCB Robot Ideas.md",
     "2024-02-05 Rev0 Tethered Prototype Complete.md",
-    "2023-12-28 Power Draw Test.md",
-    "2023-12-18 Q8 Full Robot Motor Setup.md",
-    "20240205-rev0-demo.mp4",
-    "20240205-rev0-assembled5.jpg",
-    "2024-03-28 V2 PCB.md",
-    "2024-04-04 Altium DBLIB Learning.md",
-    "2024-03-26 DXL ESP32C3.md",
-    "202412218-motorsetup.jpg",
-    "20240205-rev0-assembled4.jpg",
-    "20240205-rev0-assembled3.jpg",
-    "20240205-rev0-assembled2.jpg",
-    "20240205-rev0-assembled1.jpg",
     "2024-03-07 Rev1 Symmetric Battery Design.md",
-    "20240307-chassis-2.jpg",
-    "20240307-chassis-1.jpg",
-    "20240327-eletcronicstest.jpg",
-    "Rev0_PCB.png",
+    "2024-02-24  ESP Now.md",
+    "2024-04-30 V2 PCB Assembly & Test.md",
+    "2024-02-03 Python Flowchart.md",
+    "Flowchart.jpg",
+    "Pasted image 20240501212837.png",
+    "2024-05-01 V3 PCB TODO.md",
+    "2023-12-28 Power Draw Test.md",
+    "20240430-mechanical_1.jpg",
+    "20240430-prototype_3.jpg",
+    "202312218-motorsetup.jpg",
+    "20240430-prototype_2.jpg",
+    "20240430-prototype_1.jpg",
+    "20240430-mechanical_2.jpg",
+    "20240430-reflow.jpg",
+    "20240430-tinycomponent.jpg",
+    "2024-03-28 V2 PCB.md",
+    "2024-03-26 DXL ESP32C3.md",
+    "2024-04-04 Altium DBLIB Learning.md",
+    "2023-12-18 Q8 Full Robot Motor Setup.md",
+    "2023-12-16 Rev0 Assembly Test.md",
+    "20240205-rev0-demo.mp4",
     "Pasted image 20231209151333.png.md",
     "IMG_1217.mp4",
-    "2024-02-03.md",
     "2023-12-14 Thought on Expanding the System.md",
     "2023-12-09 Prior Documentation.md",
     "2023-12-09 Low-level IK Development.md",
     "2023-12-17 More Python Dev.md",
-    "2024-02-24  ESP Now.md",
     "2024-03-25 ESP Now.md",
     "desktop.ini",
     "Useful Resources.md",
@@ -219,8 +225,6 @@
     "Resources/Kinematic Analysis of Five-Bar Mechanism.pdf",
     "Resources",
     "Resource",
-    "New folder",
-    "~K_diagram_1.tmp",
-    "IK_diagram_1.jpg.~tmp"
+    "~K_diagram_1.tmp"
   ]
 }

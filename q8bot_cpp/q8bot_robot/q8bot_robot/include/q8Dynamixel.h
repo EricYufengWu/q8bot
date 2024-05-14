@@ -18,6 +18,7 @@ class q8Dynamixel
     void begin();
     bool checkComms(uint8_t ID);
     bool commStart();
+    uint16_t checkVoltage();
     void enableTorque();
     void disableTorque();
     void toggleTorque(bool flag);
