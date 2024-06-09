@@ -1,2 +1,0 @@
-Started a system flowchart for the main Python program.
-![[Flowchart.jpg]]

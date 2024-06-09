@@ -7,19 +7,20 @@ from q8_espnow import *
 # User-modifiable constants
 SPEED = 100
 
-# Jumping parameters
-JUMP_LOW = [11, 169, 11, 169, 11, 169, 11, 169] 
-JUMP_HIGH = [95, 85, 95, 85, 95, 85, 95, 85]
-JUMP_REST = [30, 150, 30, 150, 30, 150, 30, 150]
+# Jumping parameters. Change this to tune jumping brhavior
+JUMP_LOW = [11, 169, 11, 169, 11, 169, 11, 169]
+JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
+JUMP_2 = [90, 90, 90, 90, 90, 90, 90, 90]
+JUMP_3 = [85, 95, 85, 95, 85, 95, 85, 95]
+JUMP_4 = [80, 100, 80, 100, 80, 100, 80, 100]
+JUMP_REST = [20, 160, 20, 160, 20, 160, 20, 160]
 
 # Helper Functions
-def jump():
-    q8.move_all(JUMP_REST, 700)
-    time.sleep(0.3)
+def jump(JUMP_HIGH, jump_time):
     q8.move_all(JUMP_LOW, 500)
-    time.sleep(0.5)
+    time.sleep(0.7)
     q8.move_all(JUMP_HIGH, 0)
-    time.sleep(0.1)
+    time.sleep(jump_time)
     q8.move_all(JUMP_REST, 0)
     time.sleep(0.5)
     return
@@ -108,8 +109,8 @@ window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
 leg = k_solver()
-q8 = q8_espnow('COM10')  # ESP1
-# q8 = q8_espnow('COM4')     # ESP2
+# q8 = q8_espnow('COM10')  # ESP1
+q8 = q8_espnow('COM4')     # ESP2
 q8.enable_torque()
 
 pos_x = leg.d/2
@@ -158,7 +159,8 @@ while True:
             time.sleep(0.2)
         elif keys[pygame.K_j]:
             print("Jump")
-            jump()
+            
+            jump(JUMP_3, 0.08)
             time.sleep(0.5)
             q8.move_mirror([q1_idle, q2_idle], 500)
         elif keys[pygame.K_ESCAPE]:
