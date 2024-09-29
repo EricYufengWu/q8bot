@@ -20,11 +20,14 @@ typedef struct struct_message {
 // struct_message myData;
 char myData[100];
 
-// 1st PCB MCU Address (Seeed XIAO) EC:DA:3B:36:14:70
-// 2nd PCB MCU Address (Seeed XIAO) EC:DA:3B:36:E2:38
+// Rev1 PCB MCU Address (Seeed XIAO) EC:DA:3B:36:14:70 Paired w dongle 1
+// Rev2 PCB MCU Address (Seeed XIAO) EC:DA:3B:36:E2:38 
+// Rev2.1 PCB MCU Address (Seeed XIAO) 54:32:04:86:FE:38
+// Rev2.2 PCB MCU Address (Seeed XIAO) 54:32:04:86:D2:EC Paired w dongle 2
 // Breadboard MCU Address EC:DA:3B:36:81:40
+// uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0xE2, 0x38};
 // uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x14, 0x70};
-uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0xE2, 0x38};
+uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xD2, 0xEC};
 
 // String for storing serial command
 String cmd;

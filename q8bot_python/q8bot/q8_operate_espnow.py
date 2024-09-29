@@ -6,19 +6,24 @@ from q8_espnow import *
 
 # User-modifiable constants
 SPEED = 100
+# PORT = 'COM6'    #ESP1
+PORT = 'COM4'     #ESP2
 
 # Jumping parameters. Change this to tune jumping brhavior
-JUMP_LOW = [11, 169, 11, 169, 11, 169, 11, 169]
+# JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]
+JUMP_LOW = [12, 168, 12, 168, 12, 168, 12, 168]
 JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
-JUMP_2 = [90, 90, 90, 90, 90, 90, 90, 90]
-JUMP_3 = [85, 95, 85, 95, 85, 95, 85, 95]
-JUMP_4 = [80, 100, 80, 100, 80, 100, 80, 100]
+JUMP_2 = [95, 85, 95, 85, -25, 205, -25, 205]
+# JUMP_REST = [0, 180, 0, 180, 0, 180, 0, 180]
 JUMP_REST = [20, 160, 20, 160, 20, 160, 20, 160]
+
 
 # Helper Functions
 def jump(JUMP_HIGH, jump_time):
+    # q8.move_all(JUMP_HIGH, 500)
+    # time.sleep(0.7)
     q8.move_all(JUMP_LOW, 500)
-    time.sleep(0.7)
+    time.sleep(0.8)
     q8.move_all(JUMP_HIGH, 0)
     time.sleep(jump_time)
     q8.move_all(JUMP_REST, 0)
@@ -109,8 +114,7 @@ window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
 leg = k_solver()
-# q8 = q8_espnow('COM10')  # ESP1
-q8 = q8_espnow('COM4')     # ESP2
+q8 = q8_espnow(PORT)
 q8.enable_torque()
 
 pos_x = leg.d/2
@@ -155,14 +159,18 @@ while True:
             movement = True
         elif keys[pygame.K_b]:
             voltage = q8.check_voltage()
+            q8.check_battery()
             print("Battery Voltage: %.1f" % (voltage))
             time.sleep(0.2)
         elif keys[pygame.K_j]:
             print("Jump")
-            
-            jump(JUMP_3, 0.08)
-            time.sleep(0.5)
+            # q8.send_jump()
+            jump(JUMP_1, 0.1)
+            time.sleep(1)
             q8.move_mirror([q1_idle, q2_idle], 500)
+            q8.move_mirror([q1_idle, q2_idle], 500)
+            time.sleep(1)
+
         elif keys[pygame.K_ESCAPE]:
             break
 

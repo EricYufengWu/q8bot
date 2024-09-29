@@ -31,7 +31,7 @@ ADDR_PRESENT_POSITION       = 132
 BAUDRATE                    = 1000000
 
 # Use the actual port assigned to the U2D2.
-DEVICENAME                  = 'COM3'
+DEVICENAME                  = 'COM5'
 
 TORQUE_ENABLE               = 1     # Value for enabling the torque
 TORQUE_DISABLE              = 0     # Value for disabling the torque
@@ -40,6 +40,13 @@ DXL_MOVING_STATUS_THRESHOLD = 20    # Dynamixel moving status threshold
 # Custom instances
 JOINTS                      = [11, 12]
 GEAR_RATIO                  = 1.0   # 5 (output gear) to 4 (DXL input gear)
+# jump_start                  = [12, 168] 
+# jump_start                  = [-30, 210] 
+jump_start                  = [-45, 225] 
+jump_end                    = [90, 90]
+jump_rest                   = [90, 90]
+sleep_time                  = 0.05
+cycle                      = 1
 
 # Initialize PortHandler and PacketHandler instance
 portHandler = PortHandler(DEVICENAME)
@@ -93,16 +100,16 @@ while(1):
     if getch() == '\x1b':    #esc key
         break
 
-    time.sleep(4)
+    time.sleep(1)
 
-    for x in range(5):
+    for x in range(cycle):
         # Set Dynamixel time-based profiles
         dur_ms = 500
         for i in range(len(JOINTS)):
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
         # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(10 + 360), angle_friendly_to_dxl(170 + 360)]
+        goal_pos = [angle_friendly_to_dxl(jump_start[0] + 360), angle_friendly_to_dxl(jump_start[1] + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.5)
@@ -113,11 +120,11 @@ while(1):
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_VELOCITY, dur_ms)
             packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_PROFILE_ACCELERATION, int(dur_ms / 3))
         # Move Dynamixel motors
-        goal_pos = [angle_friendly_to_dxl(97.5 + 360), angle_friendly_to_dxl(82.5 + 360)]
+        goal_pos = [angle_friendly_to_dxl(jump_end[0] + 360), angle_friendly_to_dxl(jump_end[1] + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
-        time.sleep(0.04)
-        goal_pos = [angle_friendly_to_dxl(30 + 360), angle_friendly_to_dxl(150 + 360)]
+        time.sleep(sleep_time)
+        goal_pos = [angle_friendly_to_dxl(jump_rest[0] + 360), angle_friendly_to_dxl(jump_rest[1] + 360)]
         for i in range(len(JOINTS)):
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, JOINTS[i], ADDR_GOAL_POSITION, goal_pos[i])
         time.sleep(0.5)

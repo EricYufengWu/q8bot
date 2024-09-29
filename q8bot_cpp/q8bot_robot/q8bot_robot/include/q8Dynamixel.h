@@ -26,6 +26,7 @@ class q8Dynamixel
     void setProfile(uint16_t dur);
     void moveSingle(int32_t val);
     void bulkWrite(int32_t values[8]);
+    void jump();
     void parseData(const char* myData);
 
   private:
@@ -45,8 +46,16 @@ class q8Dynamixel
     uint16_t _prevProfile;
     bool _torqueFlag = false;
     bool _prevTorqueFlag = false;
+    uint8_t _specialCmd = 0;
     int32_t _deg2Dxl(float deg);
     float _dxl2Deg(int32_t dxlRaw);
+    int32_t _idlePos[8]   = {4618, 5622, 4618, 5622, 4618, 5622, 4618, 5622};
+    int32_t _jumpLow[8]   = {4221, 6019, 4221, 6019, 4221, 6019, 4221, 6019};
+    int32_t _jumpHigh1[8] = {5177, 5063, 5177, 5063, 5177, 5063, 5177, 5063};
+    int32_t _jumpHigh2[8] = {5120, 5120, 5120, 5120, 5120, 5120, 5120, 5120};
+    int32_t _jumpHigh3[8] = {5063, 5177, 5063, 5177, 5063, 5177, 5063, 5177};
+    int32_t _jumpHigh4[8] = {5006, 5234, 5006, 5234, 5006, 5234, 5006, 5234};
+    int32_t _jumpRest[8]  = {4324, 5916, 4324, 5916, 4324, 5916, 4324, 5916};
 
     // Struct definitions for br (bulk read) and bw (bulk write)
     struct br_data_xel{

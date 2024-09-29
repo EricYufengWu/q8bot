@@ -132,6 +132,31 @@ void q8Dynamixel::bulkWrite(int32_t values[8]){
   _dxl.bulkWrite(&_bw_infos);
 }
 
+void q8Dynamixel::jump(){
+  // float _degArray1[8] = {45.9,134.1,45.9,134.1,45.9,134.1,45.9,134.1};
+  // for (int i = 0; i < 8; i++){
+  //   Serial.print(_deg2Dxl(_degArray1[i])); Serial.print(" ");
+  // } Serial.println();
+
+  setProfile(500);
+  delay(100);
+  Serial.println("Jumping Low");
+  bulkWrite(_jumpRest);
+  setProfile(0);
+  delay(1000);
+  Serial.println("Jumping High");
+  bulkWrite(_jumpHigh1);
+  delay(100);
+  Serial.println("Jumping Rest");
+  bulkWrite(_jumpRest);
+  delay(1000);
+  setProfile(500);
+  delay(1000);
+  Serial.println("Idle");
+  bulkWrite(_idlePos);
+  _prevProfile = 500;
+}
+
 void q8Dynamixel::parseData(const char* myData) {
   char* token = strtok(const_cast<char*>(myData), ",");
   int index = 0;
@@ -140,7 +165,19 @@ void q8Dynamixel::parseData(const char* myData) {
     _posArray[index++] = _deg2Dxl(std::atof(token));
     token = strtok(nullptr, ",");
   }
-  if (token != nullptr) {
+  if (token != nullptr) {     // special
+    _specialCmd = std::atoi(token);
+    token = strtok(nullptr, ",");
+    if (_specialCmd == 1){
+      Serial.println("Check battery");
+      return;
+    } else if (_specialCmd == 2){
+      jump();
+      // Serial.println("Jumping");
+      return;
+    }
+  }
+  if (token != nullptr) {     // move profile
     _profile = std::atoi(token);
     token = strtok(nullptr, ",");
     if (_profile != _prevProfile){
@@ -149,7 +186,7 @@ void q8Dynamixel::parseData(const char* myData) {
       _prevProfile = _profile;
     }
   }
-  if (token != nullptr) {
+  if (token != nullptr) {     // torque
     _torqueFlag = (std::atoi(token) == 1);
     if (_torqueFlag != _prevTorqueFlag){
       Serial.println(_torqueFlag ? "Torque on" : "Torque off");
@@ -159,12 +196,6 @@ void q8Dynamixel::parseData(const char* myData) {
     }
   }
   bulkWrite(_posArray);
-  // // Print values
-  // for (int i = 0; i < 8; i++){
-  //   Serial.print(" Motor "); Serial.print(_DXL[i]); Serial.print(": "); Serial.print(_posArray[i]);
-  // }
-  // Serial.print(" Duration: "); Serial.print(_profile);
-  // Serial.print(" Torque: "); Serial.println(_torqueFlag);
 }
 
 int32_t q8Dynamixel::_deg2Dxl(float deg){
