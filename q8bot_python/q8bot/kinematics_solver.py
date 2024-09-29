@@ -36,7 +36,7 @@ class k_solver:
             if deg:
                 q1, q2 = q1*180/math.pi, q2*180/math.pi
             self.prev_ik = [q1, q2]
-            return round(q1, rounding), round(q2, rounding), True
+            return np.round(q1, rounding), np.round(q2, rounding), True
         except:
             return self.prev_ik[0], self.prev_ik[1], False
     

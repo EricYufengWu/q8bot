@@ -64,7 +64,7 @@ class q8_espnow:
         try:
             cmd = ",".join(map(str, joints_pos)) + ",0," + f"{dur}," + f"{int(self.torque_on)};" 
             # cmd = f"{int(self.torque_on)}," + f"{dur}," + ",".join(map(str, joints_pos)) + ";"
-            print(cmd)
+            # print(cmd)
             self.serialHandler.write(cmd.encode())
         except:
             return False
