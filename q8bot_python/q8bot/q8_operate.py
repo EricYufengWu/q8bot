@@ -10,16 +10,16 @@ from q8_espnow import *
 SPEED = 100
 res = 0.2
 y_min = 15
-# PORT = 'COM6'    #ESP1
-PORT = 'COM4'     #ESP2
+PORT = 'COM6'    #ESP1
+# PORT = 'COM4'     #ESP2
 
 # Jumping parameters. Change this to tune jumping brhavior
-# JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]   # 40mm leg
-JUMP_LOW = [12, 168, 12, 168, 12, 168, 12, 168]
+JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
+# JUMP_LOW = [12, 168, 12, 168, 12, 168, 12, 168]         # 35mm leg
 JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
 JUMP_2 = [95, 85, 95, 85, -25, 205, -25, 205]
-# JUMP_REST = [0, 180, 0, 180, 0, 180, 0, 180]   # 40mm leg
-JUMP_REST = [20, 160, 20, 160, 20, 160, 20, 160]
+JUMP_REST = [10, 170, 10, 170, 10, 170, 10, 170]            # 40mm leg
+# JUMP_REST = [20, 160, 20, 160, 20, 160, 20, 160]        # 35mm leg
 
 
 # Helper Functions
@@ -137,7 +137,8 @@ pygame.init()
 window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
-leg = k_solver(19.5, 25, 35, 25, 35)
+leg = k_solver(19.5, 25, 40, 25, 40) # 40mm leg
+# leg = k_solver(19.5, 25, 35, 25, 35) # 35mm leg
 q8 = q8_espnow(PORT)
 q8.enable_torque()
 

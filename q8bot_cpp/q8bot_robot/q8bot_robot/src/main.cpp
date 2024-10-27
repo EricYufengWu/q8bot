@@ -63,6 +63,13 @@ void setup() {
   // Serial.println("Serial port initialized.\n");
   // delay(5000);
 
+  Serial.println("q8bot ESPNOW receiver:");
+  WiFi.mode(WIFI_MODE_STA);
+  Serial.println(WiFi.macAddress());
+  WiFi.disconnect();
+  ESPNow.init();
+  ESPNow.reg_recv_cb(onRecv);
+
   // MAX17043
   // Initialize the fuel gauge.
   if (FuelGauge.begin())
@@ -88,13 +95,6 @@ void setup() {
     Serial.println("The MAX17043 device was NOT found.\n");
     while (true);
   }
-
-  Serial.println("q8bot ESPNOW receiver:");
-  WiFi.mode(WIFI_MODE_STA);
-  Serial.println(WiFi.macAddress());
-  WiFi.disconnect();
-  ESPNow.init();
-  ESPNow.reg_recv_cb(onRecv);
 
   q8.begin();
   digitalWrite(MODE_PIN, HIGH);
