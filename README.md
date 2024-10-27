@@ -2,11 +2,11 @@
 
 Q8bot is a miniature quadruped robot powered by 8 Dynamixel motors and a Seeed Studio XIAO ESP32C3.
 
-The robot weighs abot 221g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
+The robot weighs around 221g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
 
-The current BOM, without optimization, is around $300. 
+The current BOM, without optimization, is about $300. 
 
-[![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/xl0lIdEy-Oo?si=D2FZ9hHpfMyb-ybH)
+[![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
 
 
 
