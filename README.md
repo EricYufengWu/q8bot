@@ -1,4 +1,4 @@
-# Q8 PCB Robot
+# Q8bot PCB Robot
 
 Q8bot is a miniature quadruped robot powered by 8 Dynamixel motors and a Seeed Studio XIAO ESP32C3.
 
