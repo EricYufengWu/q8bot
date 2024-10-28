@@ -10,7 +10,7 @@ The current BOM, without optimization, is about $300.
 
 
 
-# Design Files
+## Design Files
 
 Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
 
