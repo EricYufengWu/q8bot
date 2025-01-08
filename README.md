@@ -1,4 +1,4 @@
-# Q8 PCB Robot
+# Q8bot PCB Robot
 
 Q8bot is a miniature quadruped robot powered by 8 Dynamixel motors and a Seeed Studio XIAO ESP32C3.
 
@@ -11,7 +11,7 @@ The current BOM, without optimization, is about $300.
 ![Q8bot](documentation_public/Jumping_Sequence.jpg)
 
 
-# Design Files
+## Design Files
 
 Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
 
