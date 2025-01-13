@@ -6,8 +6,6 @@ The robot weighs around 221g and is capable of dynamic movements like jumping an
 
 The current BOM, without optimization, is about $300. 
 
-[![YouTube](http://i.ytimg.com/vi/YJDc1xAhaOI/hqdefault.jpg)](https://www.youtube.com/watch?v=YJDc1xAhaOI)
-
 [![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
 
 ![Q8bot](documentation_public/Jumping_Sequence.jpg)
@@ -16,6 +14,8 @@ The current BOM, without optimization, is about $300.
 ## Design Files
 
 Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
+
+You can now ordered the fully-assembled PCB via PCBWay! The following project page I created contains all of the assembly-related files (BOM, centroid, etc.) and simplifies the ordering process: https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html
 
 Although I do not plan to constantly maintain this project due to availability, feel free to reach out with questions and I will try my best to answer: yufeng.wu0902@gmail.com 
 
