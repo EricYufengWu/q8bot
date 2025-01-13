@@ -6,6 +6,8 @@ The robot weighs around 221g and is capable of dynamic movements like jumping an
 
 The current BOM, without optimization, is about $300. 
 
+[![YouTube](http://i.ytimg.com/vi/YJDc1xAhaOI/hqdefault.jpg)](https://www.youtube.com/watch?v=YJDc1xAhaOI)
+
 [![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
 
 ![Q8bot](documentation_public/Jumping_Sequence.jpg)
