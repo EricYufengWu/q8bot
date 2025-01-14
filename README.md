@@ -13,6 +13,8 @@ The current BOM, without optimization, is about $300.
 
 ## Design Files
 
+**01/08/2025 Update: Component U2 should be 74LVC2G241GT, not 74LVC2G241GS. The BOM and schematics have been updated to reflect this change.** 
+
 Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
 
 Although I do not plan to constantly maintain this project due to availability, feel free to reach out with questions and I will try my best to answer: yufeng.wu0902@gmail.com 
@@ -23,8 +25,6 @@ https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFH
 [![Q8bot](documentation_public/Q8bot_Rev2_Render.png)](https://autode.sk/3BYuhuN)
 
 [![Q8bot](documentation_public/Q8bot_Components.jpeg)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)
-
-
 
 
 ## Software Architecture
