@@ -10,6 +10,7 @@ The current BOM, without optimization, starts below $300.
 
 <p align="center">
   <img src="documentation_public/10s_gif.gif" alt="Image 1" width="45%">
+  <span style="display:inline-block; width:10%;"></span>
   <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 2" width="45%">
 </p>
 
