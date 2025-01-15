@@ -9,8 +9,8 @@ The current BOM, without optimization, starts below $300.
 [![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
 
 <p align="center">
-  <img src="documentation_public/10s_gif.gif" alt="Image 1" width="45%" style="margin-left: 5%;">
-  <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 2" width="45%" style="margin-right: 5%;">
+  <img src="documentation_public/10s_gif.gif" alt="Image 1" width="45%">
+  <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 2" width="45%">
 </p>
 
 ## Design Files
