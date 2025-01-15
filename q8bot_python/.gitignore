@@ -1,6 +1,7 @@
 # Custom files to be ignored
 DynamixelSDK/
 tests/forward_kinematics.ipynb
+tests/inverse_kinematics.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
