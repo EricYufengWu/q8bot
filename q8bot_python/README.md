@@ -1,10 +1,10 @@
-# q8bot
- Q8 Robot
+# Q8bot python setup
 
-## Setup Instruction
+
+<!-- ## Setup Instruction
 Install dynamixel_sdk for python following this [instruction](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/library_setup/python_windows/#python-windows)
 
-For me, I set up dynamixel_sdk AFTER activating the venv of this project to make sure the library only applies here.
+For me, I set up dynamixel_sdk AFTER activating the venv of this project to make sure the library only applies here. -->
 
 ## Python venv instructions
 
