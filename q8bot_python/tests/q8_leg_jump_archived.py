@@ -44,7 +44,8 @@ GEAR_RATIO                  = 1.0   # 5 (output gear) to 4 (DXL input gear)
 # jump_start                  = [-30, 210] 
 jump_start                  = [-45, 225] 
 jump_end                    = [90, 90]
-jump_rest                   = [90, 90]
+# jump_rest                   = [90, 90]
+jump_rest                   = [-45, 225]
 sleep_time                  = 0.05
 cycle                      = 1
 

@@ -23,10 +23,10 @@ from q8_dynamixel import *
 
 # jump_start   = [12, 168] 
 # jump_start   = [-25, 205] 
-jump_start   = [-50, 230] 
+jump_start   = [-45, 225] 
 jump_end     = [90, 90]
-jump_rest    = [90, 90]
-# jump_rest    = [0, 180]
+# jump_rest    = [90, 90]
+jump_rest    = [-45, 225]
 
 # Main code
 def main():

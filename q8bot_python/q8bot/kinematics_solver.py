@@ -7,7 +7,7 @@ from scipy.optimize import fsolve
 # d - distance between motors; l1/l1p - upper linkage length; l2/l2p - lower linkage length
 # Unit is in mm.
 class k_solver:
-    def __init__(self, d = 19.5, l1 = 25, l2 = 35, l1p = 25, l2p = 35):
+    def __init__(self, d = 19.5, l1 = 25, l2 = 40, l1p = 25, l2p = 40):
         self.d = d
         self.l1 = l1
         self.l2 = l2

@@ -20,17 +20,20 @@ class q8_dynamixel:
 
         # Dynamixsl X Series registers
         self.ADDR_TORQUE_ENABLE = 64
+        self.ADDR_D_GAIN = 80
+        self.ADDR_P_GAIN = 84
         self.ADDR_PROFILE_ACCELERATION = 108
         self.ADDR_PROFILE_VELOCITY = 112
         self.ADDR_GOAL_POSITION = 116
+        self.ADDR_PRESENT_CURRENT = 126
         self.ADDR_PRESENT_POSITION = 132
         self.ADDR_PRESENT_INPUT_VOLTAGE = 144
         
         # Initialize PortHandler and PacketHandler instance
         self.portHandler = PortHandler(self.DEVICENAME)
         self.packetHandler = PacketHandler(self.PROTOCOL_VERSION)
-        self.groupBulkRead = GroupBulkRead(self.portHandler, 
-                                           self.packetHandler)
+        self.groupSyncRead = GroupSyncRead(self.portHandler, 
+                                           self.packetHandler, self.ADDR_PRESENT_CURRENT, 10)
         self.groupBulkWrite = GroupBulkWrite(self.portHandler, 
                                              self.packetHandler)
         self._start_comm()
@@ -82,13 +85,18 @@ class q8_dynamixel:
             mirrored_pos.append(joint_pos[1])
         return self.move_all(mirrored_pos, dur)
     
-    def bulkread(self, addr, len = 4):
+    # Reads position and current only.
+    def syncread(self):
         try:
-            self.groupBulkRead.txRxPacket()
-            value = []
+            dxl_comm_result = self.groupSyncRead.txRxPacket()
+            if dxl_comm_result != COMM_SUCCESS:
+                print("%s" % self.packetHandler.getTxRxResult(dxl_comm_result))
+            pos_raw = []
+            cur_list = []
             for joint in self.JOINTS:
-                self.groupBulkRead.isAvailable(joint, addr, len)
-                value.append(self.groupBulkRead.getData(joint, addr, len))
+                cur_list.append(self.groupSyncRead.getData(joint, self.ADDR_PRESENT_CURRENT, 2))
+                pos_raw.append(self.groupSyncRead.getData(joint, self.ADDR_PRESENT_POSITION, 4))
+            value = [pos_raw, cur_list]
         except:
             return [], False
         return value, True
@@ -106,6 +114,16 @@ class q8_dynamixel:
             joint, 
             addr)
         return value
+    
+    def joint_write4(self, joint, addr, value):
+        comm_result, error = self.packetHandler.write4ByteTxRx(self.portHandler, joint, addr, value)
+        if comm_result != COMM_SUCCESS:
+            print("joint ", joint, ": %s" % self.packetHandler.getTxRxResult(comm_result))
+        elif error != 0:
+            print("joint ", joint, ": %s" % self.packetHandler.getRxPacketError(error))
+        # else:
+        #     print("joint write success")
+        return
 
     def check_voltage(self):
         voltage = self.joint_read2(self.JOINTS[0], 
@@ -117,8 +135,10 @@ class q8_dynamixel:
     #-------------------#
     def _start_comm(self):
         # Open port and set baudrate
+        for joint in self.JOINTS:
+            result = self.groupSyncRead.addParam(joint)
         if self.portHandler.openPort() and \
-        self.portHandler.setBaudRate(self.BAUDRATE):
+        self.portHandler.setBaudRate(self.BAUDRATE) and result:
             return True
         else:
             return False
@@ -155,3 +175,4 @@ class q8_dynamixel:
                 DXL_HIBYTE(DXL_LOWORD(goal_pos)),
                 DXL_LOBYTE(DXL_HIWORD(goal_pos)), 
                 DXL_HIBYTE(DXL_HIWORD(goal_pos))]
+    
