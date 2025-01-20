@@ -27,7 +27,7 @@ You can now ordered the fully-assembled PCB via PCBWay! This [project page](http
 
 Although I do not plan to constantly maintain this project due to availability, feel free to reach out with questions and I will try my best to answer: yufeng.wu0902@gmail.com 
 
-Access the bill of materials (BOM) **[here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. Build the optional E for easier robot control by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). This is not included in the main BOM as there are other ways to control Q8bot (WiFi, BLE, etc.)
+Access the bill of materials (BOM) **[here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. Build the optional USB dongle for easier robot control by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). This is not included in the main BOM as there are other ways to control Q8bot (WiFi, BLE, etc.)
 
 [![Q8bot](documentation_public/Q8bot_Rev2_Render.png)](https://autode.sk/3BYuhuN)
 
