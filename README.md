@@ -1,6 +1,6 @@
 # Q8bot PCB Robot
 
-Q8bot is a miniature quadruped robot powered by 8 Dynamixel motors and a Seeed Studio XIAO ESP32C3.
+Q8bot is a miniature quadruped robot powered by 8 [Dynamixel](https://www.robotis.us/dynamixel-xl330-m077-t/) motors and a Seeed Studio XIAO ESP32C3.
 
 The robot weighs around 221g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
 
