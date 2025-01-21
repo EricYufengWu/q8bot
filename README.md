@@ -19,7 +19,7 @@ The current BOM, without optimization, starts below $300.
 
 Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
 
-You can now ordered the fully-assembled PCB via PCBWay! This [project page](https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html) contains all of the assembly-related files (BOM, centroid, etc.) and simplifies the ordering process.
+**You can now ordered the fully-assembled PCB via PCBWay!** This [project page](https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html) contains all of the assembly-related files (BOM, centroid, etc.) and simplifies the ordering process.
 
 <p align="center">
     <a href="https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html"><img src="https://www.pcbway.com/project/img/images/frompcbway-1220.png" alt="PCB from PCBWay" /></a>
@@ -66,7 +66,7 @@ Currently, all computation regarding gait generation and FK/IK happens on the la
 
 ### Seeed Studio XIAO MCU Setup (Robot + Controller)
 
-The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to official documentation and tutorials to setup the environment.
+The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
 
 Open the folder "q8bot_robot" with PlatformIO and upload it to Q8bot's XIAO board.
 

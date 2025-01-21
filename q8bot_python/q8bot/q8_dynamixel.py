@@ -28,12 +28,15 @@ class q8_dynamixel:
         self.ADDR_PRESENT_CURRENT = 126
         self.ADDR_PRESENT_POSITION = 132
         self.ADDR_PRESENT_INPUT_VOLTAGE = 144
+        self.ADDR_PRESENT_TEMPERATURE = 146
         
         # Initialize PortHandler and PacketHandler instance
         self.portHandler = PortHandler(self.DEVICENAME)
         self.packetHandler = PacketHandler(self.PROTOCOL_VERSION)
         self.groupSyncRead = GroupSyncRead(self.portHandler, 
                                            self.packetHandler, self.ADDR_PRESENT_CURRENT, 10)
+        self.groupSyncWrite = GroupSyncWrite(self.portHandler, 
+                                           self.packetHandler, self.ADDR_TORQUE_ENABLE, 1)
         self.groupBulkWrite = GroupBulkWrite(self.portHandler, 
                                              self.packetHandler)
         self._start_comm()
@@ -58,6 +61,16 @@ class q8_dynamixel:
                 self.TORQUE_DISABLE)
             if dxl_comm_result != COMM_SUCCESS or dxl_error != 0:
                 return False
+        return True
+    
+    def syncwrite(self, cmd):
+        for j in range(len(self.JOINTS)):
+            result = self.groupSyncWrite.addParam(self.JOINTS[j], [DXL_LOBYTE(cmd)])
+            if not result:
+                print('failed to add syncwrite param')
+                return False
+        self.groupSyncWrite.txPacket()
+        self.groupSyncWrite.clearParam()
         return True
 
     def move_all(self, joints_pos, dur = 0):
@@ -110,6 +123,13 @@ class q8_dynamixel:
     
     def joint_read2(self, joint, addr):
         value, dxl_comm_result, dxl_error =  self.packetHandler.read2ByteTxRx(
+            self.portHandler, 
+            joint, 
+            addr)
+        return value
+    
+    def joint_read1(self, joint, addr):
+        value, dxl_comm_result, dxl_error =  self.packetHandler.read1ByteTxRx(
             self.portHandler, 
             joint, 
             addr)
