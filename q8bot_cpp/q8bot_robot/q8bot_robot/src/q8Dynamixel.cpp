@@ -21,21 +21,21 @@ void q8Dynamixel::begin(){
   _dxl.setPortProtocolVersion(_protocolVersion);
   setOpMode();
 
-  // fill the members of structure for bulkRead using external user packet buffer
-  _br_infos.packet.p_buf = _user_pkt_buf;
-  _br_infos.packet.buf_capacity = _user_pkt_buf_cap;
-  _br_infos.packet.is_completed = false;
-  _br_infos.p_xels = _info_xels_br;
-  _br_infos.xel_count = 0;
+  // // fill the members of structure for bulkRead using external user packet buffer
+  // _br_infos.packet.p_buf = _user_pkt_buf;
+  // _br_infos.packet.buf_capacity = _user_pkt_buf_cap;
+  // _br_infos.packet.is_completed = false;
+  // _br_infos.p_xels = _info_xels_br;
+  // _br_infos.xel_count = 0;
 
-  for (int i = 0; i < _idCount; i++){
-    _info_xels_br[i].id = _DXL[i];
-    _info_xels_br[i].addr = 132; // Present Position of X serise.
-    _info_xels_br[i].addr_length = 4; // Present Current + Position + Velocity
-    _info_xels_br[i].p_recv_buf = reinterpret_cast<uint8_t*>(&_br_data_xel[i]);
-    _br_infos.xel_count++;
-  }
-  _br_infos.is_info_changed = true;
+  // for (int i = 0; i < _idCount; i++){
+  //   _info_xels_br[i].id = _DXL[i];
+  //   _info_xels_br[i].addr = 132; // Present Position of X serise.
+  //   _info_xels_br[i].addr_length = 4; // Present Current + Position + Velocity
+  //   _info_xels_br[i].p_recv_buf = reinterpret_cast<uint8_t*>(&_br_data_xel[i]);
+  //   _br_infos.xel_count++;
+  // }
+  // _br_infos.is_info_changed = true;
 
   // Fill the members of structure for bulkWrite using internal packet buffer
   _bw_infos.packet.p_buf = nullptr;
@@ -52,6 +52,22 @@ void q8Dynamixel::begin(){
     _bw_infos.xel_count++;
   }
   _bw_infos.is_info_changed = true;
+
+  // Fill the members of structure to fastSyncRead using external user packet buffer
+  _sr_infos.packet.buf_capacity = _user_pkt_buf_cap;
+  _sr_infos.packet.p_buf = _user_pkt_buf;
+  _sr_infos.packet.is_completed = false;
+  _sr_infos.addr = SR_START_ADDR;
+  _sr_infos.addr_length = SR_ADDR_LEN;
+  _sr_infos.p_xels = _info_xels_sr;
+  _sr_infos.xel_count = 0;  
+
+  for(int i=0; i < _idCount; i++){
+    _info_xels_sr[i].id = _DXL[i];;
+    _info_xels_sr[i].p_recv_buf = (uint8_t*)&_sr_data[i];
+    _sr_infos.xel_count++;
+  }
+  _sr_infos.is_info_changed = true;
 
   setProfile(1000);
 }
@@ -70,15 +86,11 @@ uint16_t q8Dynamixel::checkVoltage(){
 }
 
 void q8Dynamixel::enableTorque(){
-  for (int i = 0; i < _idCount; i++){
-    _dxl.torqueOn(_DXL[i]);
-  }
+  _dxl.torqueOn(BROADCAST_ID);
 }
 
 void q8Dynamixel::disableTorque(){
-  for (int i = 0; i < _idCount; i++){
-    _dxl.torqueOff(_DXL[i]);
-  }
+  _dxl.torqueOff(BROADCAST_ID);
 }
 
 void q8Dynamixel::toggleTorque(bool flag){
@@ -130,6 +142,28 @@ void q8Dynamixel::bulkWrite(int32_t values[8]){
   _bw_infos.is_info_changed = true;
 
   _dxl.bulkWrite(&_bw_infos);
+}
+
+uint16_t* q8Dynamixel::syncRead(){
+  // Read relevant registers from all joints into a single array
+  int recv_cnt;
+  size_t offset = 0;
+  uint16_t* byteArray = new uint16_t[_idCount * 2];
+
+  recv_cnt = _dxl.fastSyncRead(&_sr_infos);
+  if(recv_cnt = _idCount){
+    for (size_t i = 0; i < _idCount; i++){
+      // cast to uint16_t since values never exceed 65535 in robot configuration
+      byteArray[i*2] = static_cast<uint16_t>(_sr_data[i].present_current + 10000);
+      byteArray[i*2+1] = static_cast<uint16_t>(_sr_data[i].present_position);
+    }
+  } else {
+    // Fill ByteArray with zeros
+    for (size_t i = 0; i < _idCount*2; ++i){
+      byteArray[i] = 0;
+    }
+  }
+  return byteArray;
 }
 
 void q8Dynamixel::jump(){

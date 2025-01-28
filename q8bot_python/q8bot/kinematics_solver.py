@@ -1,4 +1,8 @@
-# Python class for kinematics-related calculation
+'''
+Written by yufeng.wu0902@gmail.com
+
+Python class for FK/IK calculations on Q8bot.
+'''
 
 import math
 import numpy as np

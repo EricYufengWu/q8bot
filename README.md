@@ -44,8 +44,8 @@ While there are no detailed building instruction for Q8bot yet, you can use the 
 
 4. If you are using brand-new Dynamixel actuators, they need to individually configured. There are 2 ways to do this:
 
-    1. Manually: If you have an [U2D2 Hub](https://www.robotis.us/u2d2) from Robotis, you can use the [Dynamixel Wizard](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/) tool to configure each motor prior to attaching them during assembly. Follow [this instruction](documentation_public/DXL_config_manual.md). ,<br>
-    2. Automatically: upload and run the motor initialization code on the Seeed Studio XIAO and follow the instructions on the serial monitor. **This is still WIP**. If you don't have an U2D2 you can try to write your own set of instructions to change the parameters (you can follow examples in the [Dynamixel2Arduino library](https://github.com/ROBOTIS-GIT/Dynamixel2Arduino)).
+    1. Manually: If you have an [U2D2 Hub](https://www.robotis.us/u2d2) from Robotis, you can use the [Dynamixel Wizard](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/) tool to configure each motor prior to attaching them during assembly. Follow [this instruction](documentation_public/DXL_config_manual.md).<br>
+    2. Automatically: upload and run the [motor initialization code](/q8bot_cpp/q8bot_motor_config/) on the Seeed Studio XIAO on the fully assembled robot PCB. Connect your board to the laptop/PC and open a serial monitor. Connect the brand new Dynamixel motors into the robot PCB one-by-one, and the serial monitor should indicate whether motor configuration was successful. A detailed video instruction is WIP.
 
 5. Once all motors are configured and installed, it is recommended to go through the software setup and power up the robot without legs first to ensure correct joint configuration. Please go through Software Setup before returning to step 6.
 
@@ -95,10 +95,13 @@ Navigate to `/q8bot_python/q8bot` folder and run:
     python q8_operate.py
 
 If everything works, you should see a small pygame window pop up and the robot move its joints to their initial location. Robot keyboard control instructions are as follows:
-- WASD for robot movement.
+- WASD for robot movement. Q and E are used to partial turning in amber gait.
+- G two cycle between different gaits.
 - J for jumping.
 - Keyboard up and down for adjusting robot stance.
 - "+" and "-" for adjusting stride size.
+- R for resetting stance, size, etc.
+- (More functions comming soon).
 
 ## Appendix
 

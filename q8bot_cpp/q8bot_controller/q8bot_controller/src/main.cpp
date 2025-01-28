@@ -1,4 +1,5 @@
 /*
+ * Modified from the following author's creation by yufeng.wu0902@gmail.com.
  * "THE BEER-WARE LICENSE" (Revision 42):
  * regenbogencode@gmail.com wrote this file. As long as you retain this notice
  * you can do whatever you want with this stuff. If we meet some day, and you
@@ -6,45 +7,44 @@
  */
 #include <Arduino.h>
 #include <WiFi.h>
-#include <esp_now.h>
+#include <ESPNowW.h>
 
-// Structure example to send data
-// Must match the receiver structure
-typedef struct struct_message {
-  float pos[8];
-  uint16_t dur;
-  bool torque = false;
-} struct_message;
-
-// Create a struct_message called myData
-// struct_message myData;
-char myData[100];
-
-// Rev2.2 PCB MCU Address (Seeed XIAO) 54:32:04:86:F8:C8 Paired w dongle 1 (COM6)
+// This Q8bot's MAC address. Change this to yours.
 uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xF8, 0xC8};
-// Rev2.1 PCB MCU Address (Seeed XIAO) 54:32:04:86:D2:EC Paired w dongle 2 (COM4)
-// uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xD2, 0xEC};
+
+// Char array for sending and receiving data
+char myData[100];
+char theirData[100];
+bool incoming = false;
 
 // String for storing serial command
 String cmd;
 
-// peerInfo
+// PeerInfo
 esp_now_peer_info_t peerInfo;
 
-// callback when data is sent
+// Callback when data is received
+void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
+  char macStr[18];
+  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
+           mac_addr[5]);
+  memcpy(&theirData, incomingData, sizeof(theirData));
+  // Serial.print("Received from ["); Serial.print(macStr); Serial.print("]: "); 
+  Serial.println(theirData);
+}
+
+// Callback when data is sent. Not used ATM
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  // Serial.print("\r\nLast Packet Send Status:\t");
-  // // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-  // Serial.println(!status);
+  // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
  
 void setup() {
-  // Init Serial Monitor
   Serial.begin(115200);
   Serial.setTimeout(100);
- 
+
   // Set device as a Wi-Fi Station
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_MODE_STA);
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -52,15 +52,15 @@ void setup() {
     return;
   }
 
-  // Once ESPNow is successfully Init, we will register for Send CB to
-  // get the status of Trasnmitted packet
-  esp_now_register_send_cb(OnDataSent);
+  // Receive data callback function
+  ESPNow.reg_recv_cb(onRecv);
 
+  // Register for Send CB to get the status of Trasnmitted packet
+  esp_now_register_send_cb(OnDataSent);
   // Register peer
   memcpy(peerInfo.peer_addr, receiver_mac, 6);
   peerInfo.channel = 0;  
   peerInfo.encrypt = false;
-  
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer");
@@ -71,7 +71,7 @@ void setup() {
 void loop() {
   if(Serial.available()){
     uint8_t size_t = Serial.readBytesUntil(';', myData, sizeof(myData));
-    myData[size_t] = '\0';
+    myData[size_t] = '\0'; // Null-terminate the string
     // Serial.println(myData);
 
     esp_err_t result = esp_now_send(receiver_mac, (uint8_t *) &myData, 
