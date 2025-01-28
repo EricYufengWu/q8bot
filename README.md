@@ -36,7 +36,7 @@ Access the bill of materials (BOM) **[here](https://docs.google.com/spreadsheets
 ## Building Instructions
 
 While there are no detailed building instruction for Q8bot yet, you can use the YouTube video with the following simplified steps as reference:
-1. Obtain all components folling the bill of materials (BOM), including the PCB and 3D-printed parts.
+1. Obtain all components following the bill of materials (BOM), including the PCB and 3D-printed parts.
 
 2. Solder SMD and THT components to the PCB (skip if using PCBWay's assembly service).
 
@@ -45,7 +45,11 @@ While there are no detailed building instruction for Q8bot yet, you can use the 
 4. If you are using brand-new Dynamixel actuators, they need to individually configured. There are 2 ways to do this:
 
     1. Manually: If you have an [U2D2 Hub](https://www.robotis.us/u2d2) from Robotis, you can use the [Dynamixel Wizard](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/) tool to configure each motor prior to attaching them during assembly. Follow [this instruction](documentation_public/DXL_config_manual.md).<br>
-    2. Automatically: upload and run the [motor initialization code](/q8bot_cpp/q8bot_motor_config/) on the Seeed Studio XIAO on the fully assembled robot PCB. Connect your board to the laptop/PC and open a serial monitor. Connect the brand new Dynamixel motors into the robot PCB one-by-one, and the serial monitor should indicate whether motor configuration was successful. A detailed video instruction is WIP.
+    2. Automatically: upload and run the [motor initialization code](/q8bot_cpp/q8bot_motor_config/) on the Seeed Studio XIAO on the fully assembled robot PCB. Connect your board to the laptop/PC and open a serial monitor. Connect new Dynamixel motors into the robot PCB one-by-one, starting at the location of J1 (see picture below) and the serial monitor should indicate whether motor configuration was successful. Detailed instruction video coming soon!
+
+<p align="center">
+    <img src="documentation_public/dxl_manual_setup.png" alt="High level flowchart" width="60%">
+</p>
 
 5. Once all motors are configured and installed, it is recommended to go through the software setup and power up the robot without legs first to ensure correct joint configuration. Please go through Software Setup before returning to step 6.
 
@@ -66,7 +70,7 @@ Currently, all computation regarding gait generation and FK/IK happens on the la
 
 ### Seeed Studio XIAO MCU Setup (Robot + Controller)
 
-The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
+The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to their official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
 
 Open the folder "q8bot_robot" with PlatformIO and upload it to Q8bot's XIAO board.
 
