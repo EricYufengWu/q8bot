@@ -33,7 +33,7 @@ Dynamixel2Arduino dxl(ser, 8);
 const uint8_t idList[8] = {11, 12, 13, 14, 15, 16, 17, 18};
 const uint8_t driveMode[8] = {4, 4, 5, 5, 4, 4, 5, 5};
 const uint8_t operateMode = 4;
-const uint32_t homingOffset[8] = {2048, 4096, 2048, 4096, 2048, 4096, 2048, 4096};
+const uint32_t homingOffset[8] = {2048, 4096, 4294965248, 4294963200, 2048, 4096, 4294965248, 4294963200};
 const uint8_t baudRate = 3; // Corresponds to 1Mb baudrate
 const int32_t idlePos[8]   = {4618, 5622, 4618, 5622, 4618, 5622, 4618, 5622};
 const uint16_t moveTime = 1000;
@@ -59,6 +59,12 @@ void loop() {
     dxl.begin(FINAL_BAUD);
     if (dxl.ping(idList[count])) {
       Serial.printf("Joint %d already set up.\n", idList[count]);
+      dxl.writeControlTableItem(DRIVE_MODE, idList[count], driveMode[count]);
+      delay(100);
+      dxl.writeControlTableItem(OPERATING_MODE, idList[count], operateMode);
+      delay(100);
+      dxl.writeControlTableItem(HOMING_OFFSET, idList[count], homingOffset[count]);
+      delay(100);
       count++;
     // If not, wait for the first new motor to connect and set it up for the ID
     } else {

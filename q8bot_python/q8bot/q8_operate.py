@@ -13,11 +13,10 @@ from q8_espnow import *
 from q8_helpers import *
 
 # User-modifiable constants
+PORT = 'COM6'
 SPEED = 100
 res = 0.2
 y_min = 15
-PORT = 'COM6'    #ESP1
-# PORT = 'COM4'     #ESP2
 
 # Jumping parameters. Change this to tune jumping brhavior
 JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
