@@ -28,13 +28,13 @@ JUMP_REST = [10, 170, 10, 170, 10, 170, 10, 170]            # 40mm leg
 
 # Helper Functions
 def jump(JUMP_HIGH, jump_time):
-    # q8.move_all(JUMP_HIGH, 500)
+    # q8.move_all(JUMP_HIGH, 500, False)
     # time.sleep(0.7)
-    q8.move_all(JUMP_LOW, 500)
+    q8.move_all(JUMP_LOW, 500, False)
     time.sleep(0.8)
-    q8.move_all(JUMP_HIGH, 0)
+    q8.move_all(JUMP_HIGH, 0, False)
     time.sleep(jump_time)
-    q8.move_all(JUMP_REST, 0)
+    q8.move_all(JUMP_REST, 0, False)
     time.sleep(0.5)
     return
 
@@ -63,6 +63,8 @@ def movement_start(leg, dir, x_0, y_0, x_size, y_size, move_type = 'AMBER'):
 movement = False
 ongoing = False
 exit = False
+record = False
+request = "none"
 
 pygame.init()
 window = pygame.display.set_mode((300, 300))
@@ -90,34 +92,36 @@ while True:
             if not ongoing:
                 move_list = movement_start(leg, 'f', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         elif keys[pygame.K_s]:
             if not ongoing:
                 move_list = movement_start(leg, 'b', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         elif keys[pygame.K_a]:
             if not ongoing:
                 move_list = movement_start(leg, 'l', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         elif keys[pygame.K_d]:
             if not ongoing:
                 move_list = movement_start(leg, 'r', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         elif keys[pygame.K_q]:
             if not ongoing:
                 move_list = movement_start(leg, 'fl', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         elif keys[pygame.K_e]:
             if not ongoing:
                 move_list = movement_start(leg, 'fr', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0)
+            q8.move_all(pos, 0, record)
         else:
             move_xy(pos_x, pos_y, 0)
+            q8.finish_recording()
+            record = False
             ongoing = False
             movement = False
     else:
@@ -146,20 +150,40 @@ while True:
             # q8.send_jump()
             jump(JUMP_1, 0.1)
             time.sleep(1)
-            move_xy(pos_x, pos_y, 500)
+            move_xy(pos_x, pos_y, 500) # This is super weird fix this
             move_xy(pos_x, pos_y, 500)
             time.sleep(1)
         elif keys[pygame.K_g]:
             gait.append(gait.pop(0))
             print(f"Changed gait to: {gait[0]}")
             time.sleep(0.2)
+        elif keys[pygame.K_b]:
+            # print(f"Requesting battery info")
+            q8.check_battery()
+            request = "battery"
+            time.sleep(0.2)
+        elif keys[pygame.K_z]:
+            print(f"Record next movement")
+            record = True
+            request = "data"
+            time.sleep(0.2)
         elif keys[pygame.K_ESCAPE]:
             break
         else:
-            if q8.serialHandler.in_waiting > 0:  # Check if there is any data waiting to be read
-                data = q8.serialHandler.readline().decode('utf-8').strip()  # Read a line and decode it
-                print(f"Battery level: {data}%")  # Print the incoming data
-                # print(data)
+            totalArray = []
+            while q8.serialHandler.in_waiting > 0:  # Check if there is any data waiting to be read
+                raw_data = q8.serialHandler.readline().decode('utf-8').strip() # Read a line and decode it
+                raw_data = raw_data.split()
+                while raw_data and raw_data[-1] == '0':
+                    raw_data.pop()
+                if request == "battery":
+                    print(f"Battery Level: {int(raw_data[0])}")
+                else:
+                    processed_data = [int(x) for x in raw_data]
+                    totalArray.extend(processed_data)
+            request = "none"
+            if len(totalArray) > 0:
+                print(totalArray) 
 
 q8.disable_torque()
 pygame.quit()

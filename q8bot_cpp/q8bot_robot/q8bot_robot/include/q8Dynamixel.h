@@ -18,7 +18,7 @@ class q8Dynamixel
     void begin();
     bool checkComms(uint8_t ID);
     bool commStart();
-    uint16_t checkVoltage();
+    uint16_t checkBattery();
     void enableTorque();
     void disableTorque();
     void toggleTorque(bool flag);
@@ -28,7 +28,7 @@ class q8Dynamixel
     void bulkWrite(int32_t values[8]);
     uint16_t* syncRead();
     void jump();
-    void parseData(const char* myData);
+    uint8_t parseData(const char* myData);
 
   private:
     Dynamixel2Arduino& _dxl; // Member variable to store the object of Dynamixel2Arduino

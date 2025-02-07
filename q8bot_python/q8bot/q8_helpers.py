@@ -5,7 +5,7 @@ Helper functions for q8_operate.py.
 '''
 
 import math
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from kinematics_solver import *
 from q8_espnow import *
 
@@ -244,8 +244,8 @@ def movement_tick(move_list):
     new_list = move_list[1:] + [move_list[0]]
     return pos, new_list
 
-def visualize_gait(x_list, y_list):
-    for i in range(len(x_list)):
-        plt.plot(x_list[i], y_list[i],'o', label=i)
-    plt.legend()
-    plt.show()
+# def visualize_gait(x_list, y_list):
+#     for i in range(len(x_list)):
+#         plt.plot(x_list[i], y_list[i],'o', label=i)
+#     plt.legend()
+#     plt.show()

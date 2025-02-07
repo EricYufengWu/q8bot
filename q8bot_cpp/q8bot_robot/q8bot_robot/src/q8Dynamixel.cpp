@@ -81,8 +81,8 @@ bool q8Dynamixel::commStart(){
   return _torqueFlag;
 }
 
-uint16_t q8Dynamixel::checkVoltage(){
-  return _dxl.readControlTableItem(PRESENT_INPUT_VOLTAGE, _DXL[0]);
+uint16_t q8Dynamixel::checkBattery(){
+  return 1;
 }
 
 void q8Dynamixel::enableTorque(){
@@ -163,6 +163,10 @@ uint16_t* q8Dynamixel::syncRead(){
       byteArray[i] = 0;
     }
   }
+
+  // for (size_t i = 0; i < 4; ++i){
+  //   Serial.print(byteArray[i]); Serial.print(" ");
+  // } Serial.println();
   return byteArray;
 }
 
@@ -191,27 +195,30 @@ void q8Dynamixel::jump(){
   _prevProfile = 500;
 }
 
-void q8Dynamixel::parseData(const char* myData) {
+uint8_t q8Dynamixel::parseData(const char* myData) {
   char* token = strtok(const_cast<char*>(myData), ",");
   int index = 0;
+  int check = 0;
   
-  while (token != nullptr && index < 8) {
+  while (token != nullptr && index < 8) {  // First 8 contain joint positions
     _posArray[index++] = _deg2Dxl(std::atof(token));
     token = strtok(nullptr, ",");
   }
-  if (token != nullptr) {     // special
+  if (token != nullptr) {                  // 9th value is for special token
     _specialCmd = std::atoi(token);
     token = strtok(nullptr, ",");
-    if (_specialCmd == 1){
-      Serial.println("Check battery");
-      return;
-    } else if (_specialCmd == 2){
+    if (_specialCmd == 1){           // Battery
+      return 1;
+    } else if (_specialCmd == 2){    // Record
+      check = 2;
+    } else if (_specialCmd == 3){    // Send recorded
+      return 3;
+    } else if (_specialCmd == 4){    // Jump
       jump();
-      // Serial.println("Jumping");
-      return;
+      return 0;
     }
   }
-  if (token != nullptr) {     // move profile
+  if (token != nullptr) {                   // 10th value is vel/acc profiles
     _profile = std::atoi(token);
     token = strtok(nullptr, ",");
     if (_profile != _prevProfile){
@@ -220,16 +227,17 @@ void q8Dynamixel::parseData(const char* myData) {
       _prevProfile = _profile;
     }
   }
-  if (token != nullptr) {     // torque
+  if (token != nullptr) {                    // 1th value is torque enable/disable
     _torqueFlag = (std::atoi(token) == 1);
     if (_torqueFlag != _prevTorqueFlag){
       Serial.println(_torqueFlag ? "Torque on" : "Torque off");
       toggleTorque(_torqueFlag);
       _prevTorqueFlag = _torqueFlag;
-      return;
+      return 0;
     }
   }
   bulkWrite(_posArray);
+  return check - 0;
 }
 
 int32_t q8Dynamixel::_deg2Dxl(float deg){

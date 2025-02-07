@@ -10,11 +10,13 @@
 #include <ESPNowW.h>
 
 // This Q8bot's MAC address. Change this to yours. 24:EC:4A:C9:91:7C
-uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x91, 0x7C};
+// uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x91, 0x7C};
+uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xF8, 0xC8};
 
 // Char array for sending and receiving data
 char myData[100];
-char theirData[100];
+// char theirData[100];
+uint16_t theirData[100];
 bool incoming = false;
 
 // String for storing serial command
@@ -29,9 +31,14 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
   snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
            mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
            mac_addr[5]);
-  memcpy(&theirData, incomingData, sizeof(theirData));
+  memcpy(&theirData, incomingData, len);
   // Serial.print("Received from ["); Serial.print(macStr); Serial.print("]: "); 
-  Serial.println(theirData);
+  // Serial.println(sizeof(theirData));
+  for (int i = 0; i < 100; i++) {
+    Serial.print(theirData[i]);
+    Serial.print(" ");
+  } Serial.println();
+  memset(theirData, 0, sizeof(theirData));
 }
 
 // Callback when data is sent. Not used ATM

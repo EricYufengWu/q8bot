@@ -36,15 +36,23 @@ class q8_espnow:
         self.serialHandler.write("0,0,0,0,0,0,0,0,1,0,0;".encode())
         return True
     
-    def send_jump(self):
+    def record_data(self):
         self.serialHandler.write("0,0,0,0,0,0,0,0,2,0,0;".encode())
         return True
+    
+    def finish_recording(self):
+        self.serialHandler.write("0,0,0,0,0,0,0,0,3,0,1;".encode())
+        return True
+    
+    def send_jump(self):
+        self.serialHandler.write("0,0,0,0,0,0,0,0,4,0,0;".encode())
+        return True
 
-    def move_all(self, joints_pos, dur = 0):
+    def move_all(self, joints_pos, dur = 0, record = True):
         # Expects 8 positions in deg. For example: [0, 90, 0, 90, 0, 90, 0, 90]
         try:
-            cmd = ",".join(map(str, joints_pos)) + ",0," + f"{dur}," + f"{int(self.torque_on)};" 
-            # cmd = f"{int(self.torque_on)}," + f"{dur}," + ",".join(map(str, joints_pos)) + ";"
+            # If record is true, the 9th element is set to value 2. Else 0.
+            cmd = ",".join(map(str, joints_pos)) + f",{record*2}," + f"{dur}," + f"{int(self.torque_on)};" 
             # print(cmd)
             self.serialHandler.write(cmd.encode())
         except:
@@ -57,7 +65,7 @@ class q8_espnow:
         for i in range(4):
             mirrored_pos.append(joint_pos[0])
             mirrored_pos.append(joint_pos[1])
-        return self.move_all(mirrored_pos, dur)
+        return self.move_all(mirrored_pos, dur, False)
     
     def bulkread(self, addr, len = 4):
         value = [0 for i in range(8)]
