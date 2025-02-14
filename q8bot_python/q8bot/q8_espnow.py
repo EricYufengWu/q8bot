@@ -82,23 +82,23 @@ class q8_espnow:
     def check_voltage(self):
         voltage = 3.7
         return voltage
-    
-    #-------------------#
-    # Private Functions #
-    #-------------------#
 
-    def _dxl_to_deg(self, angle_dxl):
+    def dxl2deg(self, angle_dxl):
         # Dynamixel joint 0 to 360 deg is 0 to 4096
         friendly_per_dxl = 360.0 / 4096.0 / self.GEAR_RATIO
         angle_friendly = (angle_dxl - self.ZERO_OFFSET) * friendly_per_dxl
         return angle_friendly
 
-    def _deg_to_dxl(self, angle_friendly):
+    def deg2dxl(self, angle_friendly):
         # Dynamixel joint 0 to 360 deg is 0 to 4096
         friendly_per_dxl = 360.0 / 4096.0 / self.GEAR_RATIO
         angle_dxl = int(angle_friendly / friendly_per_dxl + 0.5) + \
                     self.ZERO_OFFSET
         return angle_dxl
+    
+    #-------------------#
+    # Private Functions #
+    #-------------------#
     
     def _set_profile(self, dur_ms):
         return

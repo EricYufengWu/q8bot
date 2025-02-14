@@ -19,12 +19,11 @@ res = 0.2
 y_min = 15
 
 # Jumping parameters. Change this to tune jumping brhavior
-JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
-# JUMP_LOW = [12, 168, 12, 168, 12, 168, 12, 168]         # 35mm leg
+# JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
+JUMP_LOW = [0, 180, 0, 180, 0, 180, 0, 180,]     # 40mm leg
 JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
 JUMP_2 = [95, 85, 95, 85, -25, 205, -25, 205]
 JUMP_REST = [10, 170, 10, 170, 10, 170, 10, 170]            # 40mm leg
-# JUMP_REST = [20, 160, 20, 160, 20, 160, 20, 160]        # 35mm leg
 
 # Helper Functions
 def jump(JUMP_HIGH, jump_time):
@@ -75,7 +74,7 @@ q8 = q8_espnow(PORT)
 q8.enable_torque()
 
 # Starting location of leg end effector in x and y
-gait = ['WALK', 'AMBER', 'GALLOP', 'PRONK']
+gait = ['AMBER', 'WALK', 'GALLOP', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
 pos_y = (leg.l1 + leg.l2) * 0.667
@@ -183,7 +182,7 @@ while True:
                     totalArray.extend(processed_data)
             request = "none"
             if len(totalArray) > 0:
-                print(totalArray) 
+                parse_data(totalArray)
 
 q8.disable_torque()
 pygame.quit()
