@@ -9,92 +9,51 @@ import matplotlib.pyplot as plt
 from kinematics_solver import *
 from q8_espnow import *
 
-def generate_walk(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0, 
-                        yrange = 20.0, lift_count = 10, len_factor = 8):
-    move_p, move_n = [], []
-    x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
-    x_lift_step = xrange / lift_count
-    x_down_step = xrange / lift_count / (len_factor - 1)
-    q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
-
-    if y0 - yrange < 5:
-        print("Invalid: y below physical limit.")
-        return dummy_movement(q1_d, q2_d)
-
-    for i in range(lift_count * len_factor):
-        if i < lift_count:
-            x_p += x_lift_step * min(i, 1)
-            x_n -= x_lift_step * min(i, 1)
-            y = y0 - math.sin((i+1)*(math.pi/(lift_count+1))) * yrange
-        else:
-            x_p -= x_down_step
-            x_n += x_down_step
-            y = y0
-        q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
-        q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
-        if len(str(q1_p))>5 or len(str(q2_p))>5:
-            print("Invalid: ",x_p, x_n, y, check1, check2)
-            xr_new, yr_new = xrange - 1, yrange - 1
-            print(xr_new, yr_new)
-            if xr_new > 0 and yr_new > 0:
-                print("Retry with smaller step size")
-                return generate_walk(leg, dir, x0, y0, xr_new, yr_new)
-            return dummy_movement(q1_d, q2_d)
-        move_p.append([q1_p, q2_p])
-        move_n.append([q1_n, q2_n])
-
-    split = int(lift_count * len_factor/4)
-    move_p2 = move_p[split:] + move_p[:split]
-    move_p3 = move_p[split*2:] + move_p[:split*2]
-    move_p4 = move_p[split*3:] + move_p[:split*3]
-    move_n2 = move_n[split:] + move_n[:split]
-    move_n3 = move_n[split*2:] + move_n[:split*2]
-    move_n4 = move_n[split*3:] + move_n[:split*3]
-
-    if dir == 'f':
-        return append_pos_list(move_p, move_p2, move_p3, move_p4)
-    elif dir == 'r':
-        return append_pos_list(move_p, move_n2, move_p3, move_n4)
-    elif dir == 'l':
-        return append_pos_list(move_n, move_p2, move_n3, move_p4)
-    else: # all other conditions default to "back"
-        return append_pos_list(move_n, move_n2, move_n3, move_n4)
-
-def generate_amber(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0, 
-                        yrange = 20.0, lift_count = 10, len_factor = 3):
+def generate_gait(leg, dir, x0, y0, xrange, yrange, yrange2, gait_params):
     # Generate two sets of single-leg position lists (forward + backward). 
     # Mix and match to create an aggregated list for 4 legs.
-    move_p, move_ps, move_n = [], [], []
+    gait, s1_count, s2_count = gait_params
+    move_p, move_ps, move_n= [], [], []
     x_list_p, x_list_n, x_p_s, y_list = [], [], [], []
+    x_list_p2, y_list2 = [], []
     x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
     x_ps = x_p * 0.5 + 9.75 *0.5
-    x_lift_step = xrange / lift_count
-    x_down_step = xrange / lift_count / (len_factor - 1)
+    x_lift_step = xrange / s1_count
+    x_down_step = xrange / s2_count
     q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
+    x_list_p.append(x_p)
+    x_list_p2.append(x_n)
+    y_list.append(y0)
+    y_list2.append(y0)
 
     if y0 - yrange < 5:
         print("Invalid: y below physical limit.")
         return dummy_movement(q1_d, q2_d)
 
-    for i in range(lift_count * len_factor):
-        if i < lift_count:
-            x_p += x_lift_step * min(i, 1)
-            x_ps += x_lift_step * min(i, 1) * 0.5
-            x_n -= x_lift_step * min(i, 1)
-            y = y0 - math.sin((i+1)*(math.pi/(lift_count))) * yrange
+    for i in range(s1_count + s2_count):
+        if i < s1_count:
+            x_p += x_lift_step
+            x_ps += x_lift_step * 0.5
+            x_n -= x_lift_step
+            freq = math.pi / s1_count
+            y = y0 - math.sin((i+1) * freq) * yrange
+            x_list_p.append(x_p)
+            y_list.append(y)
         else:
             x_p = x_p - x_down_step
             x_ps = x_ps - x_down_step * 0.5
             x_n = x_n + x_down_step
-            y = y0
+            freq = math.pi / s2_count
+            y = y0 + math.sin((i-s1_count+1) * freq) * yrange2
+            x_list_p2.append(x_p)
+            y_list2.append(y)
         q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
         q1_ps, q2_ps, check3 = leg.ik_solve(x_ps, y, True, 1) # smaller gait
         q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
-        # Making a list of x y for visualization
-        x_list_p.append(x_p)
+        # x_list_p.append(x_p)
         x_list_n.append(x_n)
         x_p_s.append(x_ps)
-        y_list.append(y)
+        # y_list.append(y)
         #
         if len(str(q1_p))>5 or len(str(q2_p))>5:
             print("Invalid: ",x_p, x_n, y, check1, check2)
@@ -102,19 +61,29 @@ def generate_amber(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0,
             print(xr_new, yr_new)
             if xr_new > 0 and yr_new > 0:
                 print("Retry with smaller step size")
-                return generate_amber(leg, dir, x0, y0, xr_new, yr_new)
+                return generate_gait(leg, dir, x0, y0, xr_new, yr_new, gait_params)
             return dummy_movement(q1_d, q2_d)
         move_p.append([q1_p, q2_p])
         move_ps.append([q1_ps, q2_ps])
         move_n.append([q1_n, q2_n])
-    # visualize_combined(y_list, move_p)
-    # visualize_joints(move_p)
-
-    split = int(lift_count * len_factor/2)
+    # visualize_gait([x_list_p],[x_list_n],[y_list])
+    # visualize_gait(x_list_p, y_list, x_list_p2, y_list2)
+    
+    if gait == 'walk':
+        return stack_walk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
+    elif gait == 'amber':
+        return stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps), y_list + y_list2
+    elif gait == 'gallop':
+        return stack_gallop(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
+    elif gait == 'pronk':
+        return stack_pronk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
+    
+def stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps):
+    len_factor = (s1_count+s2_count)/s1_count
+    split = int(s1_count * len_factor/2)
     move_p2 = move_p[split:] + move_p[:split]
     move_ps2 = move_ps[split:] + move_ps[:split]
     move_n2 = move_n[split:] + move_n[:split]
-    
     if dir == 'f':
         return append_pos_list(move_p, move_p2, move_p2, move_p)
     elif dir == 'r':
@@ -128,100 +97,40 @@ def generate_amber(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0,
     else: # all other conditions default to "back"
         return append_pos_list(move_n, move_n2, move_n2, move_n)
     
-def generate_gallop(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0, 
-                        yrange = 20.0, lift_count = 5, len_factor = 4):
-    move_p, move_n = [], []
-    x_list_p, x_list_n, y_list = [], [], []
-    x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
-    x_lift_step = xrange / lift_count
-    x_down_step = xrange / lift_count / (len_factor - 1)
-    q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
-
-    if y0 - yrange < 5:
-        print("Invalid: y below physical limit.")
-        return dummy_movement(q1_d, q2_d)
-
-    for i in range(lift_count * len_factor):
-        if i < lift_count:
-            x_p += x_lift_step * min(i, 1)
-            x_n -= x_lift_step * min(i, 1)
-            y = y0 + math.sin((i+1)*(math.pi/(lift_count))) * yrange
-        else:
-            x_p = x_p - x_down_step
-            x_n = x_n + x_down_step
-            y = y0
-        q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
-        q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
-        # Making a list of x y for visualization
-        x_list_p.append(x_p)
-        x_list_n.append(x_n)
-        y_list.append(y)
-        if len(str(q1_p))>5 or len(str(q2_p))>5:
-            print("Invalid: ",x_p, x_n, y, check1, check2)
-            xr_new, yr_new = xrange - 1, yrange - 1
-            print(xr_new, yr_new)
-            if xr_new > 0 and yr_new > 0:
-                print("Retry with smaller step size")
-                return generate_gallop(leg, dir, x0, y0, xr_new, yr_new)
-            return dummy_movement(q1_d, q2_d)
-        move_p.append([q1_p, q2_p])
-        move_n.append([q1_n, q2_n])
-    # visualize_gait([x_list_p],[y_list])
+def stack_walk(dir, s1_count, s2_count, move_p, move_n):
+    len_factor = (s1_count+s2_count)/s1_count
+    split = int(s1_count * len_factor/4)
+    print(split)
+    move_p2 = move_p[split:] + move_p[:split]
+    move_p3 = move_p[split*2:] + move_p[:split*2]
+    move_p4 = move_p[split*3:] + move_p[:split*3]
+    move_n2 = move_n[split:] + move_n[:split]
+    move_n3 = move_n[split*2:] + move_n[:split*2]
+    move_n4 = move_n[split*3:] + move_n[:split*3] 
+    if dir == 'f':
+        return append_pos_list(move_p, move_p2, move_p3, move_p4)
+    elif dir == 'r':
+        return append_pos_list(move_p, move_n2, move_p3, move_n4)
+    elif dir == 'l':
+        return append_pos_list(move_n, move_p2, move_n3, move_p4)
+    else: # all other conditions default to "back"
+        return append_pos_list(move_n, move_n2, move_n3, move_n4)
     
-    split = int(lift_count * len_factor/4)
+def stack_gallop(dir, s1_count, s2_count, move_p, move_n):
+    split = int((s2_count + s1_count)/2)
     move_p2 = move_p[split:] + move_p[:split]
     move_n2 = move_n[split:] + move_n[:split]
-    
     if dir == 'f':
         return append_pos_list(move_p, move_p, move_p2, move_p2)
     else: # all other conditions default to "back"
         return append_pos_list(move_n, move_n, move_n2, move_n2)
-
-def generate_pronk(leg, dir, x0 = 9.75, y0 = 40, xrange = 20.0, 
-                        yrange = 20.0, lift_count = 5, len_factor = 10):
-    move_p, move_n = [], []
-    x_list_p, x_list_n, y_list = [], [], []
-    x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
-    x_lift_step = xrange / lift_count
-    x_down_step = xrange / lift_count / (len_factor - 1)
-    q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
-
-    if y0 - yrange < 5:
-        print("Invalid: y below physical limit.")
-        return dummy_movement(q1_d, q2_d)
-
-    for i in range(lift_count * len_factor):
-        if i < lift_count:
-            x_p += x_lift_step * min(i, 1)
-            x_n -= x_lift_step * min(i, 1)
-            y = y0 + math.sin((i+1)*(math.pi/(lift_count))) * yrange
-        else:
-            x_p = x_p - x_down_step
-            x_n = x_n + x_down_step
-            y = y0
-        q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
-        q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
-        # Making a list of x y for visualization
-        x_list_p.append(x_p)
-        x_list_n.append(x_n)
-        y_list.append(y)
-        if len(str(q1_p))>5 or len(str(q2_p))>5:
-            print("Invalid: ",x_p, x_n, y, check1, check2)
-            xr_new, yr_new = xrange - 1, yrange - 1
-            print(xr_new, yr_new)
-            if xr_new > 0 and yr_new > 0:
-                print("Retry with smaller step size")
-                return generate_pronk(leg, dir, x0, y0, xr_new, yr_new)
-            return dummy_movement(q1_d, q2_d)
-        move_p.append([q1_p, q2_p])
-        move_n.append([q1_n, q2_n])
-    # visualize_gait([x_list_p],[y_list])
-
+    
+def stack_pronk(dir, s1_count, s2_count, move_p, move_n):
     if dir == 'f':
         return append_pos_list(move_p, move_p, move_p, move_p)
     else: # all other conditions default to "back"
         return append_pos_list(move_n, move_n, move_n, move_n)
-
+    
 def append_pos_list(list_1, list_2, list_3, list_4):
     # Append values to overall movement list in specific order. 
     #    Robot Front
@@ -243,13 +152,13 @@ def movement_tick(move_list):
     # For each step in a movement, cycle through pre-calculated list.
     pos = move_list[0]
     new_list = move_list[1:] + [move_list[0]]
+    # for i in range(len(pos)):
+    #     pos[i] = round(pos[i])
+    # print(pos)
     return pos, new_list
 
-def parse_data(data):
-    cur_1 = []
-    pos_1 = []
-    cur_2 = []
-    pos_2 = []
+def parse_data(data, cmd, y_list):
+    cur_1, cur_2, pos_1, pos_2 = [], [], [], []
     for i in range(0, len(data), 4):
         cur_1.append(data[i])
         pos_1.append(data[i+1])
@@ -259,26 +168,36 @@ def parse_data(data):
     cur_2 = np.array(cur_2) - 10000
     pos_1 = np.round(dxl2rad(np.array(pos_1)),2)
     pos_2 = np.round(dxl2rad(np.array(pos_2)),2)
-    print(cur_1)
-    print(pos_1)
-    print(cur_2)
-    print(pos_1)
+    cmd_1 = [q_val[0] for q_val in cmd]
+    cmd_2 = [q_val[1] for q_val in cmd]
+    y_length, d_length = len(y_list), len(cur_1)
+    if d_length <= y_length:
+        y_new = y_list[:d_length]  # Take only the first n elements of y_list
+        cmd_1, cmd_2 = cmd_1[:d_length], cmd_2[:d_length]
+    else:
+        y_new = np.tile(y_list, (d_length // y_length) + 1)[:d_length]  # Repeating and slicing to fit length n
+        cmd_1 = np.tile(cmd_1, (d_length // y_length) + 1)[:d_length]
+        cmd_2 = np.tile(cmd_2, (d_length // y_length) + 1)[:d_length]
+    cmd_1 = [math.radians(deg) for deg in cmd_1]
+    cmd_2 = [math.radians(deg) for deg in cmd_2]
 
     # Generate x axis timestamps for the data
     t = [i for i in range(len(cur_1))]
-    # Create a 2x1 subplot
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
-    ax1.plot(t, cur_1, label='Joint 1', color='tab:blue')  # Blue color for the gait trajectory
-    ax1.plot(t, cur_2, label='Joint 2', color='tab:orange')  # Blue color for the gait trajectory
-    ax1.set_ylabel('Joint Current (mA)', fontsize=15, labelpad=15)  # Move y label further
-    ax1.legend(loc='upper right',fontsize=14)
-    # ax1.set_aspect(0.5)
-    ax2.plot(t, pos_1, label='Joint 1', color='tab:green')  # Red color for q_1
-    ax2.plot(t, pos_2, label='Joint 2', color='tab:red')  # Green color for q_2
-    ax2.set_xlabel('Time Stamp', fontsize=15, labelpad=15)  # Move x label further
-    ax2.set_ylabel('Joint positions (rad)', fontsize=15, labelpad=15)  # Move y label further
-    ax2.legend(loc='upper right',fontsize=14)
-    # ax2.set_aspect(0.5)
+    # Create a 3x1 subplot
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(16, 9))
+    ax1.plot(t, y_new, label='y', color='tab:blue') 
+    ax1.set_ylabel('Leg Trajectory Y (mm)', fontsize=15, labelpad=15)  # Move y label further
+    ax2.plot(t, pos_1, label='Joint 1 measured', color='tab:red')
+    ax2.plot(t, pos_2, label='Joint 2 measured', color='tab:purple')
+    ax2.plot(t, cmd_1, label='Joint 1 desired', color='tab:brown', linestyle='--')
+    ax2.plot(t, cmd_2, label='Joint 2 desired', color='tab:pink', linestyle='--')
+    ax2.set_ylabel('Joint Positions (rad)', fontsize=15, labelpad=15)
+    ax2.legend(loc='upper right',fontsize=13)
+    ax3.plot(t, cur_1, label='Joint 1', color='tab:orange')
+    ax3.plot(t, cur_2, label='Joint 2', color='tab:green')
+    ax3.set_xlabel('Time Stamp', fontsize=15, labelpad=10)
+    ax3.set_ylabel('Joint Current (mA)', fontsize=15)
+    ax3.legend(loc='upper right',fontsize=13)
     # Show the plot
     plt.tight_layout()
     plt.show()
@@ -289,17 +208,30 @@ def dxl2rad(angle_dxl):
     angle_friendly = (angle_dxl - 4096) * friendly_per_dxl
     return angle_friendly * math.pi / 180
 
-def visualize_gait(y_list):
-    y_list = y_list[-int(len(y_list)/2):] + (y_list * 5)
-    x_list = [i for i in range(len(y_list))]
-    # Plot the data
-    plt.plot(x_list, y_list)
-    # Label the axes
-    plt.xlabel('Time Stamp')
-    plt.ylabel('Y Coordinate of Trajectory (mm)')
-    # Title for the plot
-    plt.title('Robot Trajectory and Joint Angles')
-    # Show the plot
+# def visualize_gait(x_p, x_n, y_list):
+#     for i in range(len(x_p)):
+#         plt.plot(x_p[i], y_list[i],'o')
+#         plt.plot(x_n[i], y_list[i],'o', color='tab:orange')
+#     plt.legend()
+#     plt.show()
+def visualize_gait(x_1, y_1, x_2, y_2):
+    fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+    axs[0].plot(x_1, y_1, linewidth = 2, label='Sinusoid 1')
+    axs[0].plot(x_2, y_2, linewidth = 2, label='Sinusoid 2')
+    axs[0].legend(fontsize = 14)
+    for i in range(len(x_1)):
+        axs[1].plot(x_1[i], y_1[i],'o', markersize = 8, color = 'tab:blue')
+    for i in range(len(x_2)):
+        axs[1].plot(x_2[i], y_2[i],'.', markersize = 10, color = 'tab:orange')
+    for ax in axs:
+        ax.axis('equal')
+        ax.set_xticks(np.arange(-10, 31, 10))
+        ax.set_yticks(np.arange(0, 51, 10))
+        ax.tick_params(axis='both', which='major', labelsize=14, width=2)  # Make ticks thicker
+        ax.spines['top'].set_linewidth(2)   # Top axis line thickness
+        ax.spines['right'].set_linewidth(2)  # Right axis line thickness
+        ax.spines['left'].set_linewidth(2)   # Left axis line thickness
+        ax.spines['bottom'].set_linewidth(2) # Bottom axis line thickness
     plt.show()
 
 def visualize_combined(y_list, q_list):

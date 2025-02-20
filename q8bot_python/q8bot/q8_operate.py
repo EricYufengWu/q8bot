@@ -14,9 +14,23 @@ from q8_helpers import *
 
 # User-modifiable constants
 PORT = 'COM6'
-SPEED = 100
+# Pygame speed. This will change robot's gait frequency globally.
+SPEED = 200
 res = 0.2
 y_min = 15
+
+# (WIP) Dictionary format: 
+# 'NAME':     [x0, y0, xrange, yrange, s1_count, s2_count] 
+gaits = {
+    # 'AMBER':  [9.75, 43.36, 40, 20, 10, 3 ],
+    # 'WALK':   [9.75, 43.36, 30, 20, 10, 8 ],
+    # 'GALLOP': [9.75, 33.36, 30, 20, 5,  4 ],
+    # 'PRONK':  [9.75, 43.36, 20, 20, 5,  10]
+    'AMBER':  ['amber',  20, 80],
+    'WALK':   ['walk',   20, 140],
+    'GALLOP': ['gallop', 40, 10],
+    'PRONK':  ['pronk',  40, 10]
+}
 
 # Jumping parameters. Change this to tune jumping brhavior
 # JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
@@ -47,13 +61,13 @@ def movement_start(leg, dir, x_0, y_0, x_size, y_size, move_type = 'AMBER'):
     global ongoing
     ongoing = True
     if move_type == 'WALK': # three feet on the ground
-        return generate_walk(leg, dir, x_0, y_0, x_size + 10, y_size)
+        return generate_gait(leg, dir, x_0, y_0, x_size + 10, y_size, 0, gaits['WALK'])
     elif move_type == 'AMBER':  # this is like a smoother trot
-        return generate_amber(leg, dir, x_0, y_0, x_size + 20, y_size)
+        return generate_gait(leg, dir, x_0, y_0, x_size + 20, y_size, 4, gaits['AMBER'])
     elif move_type == 'GALLOP': # two front and two back
-        return generate_gallop(leg, dir, x_0, y_0 - 10, x_size + 10, y_size)
-    elif move_type == 'PRONK': # four leg jump forward
-        return generate_pronk(leg, dir, x_0, y_0, x_size, y_size)
+        return generate_gait(leg, dir, x_0, 33.36, x_size + 20, 0, y_size, gaits['GALLOP'])
+    elif move_type == 'PRONK': # four legs jump forward
+        return generate_gait(leg, dir, x_0, 33.36, x_size, 0, y_size, gaits['PRONK'])
     else:
         return dummy_movement()
 
@@ -77,7 +91,7 @@ q8.enable_torque()
 gait = ['AMBER', 'WALK', 'GALLOP', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
-pos_y = (leg.l1 + leg.l2) * 0.667
+pos_y = round((leg.l1 + leg.l2) * 0.667, 2)
 move_xy(pos_x, pos_y, 1000)
 time.sleep(2)
 
@@ -89,32 +103,32 @@ while True:
     if movement:
         if keys[pygame.K_w]:
             if not ongoing:
-                move_list = movement_start(leg, 'f', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'f', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_s]:
             if not ongoing:
-                move_list = movement_start(leg, 'b', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'b', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_a]:
             if not ongoing:
-                move_list = movement_start(leg, 'l', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'l', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_d]:
             if not ongoing:
-                move_list = movement_start(leg, 'r', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'r', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_q]:
             if not ongoing:
-                move_list = movement_start(leg, 'fl', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'fl', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_e]:
             if not ongoing:
-                move_list = movement_start(leg, 'fr', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'fr', pos_x, pos_y, step_size, step_size, gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         else:
@@ -182,10 +196,19 @@ while True:
                     totalArray.extend(processed_data)
             request = "none"
             if len(totalArray) > 0:
-                parse_data(totalArray)
+                # print(totalArray)
+                parse_data(totalArray, move_list, y_list)
 
 q8.disable_torque()
 pygame.quit()
 
 # if __name__ == "__main__":
 #     main()
+
+
+'''
+To do:
+1. Make plotting more robust against robot jerky motion at low battery
+2. Fix robot jerky motion at low battery
+3. Fully integrate gait dictionary, with variable params in walk and trot
+'''
