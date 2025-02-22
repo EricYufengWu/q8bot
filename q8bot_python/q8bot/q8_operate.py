@@ -160,12 +160,11 @@ while True:
             step_size = 20
         elif keys[pygame.K_j]:
             print("Jump")
-            # q8.send_jump()
-            jump(JUMP_1, 0.1)
-            time.sleep(1)
-            move_xy(pos_x, pos_y, 500) # This is super weird fix this
-            move_xy(pos_x, pos_y, 500)
-            time.sleep(1)
+            q8.send_jump()
+            # jump(JUMP_1, 0.1)
+            time.sleep(5)
+            move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
+            move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
         elif keys[pygame.K_g]:
             gait.append(gait.pop(0))
             print(f"Changed gait to: {gait[0]}")

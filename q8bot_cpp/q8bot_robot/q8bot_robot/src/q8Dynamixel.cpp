@@ -21,22 +21,6 @@ void q8Dynamixel::begin(){
   _dxl.setPortProtocolVersion(_protocolVersion);
   setOpMode();
 
-  // // fill the members of structure for bulkRead using external user packet buffer
-  // _br_infos.packet.p_buf = _user_pkt_buf;
-  // _br_infos.packet.buf_capacity = _user_pkt_buf_cap;
-  // _br_infos.packet.is_completed = false;
-  // _br_infos.p_xels = _info_xels_br;
-  // _br_infos.xel_count = 0;
-
-  // for (int i = 0; i < _idCount; i++){
-  //   _info_xels_br[i].id = _DXL[i];
-  //   _info_xels_br[i].addr = 132; // Present Position of X serise.
-  //   _info_xels_br[i].addr_length = 4; // Present Current + Position + Velocity
-  //   _info_xels_br[i].p_recv_buf = reinterpret_cast<uint8_t*>(&_br_data_xel[i]);
-  //   _br_infos.xel_count++;
-  // }
-  // _br_infos.is_info_changed = true;
-
   // Fill the members of structure for bulkWrite using internal packet buffer
   _bw_infos.packet.p_buf = nullptr;
   _bw_infos.packet.is_completed = false;
@@ -70,6 +54,7 @@ void q8Dynamixel::begin(){
   _sr_infos.is_info_changed = true;
 
   setProfile(1000);
+  expandArrays();
 }
 
 bool q8Dynamixel::checkComms(uint8_t ID){
@@ -117,10 +102,17 @@ void q8Dynamixel::setOpMode(){
 }
 
 void q8Dynamixel::setProfile(uint16_t dur){
-  // for Time-based Extended Pos, Profile velocity is the move duration (ms).
+  setGain(400);
   for (int i = 0; i < _idCount; i++){
     _dxl.writeControlTableItem(PROFILE_VELOCITY, _DXL[i], dur);
     _dxl.writeControlTableItem(PROFILE_ACCELERATION, _DXL[i], dur / 3);
+  }
+}
+
+void q8Dynamixel::setGain(uint16_t p_gain){
+  // for Time-based Extended Pos, Profile velocity is the move duration (ms).
+  for (int i = 0; i < _idCount; i++){
+    _dxl.writeControlTableItem(POSITION_P_GAIN, _DXL[i], p_gain);
   }
 }
 
@@ -171,27 +163,26 @@ uint16_t* q8Dynamixel::syncRead(){
 }
 
 void q8Dynamixel::jump(){
-  // float _degArray1[8] = {45.9,134.1,45.9,134.1,45.9,134.1,45.9,134.1};
-  // for (int i = 0; i < 8; i++){
-  //   Serial.print(_deg2Dxl(_degArray1[i])); Serial.print(" ");
-  // } Serial.println();
+  // Crouching Position
+  setProfile(500);
+  delay(100);
+  bulkWrite(_lowArray);
+  delay(1000);
 
-  setProfile(500);
-  delay(100);
-  Serial.println("Jumping Low");
-  bulkWrite(_jumpRest);
+  // Jump
   setProfile(0);
-  delay(1000);
-  Serial.println("Jumping High");
-  bulkWrite(_jumpHigh1);
+  setGain(800);
   delay(100);
-  Serial.println("Jumping Rest");
-  bulkWrite(_jumpRest);
-  delay(1000);
+  bulkWrite(_highArray);
+  delay(100);
+  bulkWrite(_restArray);
+  delay(5000);
+
+  // Back to idle
   setProfile(500);
+  delay(100);
+  bulkWrite(_idleArray);
   delay(1000);
-  Serial.println("Idle");
-  bulkWrite(_idlePos);
   _prevProfile = 500;
 }
 
@@ -252,4 +243,23 @@ float q8Dynamixel::_dxl2Deg(int32_t dxlRaw){
   const float friendlyPerDxl = 360.0 / 4096.0 / _gearRatio;
   float angleFriendly = (dxlRaw - _zeroOffset) * friendlyPerDxl;
   return angleFriendly;
+}
+
+void q8Dynamixel::expandArrays(){
+  for (int i = 0; i < 4; i++){
+    _idleArray[i*2] = _deg2Dxl(_idlePos[0]);
+    _idleArray[i*2+1] = _deg2Dxl(_idlePos[1]);
+  }
+  for (int i = 0; i < 4; i++){
+    _lowArray[i*2] = _deg2Dxl(_jumpLow[0]);
+    _lowArray[i*2+1] = _deg2Dxl(_jumpLow[1]);
+  }
+  for (int i = 0; i < 4; i++){
+    _highArray[i*2] = _deg2Dxl(_jumpHigh[0]);
+    _highArray[i*2+1] = _deg2Dxl(_jumpHigh[1]);
+  }
+  for (int i = 0; i < 4; i++){
+    _restArray[i*2] = _deg2Dxl(_jumpRest[0]);
+    _restArray[i*2+1] = _deg2Dxl(_jumpRest[1]);
+  }
 }

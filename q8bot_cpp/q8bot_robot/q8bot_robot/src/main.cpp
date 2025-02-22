@@ -7,8 +7,8 @@
 #include "q8Dynamixel.h"
 
 // Change this to your controller's MAC address if doing bi-directional ESPNow 24:EC:4A:C9:58:A4
-// uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
-uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x58, 0xA4};
+uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
+// uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x58, 0xA4};
 
 // ESPNow
 uint16_t myData[100];
@@ -203,7 +203,8 @@ void setup() {
 
 void loop() {
   while (!q8.commStart()){
-    delay(100);
+    delay(1000);
+    Serial.println("Waiting");
   }
   digitalWrite(LED_PIN, HIGH);
   delay(1000);
@@ -211,36 +212,11 @@ void loop() {
   Serial.println("Robot start!");
 
   while(1){
-    // unsigned long startTime = micros(); // Get start time
-
-    // uint16_t* posArray = q8.syncRead();
-    // size_t currentSize = 16;
-    // uint16_t battPercent = static_cast<uint16_t>(round(FuelGauge.percent()));
-    // addElementToArray(posArray, currentSize, battPercent); // Add battery reading
-    // myData[0] = '\0';
-    // for (int i = 0; i < currentSize; i++){
-    //   char temp[6];
-    //   sprintf(temp, "%u", posArray[i]);
-    //   if (i > 0){
-    //     strcat(myData, ",");
-    //   }
-    //   strcat(myData, temp);
-    // }
-    // delete[] posArray;
-
-    // dtostrf(FuelGauge.percent(), 5, 2, myData);
-    // myData[0]  = (uint16_t)FuelGauge.percent();
-    // esp_err_t result = esp_now_send(receiver_mac, (uint8_t *) &myData, 
-    //                                 sizeof(myData));
-
     delay(9800);
     digitalWrite(LED_PIN, HIGH);
     delay(200);
     digitalWrite(LED_PIN, LOW);
-    
-    // unsigned long endTime = micros(); // Get end time
-    // unsigned long loopTime = endTime - startTime; // Calculate loop duration
-    // Serial.println(loopTime); // Print loop time to serial monitor
+    q8.setProfile(0);
   }
 }
 

@@ -24,6 +24,7 @@ class q8Dynamixel
     void toggleTorque(bool flag);
     void setOpMode();
     void setProfile(uint16_t dur);
+    void setGain(uint16_t p_gain);
     void moveSingle(int32_t val);
     void bulkWrite(int32_t values[8]);
     uint16_t* syncRead();
@@ -56,13 +57,15 @@ class q8Dynamixel
     uint8_t _specialCmd = 0;
     int32_t _deg2Dxl(float deg);
     float _dxl2Deg(int32_t dxlRaw);
-    int32_t _idlePos[8]   = {4618, 5622, 4618, 5622, 4618, 5622, 4618, 5622};
-    int32_t _jumpLow[8]   = {4221, 6019, 4221, 6019, 4221, 6019, 4221, 6019};
-    int32_t _jumpHigh1[8] = {5177, 5063, 5177, 5063, 5177, 5063, 5177, 5063};
-    int32_t _jumpHigh2[8] = {5120, 5120, 5120, 5120, 5120, 5120, 5120, 5120};
-    int32_t _jumpHigh3[8] = {5063, 5177, 5063, 5177, 5063, 5177, 5063, 5177};
-    int32_t _jumpHigh4[8] = {5006, 5234, 5006, 5234, 5006, 5234, 5006, 5234};
-    int32_t _jumpRest[8]  = {4324, 5916, 4324, 5916, 4324, 5916, 4324, 5916};
+    void expandArrays();
+    const float _idlePos[2]   = {30, 150};
+    int32_t _idleArray[8];
+    const float _jumpLow[2]   = {-40, 220};
+    int32_t _lowArray[8];
+    const float _jumpHigh[2] = {90, 90};
+    int32_t _highArray[8];
+    const float _jumpRest[2]  = {30, 150};
+    int32_t _restArray[8];
 
     // Struct definitions for br (bulk read) and bw (bulk write)
     struct br_data_xel{
