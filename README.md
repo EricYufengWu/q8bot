@@ -2,7 +2,7 @@
 
 Q8bot is a miniature quadruped robot powered by 8 [Dynamixel](https://www.robotis.us/dynamixel-xl330-m077-t/) motors and a [Seeed Studio XIAO ESP32C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html).
 
-The robot weighs around 221g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
+The robot weighs around 220g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
 
 The current BOM, without optimization, starts below $300. 
 
@@ -12,6 +12,10 @@ The current BOM, without optimization, starts below $300.
   <img src="documentation_public/10s_gif.gif" alt="Image 1" width="49%">
   <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 2" width="49%">
 </p>
+
+**03/03/2025 Update: Q8bot is now officially a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
+
+[![Q8bot](documentation_public/Q8bot_RoMeLa.jpeg)](https://www.romela.org/)
 
 ## Design Files
 

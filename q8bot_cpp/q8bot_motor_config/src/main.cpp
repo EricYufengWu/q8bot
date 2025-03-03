@@ -53,6 +53,16 @@ void setup() {
 }
 
 void loop() {
+  // dxl.begin(FINAL_BAUD);
+  // if (dxl.ping(12)) {
+  //   Serial.println("ID 12 found");
+  //   dxl.writeControlTableItem(ID, 12, 18);
+  //   delay(1000);
+  // } else if (dxl.ping(18)){
+  //   Serial.println("ID changed to 18");
+  //   delay(1000);
+  // }
+
   // Repeat param config for all 8 Dynamixel motors here.
   if (count < sizeof(idList)) {
     // First check whether a motor with desired ID already exists. If so move to the next ID.
@@ -93,6 +103,7 @@ void loop() {
     delay(5000);
     finishSetup();
   }
+  finishSetup();
 }
 
 void finishSetup() {

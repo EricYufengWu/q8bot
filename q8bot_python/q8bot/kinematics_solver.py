@@ -52,8 +52,9 @@ class k_solver:
     def fk_solve(self, q1, q2, deg = True, rounding = 3):
         if deg:
             angles = (self._deg2rad(q1), self._deg2rad(q2))
-        x, y = fsolve(self._fk_calc, self.prev_est, args=angles)
-        self.prev_est = [x, y]
+        x, y = fsolve(self._fk_calc, [10,60], args=angles)
+        # x, y = fsolve(self._fk_calc, self.prev_est, args=angles)
+        # self.prev_est = [x, y]
         return round(x, rounding), round(y, rounding)
 
     #-------------------#

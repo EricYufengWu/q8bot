@@ -7,8 +7,8 @@
 #include "q8Dynamixel.h"
 
 // Change this to your controller's MAC address if doing bi-directional ESPNow 24:EC:4A:C9:58:A4
-uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
-// uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x58, 0xA4};
+// uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
+uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x58, 0xA4};
 
 // ESPNow
 uint16_t myData[100];
@@ -216,7 +216,7 @@ void loop() {
     digitalWrite(LED_PIN, HIGH);
     delay(200);
     digitalWrite(LED_PIN, LOW);
-    q8.setProfile(0);
+    // q8.setProfile(0);
   }
 }
 

@@ -21,10 +21,10 @@ def generate_gait(leg, dir, x0, y0, xrange, yrange, yrange2, gait_params):
     x_lift_step = xrange / s1_count
     x_down_step = xrange / s2_count
     q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
-    x_list_p.append(x_p)
-    x_list_p2.append(x_n)
-    y_list.append(y0)
-    y_list2.append(y0)
+    # x_list_p.append(x_p)
+    # x_list_p2.append(x_n)
+    # y_list.append(y0)
+    # y_list2.append(y0)
 
     if y0 - yrange < 5:
         print("Invalid: y below physical limit.")
@@ -57,33 +57,34 @@ def generate_gait(leg, dir, x0, y0, xrange, yrange, yrange2, gait_params):
         #
         if len(str(q1_p))>5 or len(str(q2_p))>5:
             print("Invalid: ",x_p, x_n, y, check1, check2)
-            xr_new, yr_new = xrange - 1, yrange - 1
+            xr_new, yr_new, yr_new2 = xrange - 1, yrange - 1, yrange2
             print(xr_new, yr_new)
             if xr_new > 0 and yr_new > 0:
                 print("Retry with smaller step size")
-                return generate_gait(leg, dir, x0, y0, xr_new, yr_new, gait_params)
+                return generate_gait(leg, dir, x0, y0, xr_new, yr_new, yr_new2, gait_params)
             return dummy_movement(q1_d, q2_d)
         move_p.append([q1_p, q2_p])
         move_ps.append([q1_ps, q2_ps])
         move_n.append([q1_n, q2_n])
-    # visualize_gait([x_list_p],[x_list_n],[y_list])
-    # visualize_gait(x_list_p, y_list, x_list_p2, y_list2)
+    # visualize_traj(x_list_p, y_list, x_list_p2, y_list2)
     
     if gait == 'walk':
         return stack_walk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     elif gait == 'amber':
-        return stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps), y_list + y_list2
+        return stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list + y_list2), y_list + y_list2
     elif gait == 'gallop':
         return stack_gallop(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     elif gait == 'pronk':
         return stack_pronk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     
-def stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps):
+def stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list):
     len_factor = (s1_count+s2_count)/s1_count
     split = int(s1_count * len_factor/2)
     move_p2 = move_p[split:] + move_p[:split]
     move_ps2 = move_ps[split:] + move_ps[:split]
     move_n2 = move_n[split:] + move_n[:split]
+    y_2 = y_list[split:] + y_list[:split]
+    # visualize_gaits(y_list, y_2, move_p, move_p2)
     if dir == 'f':
         return append_pos_list(move_p, move_p2, move_p2, move_p)
     elif dir == 'r':
@@ -117,7 +118,7 @@ def stack_walk(dir, s1_count, s2_count, move_p, move_n):
         return append_pos_list(move_n, move_n2, move_n3, move_n4)
     
 def stack_gallop(dir, s1_count, s2_count, move_p, move_n):
-    split = int((s2_count + s1_count)/2)
+    split = int((s2_count + s1_count)/4)
     move_p2 = move_p[split:] + move_p[:split]
     move_n2 = move_n[split:] + move_n[:split]
     if dir == 'f':
@@ -146,7 +147,7 @@ def append_pos_list(list_1, list_2, list_3, list_4):
 
 def dummy_movement(q1 = 90, q2 = 90):
     # Movement placeholder for the types I have yet to write atual code for :/
-    return[[q1 if i % 2 == 0 else q2 for i in range(8)] for j in range(10)]
+    return[[q1 if i % 2 == 0 else q2 for i in range(8)] for j in range(10)], []
 
 def movement_tick(move_list):
     # For each step in a movement, cycle through pre-calculated list.
@@ -208,13 +209,44 @@ def dxl2rad(angle_dxl):
     angle_friendly = (angle_dxl - 4096) * friendly_per_dxl
     return angle_friendly * math.pi / 180
 
-# def visualize_gait(x_p, x_n, y_list):
-#     for i in range(len(x_p)):
-#         plt.plot(x_p[i], y_list[i],'o')
-#         plt.plot(x_n[i], y_list[i],'o', color='tab:orange')
-#     plt.legend()
-#     plt.show()
-def visualize_gait(x_1, y_1, x_2, y_2):
+def visualize_gaits(y1, y2, p1, p2):
+    y1 = y1[-int(len(y1)/2):] + (y1 * 5)
+    y2 = y2[-int(len(y2)/2):] + (y2 * 5)
+    q_1 = [q_val[0] for q_val in p1]
+    q_2 = [q_val[1] for q_val in p1]
+    q_3 = [q_val[0] for q_val in p2]
+    q_4 = [q_val[1] for q_val in p2]
+    q1 = q_1[-int(len(q_1)/2):] + (q_1 * 5)
+    q2 = q_2[-int(len(q_2)/2):] + (q_2 * 5)
+    q3 = q_3[-int(len(q_3)/2):] + (q_3 * 5)
+    q4 = q_4[-int(len(q_4)/2):] + (q_4 * 5)
+    q1 = [math.radians(deg) for deg in q1]
+    q2 = [math.radians(deg) for deg in q2]
+    q3 = [math.radians(deg) for deg in q3]
+    q4 = [math.radians(deg) for deg in q4]
+    x1 = [i for i in range(len(y1))]
+    x2 = [i for i in range(len(q1))]
+
+    plt.rc('font', family='serif')
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6))
+    ax1.plot(x1, y1, label = 'Leg 1 & 4')
+    ax1.plot(x1, y2, label = 'Leg 2 & 3')
+    ax1.grid(True)
+    ax1.set_aspect(3)
+    ax1.set_ylabel('Y Trajectory (mm)', fontsize=14)
+    ax1.legend(loc = 'lower right')
+    ax2.plot(x2, q1, color='tab:blue', linewidth = 1.5, linestyle='dashdot')
+    ax2.plot(x2, q2, color='tab:blue', linewidth = 1.5, linestyle='dashed')
+    ax2.plot(x2, q3, color='tab:orange', linewidth = 1.5, linestyle='dashdot')
+    ax2.plot(x2, q4, color='tab:orange', linewidth = 1.5, linestyle='dashed')
+    ax2.grid(True)
+    ax2.set_xlabel('Time Stamp', fontsize=14)
+    ax2.set_ylabel('Joint angles (rad)', labelpad=3, fontsize=14)
+    plt.tight_layout()
+    # plt.legend()
+    plt.show()
+
+def visualize_traj(x_1, y_1, x_2, y_2):
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
     axs[0].plot(x_1, y_1, linewidth = 2, label='Sinusoid 1')
     axs[0].plot(x_2, y_2, linewidth = 2, label='Sinusoid 2')

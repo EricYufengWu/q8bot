@@ -13,7 +13,7 @@ from q8_espnow import *
 from q8_helpers import *
 
 # User-modifiable constants
-PORT = 'COM6'
+PORT = 'COM14'
 # Pygame speed. This will change robot's gait frequency globally.
 SPEED = 200
 res = 0.2
@@ -26,10 +26,10 @@ gaits = {
     # 'WALK':   [9.75, 43.36, 30, 20, 10, 8 ],
     # 'GALLOP': [9.75, 33.36, 30, 20, 5,  4 ],
     # 'PRONK':  [9.75, 43.36, 20, 20, 5,  10]
-    'AMBER':  ['amber',  20, 40],
+    'AMBER':  ['amber',  15, 30],
     'WALK':   ['walk',   20, 140],
-    'GALLOP': ['gallop', 40, 10],
-    'PRONK':  ['pronk',  40, 10]
+    'GALLOP': ['gallop', 50, 10],
+    'PRONK':  ['pronk',  60, 10]
 }
 
 # Jumping parameters. Change this to tune jumping brhavior
@@ -38,6 +38,24 @@ JUMP_LOW = [0, 180, 0, 180, 0, 180, 0, 180,]     # 40mm leg
 JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
 JUMP_2 = [95, 85, 95, 85, -25, 205, -25, 205]
 JUMP_REST = [10, 170, 10, 170, 10, 170, 10, 170]            # 40mm leg
+R1 = [100, 80, 100, 80, 100, 80, 100, 80]
+R2 = [0, 45, 0, 45, 0, 45, 0, 45]
+R3 = [-90, 45, -90, 45, -90, 45, -90, 45]
+R4 = [-20, 200, -20, 200, -20, 200, -20, 200]
+R5 = [130, 270, 130, 270, 130, 270, 130, 270]
+R6 = [130, 180, 130, 180, 130, 180, 130, 180]
+R7 = [100, 80, 100, 80, 100, 80, 100, 80]
+R8 = [-20, 200, -20, 200, -20, 200, -20, 200]
+R9 = [30, 150, 30, 150, 30, 150, 30, 150]
+R = [R1, R2, R3, R4, R5, R6, R7, R8, R9]
+
+def show_range():
+    for pos in R:
+        print(pos)
+        q8.move_all(pos, 1000, False)
+        # q8.move_all(pos, 500, False)
+        time.sleep(1.5)
+    return
 
 # Helper Functions
 def jump(JUMP_HIGH, jump_time):
@@ -63,11 +81,11 @@ def movement_start(leg, dir, x_0, y_0, x_size, y_size, move_type = 'AMBER'):
     if move_type == 'WALK': # three feet on the ground
         return generate_gait(leg, dir, x_0, y_0, x_size + 10, y_size, 0, gaits['WALK'])
     elif move_type == 'AMBER':  # this is like a smoother trot
-        return generate_gait(leg, dir, x_0, y_0, x_size + 20, y_size, 4, gaits['AMBER'])
+        return generate_gait(leg, dir, x_0, y_0, x_size + 20, y_size, 0, gaits['AMBER'])
     elif move_type == 'GALLOP': # two front and two back
         return generate_gait(leg, dir, x_0, 33.36, x_size + 20, 0, y_size, gaits['GALLOP'])
     elif move_type == 'PRONK': # four legs jump forward
-        return generate_gait(leg, dir, x_0, 33.36, x_size, 0, y_size, gaits['PRONK'])
+        return generate_gait(leg, dir, x_0, 33.36, x_size + 20, 0, y_size, gaits['PRONK'])
     else:
         return dummy_movement()
 
@@ -178,6 +196,10 @@ while True:
             print(f"Record next movement")
             record = True
             request = "data"
+            time.sleep(0.2)
+        elif keys[pygame.K_c]:
+            print(f"Show Range")
+            show_range()
             time.sleep(0.2)
         elif keys[pygame.K_ESCAPE]:
             break
