@@ -2,9 +2,9 @@
 
 Q8bot is a miniature quadruped robot powered by 8 [Dynamixel](https://www.robotis.us/dynamixel-xl330-m077-t/) motors and a [Seeed Studio XIAO ESP32C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html).
 
-The robot weighs around 220g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost.
+The robot weighs around 220g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
 
-The current BOM, without optimization, starts below $300. 
+Note: Refer to the CAD mode for the latest dsign, as the photos mighht be from an earlier version.
 
 [![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
 
@@ -15,7 +15,7 @@ The current BOM, without optimization, starts below $300.
 
 **03/03/2025 Update: Q8bot is now officially a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
 
-[![Q8bot](documentation_public/Q8bot_RoMeLa.jpeg)](https://www.romela.org/)
+[![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
 ## Design Files
 
@@ -33,9 +33,7 @@ Although I do not plan to constantly maintain this project due to availability, 
 
 Access the bill of materials (BOM) **[here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. Build the optional USB dongle for easier robot control by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). This is not included in the main BOM as there are other ways to control Q8bot (WiFi, BLE, etc.)
 
-[![Q8bot](documentation_public/Q8bot_Rev2_Render.png)](https://autode.sk/3BYuhuN)
-
-[![Q8bot](documentation_public/Q8bot_Components.jpeg)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)
+[![Q8bot](documentation_public/Q8bot_Components.jpg)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)
 
 ## Building Instructions
 
