@@ -97,16 +97,12 @@ Here is a table comparing MJF and FDM 3D-printed parts:
 _*Not rigorously tested. Robot survives 1-meter drop during preliminary testing_
 
 ## Other Recommended Components
-If you don't already have one, you probably also want to pick up a Li-ion battery charger like [this one](https://www.amazon.com/EBL-Battery-Charger-Rechargeable-Technology/dp/B01D9TUL8Y/). In the future, I plan to add battery charging functionality to the PCB so you no longer have to buy a separate charger.
+**Li-ion battery charger:** If you don't already have one, you probably also want to pick up a charger like [this one](https://www.amazon.com/EBL-Battery-Charger-Rechargeable-Technology/dp/B01D9TUL8Y/). In the future, I plan to add battery charging functionality to the PCB so you no longer have to buy a separate charger.
+
+**ESPNow Dongle:** The current software architecture uses an ESP32C3 microcontroller connected to the laptop to wirelessly communicate with the robot. You can build an optional USB dongle by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). 
 
 <p align="center">
-    <img src="sourcing_charger.png" alt="Dongle" width="25%">
-</p>
-
-The current software architecture uses an ESP32C3 microcontroller connected to the laptop to wirelessly communicate with the robot. You can build an optional USB dongle by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). 
-
-<p align="center">
-    <img src="sourcing_dongle.png" alt="Dongle" width="40%">
+    <img src="sourcing_dongle.jpg" alt="Dongle" width="40%">
 </p>
 
 
