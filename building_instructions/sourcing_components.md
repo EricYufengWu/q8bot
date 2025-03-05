@@ -6,12 +6,19 @@
 
 [Software Setup](software_setup.md)
 
-[Back to Project Page](../README.md)
+[Back to Project Page](https://github.com/EricYufengWu/q8bot)
 
 
 **The complete bill of materials (BOM) of Q8bot can be accessed [here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. 
 
 The BOM of this robot is so short that I can afford to explain every single component in detail :D
+
+## Required Tools
+This instruction assumes you have the following tools at a minimum:
+- A PH-0 or JIS-1 screwdriver.
+- A soldering iron with basic consumables.
+- A modern laptop capable of running Microsoft Visual Studio Code.
+- A USB Type-A to Type-C (or Type-C to Type-C) cable.
 
 ## Off-The-Shelf Components
 These are the components you need to purchase regardless of build configurations.
@@ -74,7 +81,7 @@ There are 2 options for 3D-printing parts for Q8bot. Regardless of outsourcing o
 Multi Jet Fusion (MJF) is an isotropic 3D-printing technology similar to SLS. Many domestic and international companies offer printing service with relatively affordable price. To order, you typically need to upload the .STL files in the `/CAD/Q8_VX.X_MJF` folder to the vendor's website and configure the materials and quantity. I ordered the MJF parts together with my JLCPCB order to simplify the purchasing process.
 
 ### Option 2: 3D-Print Yourself using FDM
-If you own a Bambu Lab, Prusa, or similar 3D-printer, you can print the parts yourself by downloading and slicing the files under `/CAD/Q8_VX.X_FDM`. I printed mine on a Bambu Lab A1 mini with the default 0.12mm settings. The cost of filament is less than $1 for a $20 spool.
+If you own a Bambu Lab, Prusa, or similar 3D-printer, you can print the parts yourself by downloading and slicing the files under `/CAD/Q8_VX.X_FDM`. I printed mine on a Bambu Lab A1 mini with the default 0.12mm settings. **The cost of filament is less than $1 for a $20 spool.**
 
 Here is a table comparing MJF and FDM 3D-printed parts:
 
@@ -83,5 +90,23 @@ Here is a table comparing MJF and FDM 3D-printed parts:
 | <img src="sourcing_MJF.jpg" width="93%"> |<img src="sourcing_FDM.jpg" width="95%">|
 | More expensive :x: | Less expensive :white_check_mark: |
 | Saves time :white_check_mark: | Takes more time :x: |
+| Surface finish gives a "product" vibe :white_check_mark: | Visible layer lines on parts :x: |
+| Has extra geometry that makes assembly easier :white_check_mark: | No extra geometry :x: |
+| Difficult to replace :x: | Easy to re-print and modify :white_check_mark: |
+| Breaks first to protect motors* | Motors might break due to transferred impact* |
+_*Not rigorously tested. Robot survives 1-meter drop during preliminary testing_
+
+## Other Recommended Components
+If you don't already have one, you probably also want to pick up a Li-ion battery charger like [this one](https://www.amazon.com/EBL-Battery-Charger-Rechargeable-Technology/dp/B01D9TUL8Y/). In the future, I plan to add battery charging functionality to the PCB so you no longer have to buy a separate charger.
+
+<p align="center">
+    <img src="sourcing_charger.png" alt="Dongle" width="25%">
+</p>
+
+The current software architecture uses an ESP32C3 microcontroller connected to the laptop to wirelessly communicate with the robot. You can build an optional USB dongle by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). 
+
+<p align="center">
+    <img src="sourcing_dongle.png" alt="Dongle" width="40%">
+</p>
 
 
