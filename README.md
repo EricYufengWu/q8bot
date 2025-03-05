@@ -1,27 +1,21 @@
-# Q8bot PCB Robot
+# Q8bot Quadruped
 
 **03/03/2025 Update: Q8bot is now officially a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
 
 [![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
-Q8bot is a miniature quadruped robot powered by 8 [Dynamixel](https://www.robotis.us/dynamixel-xl330-m077-t/) motors and a [Seeed Studio XIAO ESP32C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html).
+Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
 
-The robot weighs around 220g and is capable of dynamic movements like jumping and various gaits (WIP). It also has no wires and cables - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
-
-Note: Refer to the CAD mode for the latest dsign, as the photos might be from an earlier version.
-
-[![Q8bot](documentation_public/Q8bot_Rev2_Hero.jpeg)](https://youtu.be/YJDc1xAhaOI)
+See the robot in action on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
 <p align="center">
-  <img src="documentation_public/10s_gif.gif" alt="Image 1" width="49%">
-  <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 2" width="49%">
+  <img src="documentation_public/Q8bot_Rev2_Hero.jpeg" alt="Image 1" width="49%">
+  <img src="documentation_public/10s_gif.gif" alt="Image 2" width="49%">
+  <img src="documentation_public/Q8bot_Components.jpg" alt="Image 3" width="49%">
+  <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 4" width="49%">
 </p>
 
-## Design Files
-
-**01/08/2025 Update: Component U2 should be 74LVC2G241GT, not 74LVC2G241GS. The BOM and schematics have been updated to reflect this change.** 
-
-Q8bot is 99% open source: In this repo, you will find everything you need - STEP, STL, Gerber, Schematics, BOM, and more - to build your own version. 
+Q8bot is 100% open source: In this repository, you will find everything you need - STEP, STL, Gerber, Schematics, bill of materials (BOM), instructions, and more - to build your own version. 
 
 **You can now ordered the fully-assembled PCB via PCBWay!** This [project page](https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html) contains all of the assembly-related files (BOM, centroid, etc.) and simplifies the ordering process.
 
@@ -29,9 +23,24 @@ Q8bot is 99% open source: In this repo, you will find everything you need - STEP
     <a href="https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html"><img src="https://www.pcbway.com/project/img/images/frompcbway-1220.png" alt="PCB from PCBWay" /></a>
 </p>
 
-Although I do not plan to constantly maintain this project due to availability, feel free to reach out with questions and I will try my best to answer: yufeng.wu0902@gmail.com 
+I’m working on turning Q8bot into a purchasable kit, though I’m not sure when or if it will happen. In the meantime, I encourage you to build your own Q8bot! This palm-sized quadruped is perfect for robotics education, swarm robotics research, or simply as a fun engineering project. If you have any questions, feel free to reach out and I will try my best to help. 
 
-Access the bill of materials (BOM) **[here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. Build the optional USB dongle for easier robot control by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). This is not included in the main BOM as there are other ways to control Q8bot (WiFi, BLE, etc.)
+Personal: yufeng.wu0902@gmail.com
+
+School: ericyufengwu@ucla.edu
+
+
+## Building Instruction
+
+The building instructions have moved to a dedicated folder:
+
+[Sourcing Components](building_instructions/sourcing_components.md)
+
+[Assembling the Robot](building_instructions/sourcing_components.md)
+
+[Software Setup](building_instructions/sourcing_components.md)
+
+Build the optional USB dongle for easier robot control by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). This is not included in the main BOM as there are other ways to control Q8bot (WiFi, BLE, etc.)
 
 [![Q8bot](documentation_public/Q8bot_Components.jpg)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)
 
