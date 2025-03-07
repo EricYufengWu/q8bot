@@ -4,7 +4,7 @@ import time
 import math
 import pygame
 from kinematics_solver import *
-from q8_espnow import *
+from q8bot.espnow import *
 
 # User-modifiable constants
 SPEED = 100

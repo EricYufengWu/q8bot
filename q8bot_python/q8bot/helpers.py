@@ -7,12 +7,24 @@ Helper functions for q8_operate.py.
 import math
 import matplotlib.pyplot as plt
 from kinematics_solver import *
-from q8_espnow import *
+from espnow import *
 
-def generate_gait(leg, dir, x0, y0, xrange, yrange, yrange2, gait_params):
+# Q8bot range of motion via points
+R1 = [100, 80, 100, 80, 100, 80, 100, 80]
+R2 = [0, 45, 0, 45, 0, 45, 0, 45]
+R3 = [-90, 45, -90, 45, -90, 45, -90, 45]
+R4 = [-20, 200, -20, 200, -20, 200, -20, 200]
+R5 = [130, 270, 130, 270, 130, 270, 130, 270]
+R6 = [130, 180, 130, 180, 130, 180, 130, 180]
+R7 = [100, 80, 100, 80, 100, 80, 100, 80]
+R8 = [-20, 200, -20, 200, -20, 200, -20, 200]
+R9 = [30, 150, 30, 150, 30, 150, 30, 150]
+R = [R1, R2, R3, R4, R5, R6, R7, R8, R9]
+
+def generate_gait(leg, dir, gait_params):
     # Generate two sets of single-leg position lists (forward + backward). 
     # Mix and match to create an aggregated list for 4 legs.
-    gait, s1_count, s2_count = gait_params
+    stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
     move_p, move_ps, move_n= [], [], []
     x_list_p, x_list_n, x_p_s, y_list = [], [], [], []
     x_list_p2, y_list2 = [], []
@@ -68,13 +80,13 @@ def generate_gait(leg, dir, x0, y0, xrange, yrange, yrange2, gait_params):
         move_n.append([q1_n, q2_n])
     # visualize_traj(x_list_p, y_list, x_list_p2, y_list2)
     
-    if gait == 'walk':
+    if stacktype == 'walk':
         return stack_walk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-    elif gait == 'amber':
+    elif stacktype == 'amber':
         return stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list + y_list2), y_list + y_list2
-    elif gait == 'gallop':
-        return stack_gallop(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-    elif gait == 'pronk':
+    elif stacktype == 'bound':
+        return stack_bound(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
+    elif stacktype == 'pronk':
         return stack_pronk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     
 def stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list):
@@ -117,7 +129,7 @@ def stack_walk(dir, s1_count, s2_count, move_p, move_n):
     else: # all other conditions default to "back"
         return append_pos_list(move_n, move_n2, move_n3, move_n4)
     
-def stack_gallop(dir, s1_count, s2_count, move_p, move_n):
+def stack_bound(dir, s1_count, s2_count, move_p, move_n):
     split = int((s2_count + s1_count)/4)
     move_p2 = move_p[split:] + move_p[:split]
     move_n2 = move_n[split:] + move_n[:split]

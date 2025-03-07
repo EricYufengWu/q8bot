@@ -6,11 +6,12 @@ in your laptop with an ESP32C3 connected and control the robot via keyboard.
 '''
 
 import time
-import math
 import pygame
+import sys
+import serial.tools.list_ports
 from kinematics_solver import *
-from q8_espnow import *
-from q8_helpers import *
+from espnow import *
+from helpers import *
 
 # User-modifiable constants
 PORT = 'COM14'
@@ -18,54 +19,39 @@ SPEED = 200
 res = 0.2
 y_min = 15
 
-# (WIP) Dictionary format: 
-# 'NAME':     [x0, y0, xrange, yrange, s1_count, s2_count] 
+# Gait params dictionary. Add your own gaits here
+# 'NAME': [STACKTYPE, x0, y0, xrange, yrange, yrange2, s1_count, s2_count] 
 gaits = {
-    # 'AMBER':  [9.75, 43.36, 40, 20, 10, 3 ],
-    # 'WALK':   [9.75, 43.36, 30, 20, 10, 8 ],
-    # 'GALLOP': [9.75, 33.36, 30, 20, 5,  4 ],
-    # 'PRONK':  [9.75, 43.36, 20, 20, 5,  10]
-    'AMBER':  ['amber',  15, 30],
-    'WALK':   ['walk',   20, 140],
-    'GALLOP': ['gallop', 50, 10],
-    'PRONK':  ['pronk',  60, 10]
+    'AMBER':      ['amber', 9.75, 43.36, 40, 20, 0, 15, 30],
+    'AMBER_HIGH': ['amber', 9.75, 60, 20, 10, 0, 15, 30],
+    'AMBER_LOW':  ['amber', 9.75, 25, 20, 10, 0, 15, 30],
+    'AMBER_FAST': ['amber', 9.75, 43.36, 50, 20, 0, 12, 24],
+    'WALK':       ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
+    'BOUND':      ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
+    'PRONK':      ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
 }
 
-# Jumping parameters. Change this to tune jumping brhavior
-# JUMP_LOW = [-25, 205, -25, 205, -25, 205, -25, 205]     # 40mm leg
-JUMP_LOW = [0, 180, 0, 180, 0, 180, 0, 180,]     # 40mm leg
-JUMP_1 = [95, 85, 95, 85, 95, 85, 95, 85]
-JUMP_2 = [95, 85, 95, 85, -25, 205, -25, 205]
-JUMP_REST = [10, 170, 10, 170, 10, 170, 10, 170]            # 40mm leg
-R1 = [100, 80, 100, 80, 100, 80, 100, 80]
-R2 = [0, 45, 0, 45, 0, 45, 0, 45]
-R3 = [-90, 45, -90, 45, -90, 45, -90, 45]
-R4 = [-20, 200, -20, 200, -20, 200, -20, 200]
-R5 = [130, 270, 130, 270, 130, 270, 130, 270]
-R6 = [130, 180, 130, 180, 130, 180, 130, 180]
-R7 = [100, 80, 100, 80, 100, 80, 100, 80]
-R8 = [-20, 200, -20, 200, -20, 200, -20, 200]
-R9 = [30, 150, 30, 150, 30, 150, 30, 150]
-R = [R1, R2, R3, R4, R5, R6, R7, R8, R9]
+# Helper Functions
+def find_xiao_com_port():
+    # Finds the first connected Seeed Studio XIAO ESP32C3 based on VID/PID.
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        if port.vid == XIAO_VID and port.pid == XIAO_PID:
+            return port.device  # Returns the COM port (e.g., "COM3" or "/dev/ttyUSB0")
+    return None
+
+def is_xiao_device(com_port):
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        if port.device == com_port and port.vid == XIAO_VID and port.pid == XIAO_PID:
+            return True
+    return False
 
 def show_range():
     for pos in R:
         print(pos)
         q8.move_all(pos, 1000, False)
-        # q8.move_all(pos, 500, False)
         time.sleep(1.5)
-    return
-
-# Helper Functions
-def jump(JUMP_HIGH, jump_time):
-    # q8.move_all(JUMP_HIGH, 500, False)
-    # time.sleep(0.7)
-    q8.move_all(JUMP_LOW, 500, False)
-    time.sleep(0.8)
-    q8.move_all(JUMP_HIGH, 0, False)
-    time.sleep(jump_time)
-    q8.move_all(JUMP_REST, 0, False)
-    time.sleep(0.5)
     return
 
 def move_xy(x, y, dur = 0, deg = True):
@@ -77,35 +63,45 @@ def movement_start(leg, dir, x_0, y_0, x_size, y_size, move_type = 'AMBER'):
     # start movement by generating the position list
     global ongoing
     ongoing = True
-    if move_type == 'WALK': # three feet on the ground
-        return generate_gait(leg, dir, x_0, y_0, x_size + 10, y_size, 0, gaits['WALK'])
-    elif move_type == 'AMBER':  # this is like a smoother trot
-        return generate_gait(leg, dir, x_0, y_0, x_size + 20, y_size, 0, gaits['AMBER'])
-    elif move_type == 'GALLOP': # two front and two back
-        return generate_gait(leg, dir, x_0, 33.36, x_size + 20, 0, y_size, gaits['GALLOP'])
-    elif move_type == 'PRONK': # four legs jump forward
-        return generate_gait(leg, dir, x_0, 33.36, x_size + 20, 0, y_size, gaits['PRONK'])
-    else:
-        return dummy_movement()
+    return generate_gait(leg, dir, gaits[move_type])
 
-# # Main code
-# def main():
+# Main code
+# Seeed Studio XIAO devices have the following VID and PID
+XIAO_VID = 0x303A
+XIAO_PID = 0x1001
+
+# Flags for main loop
 movement = False
 ongoing = False
 exit = False
 record = False
 request = "none"
 
+# find a serial port and connect
+if len(sys.argv) > 1:
+    # User provided a COM port
+    com_port = sys.argv[1]
+    if not is_xiao_device(com_port):
+        print(f"Error: {com_port} is not an ESP32C3 or does not exist.")
+        sys.exit(1)
+else:
+    # Auto-detect COM port
+    com_port = find_xiao_com_port()
+    if com_port is None:
+        print("No ESP32C3 controller device found.")
+        sys.exit(1)
+
+# Start pygame instance
 pygame.init()
 window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
-leg = k_solver(19.5, 25, 40, 25, 40) # 40mm leg
-q8 = q8_espnow(PORT)
+leg = k_solver(19.5, 25, 40, 25, 40)
+q8 = q8_espnow(com_port)
 q8.enable_torque()
 
 # Starting location of leg end effector in x and y
-gait = ['AMBER', 'WALK', 'GALLOP', 'PRONK']
+gait = ['AMBER', 'AMBER_HIGH', 'AMBER_LOW', 'AMBER_FAST', 'WALK', 'BOUND', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
 pos_y = round((leg.l1 + leg.l2) * 0.667, 2)
@@ -158,33 +154,19 @@ while True:
         if (keys[pygame.K_w] or keys[pygame.K_a] or keys[pygame.K_s] or 
             keys[pygame.K_d] or keys[pygame.K_q] or keys[pygame.K_e] ):
             movement = True
-        elif keys[pygame.K_UP] or keys[pygame.K_DOWN]:        # standing height
-            temp_y = pos_y + (keys[pygame.K_UP] - keys[pygame.K_DOWN]) * res
-            q1, q2, success = leg.ik_solve(pos_x, temp_y, True, 1)
-            if success and temp_y > y_min:
-                q8.move_mirror([q1,q2], 0)
-                pos_y = round(temp_y, 1)
-                print("Changed y height to: ", pos_y)
-        elif keys[pygame.K_EQUALS] or keys[pygame.K_MINUS]:   # step size
-            temp_s = step_size+(keys[pygame.K_EQUALS]-keys[pygame.K_MINUS])*res
-            if temp_s > 10 and temp_s < 30:
-                step_size = round(temp_s, 1)
-                print("Changed step size to:", step_size)
         elif keys[pygame.K_r]:                                # reset step
-            pos_x = leg.d/2
-            pos_y = (leg.l1 + leg.l2) * 0.667
             move_xy(pos_x, pos_y, 500)
-            step_size = 20
         elif keys[pygame.K_j]:
             print("Jump")
             q8.send_jump()
-            # jump(JUMP_1, 0.1)
             time.sleep(5)
             move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
             move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
         elif keys[pygame.K_g]:
             gait.append(gait.pop(0))
             print(f"Changed gait to: {gait[0]}")
+            pos_x, pos_y = gaits[gait[0]][1], gaits[gait[0]][2]
+            move_xy(pos_x, pos_y, 500)
             time.sleep(0.2)
         elif keys[pygame.K_b]:
             # print(f"Requesting battery info")
@@ -221,13 +203,3 @@ while True:
 
 q8.disable_torque()
 pygame.quit()
-
-# if __name__ == "__main__":
-#     main()
-
-'''
-To do:
-1. Make plotting more robust against robot jerky motion at low battery
-2. Fix robot jerky motion at low battery
-3. Fully integrate gait dictionary, with variable params in walk and trot
-'''
