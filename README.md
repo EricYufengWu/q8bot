@@ -36,7 +36,7 @@ The building instructions have moved to a dedicated folder:
 
 [Sourcing Components](building_instructions/sourcing_components.md)
 
-[Assembling the Robot](building_instructions/sourcing_components.md)
+[Assembling the Robot](building_instructions/robot_assembly.md)
 
-[Software Setup](building_instructions/sourcing_components.md)
+[Software Setup](building_instructions/software_setup.md)
 
