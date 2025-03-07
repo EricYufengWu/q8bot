@@ -15,10 +15,11 @@ The BOM of this robot is so short that I can afford to explain every single comp
 
 ## Required Tools
 This instruction assumes you have the following tools at a minimum:
-- A PH-0 or JIS-1 screwdriver.
-- A soldering iron with basic consumables.
+- A PH-0 or JIS-1 screwdriver (I an iFixit Mako Driver Kit).
+- A soldering iron with basic consumables (I used a Pinecil V2).
 - A modern laptop capable of running Microsoft Visual Studio Code.
-- A USB Type-A to Type-C (or Type-C to Type-C) cable.
+- A USB Type-A to Type-C (or Type-C to Type-C) cable for uploading firmware.
+- Some masking tape or similar.
 
 ## Off-The-Shelf Components
 These are the components you need to purchase regardless of build configurations.
@@ -94,10 +95,11 @@ Here is a table comparing MJF and FDM 3D-printed parts:
 | Has extra geometry that makes assembly easier :white_check_mark: | No extra geometry :x: |
 | Difficult to replace :x: | Easy to re-print and modify :white_check_mark: |
 | Breaks first to protect motors* | Motors might break due to transferred impact* |
+
 _*Not rigorously tested. Robot survives 1-meter drop during preliminary testing_
 
 ## Other Recommended Components
-**Li-ion battery charger:** If you don't already have one, you probably also want to pick up a charger like [this one](https://www.amazon.com/EBL-Battery-Charger-Rechargeable-Technology/dp/B01D9TUL8Y/). In the future, I plan to add battery charging functionality to the PCB so you no longer have to buy a separate charger.
+**Li-ion battery charger:** If you don't already have one, you probably also want to pick up a charger like [this one](https://www.amazon.com/EBL-Battery-Charger-Rechargeable-Technology/dp/B01D9TUL8Y/). In the future, I plan to add battery charging functionality to the PCB in the next iteration so you no longer have to buy a separate charger.
 
 **ESPNow Dongle:** The current software architecture uses an ESP32C3 microcontroller connected to the laptop to wirelessly communicate with the robot. You can build an optional USB dongle by following instructions [here](https://github.com/EricYufengWu/ESPNowDongle). 
 
@@ -105,4 +107,4 @@ _*Not rigorously tested. Robot survives 1-meter drop during preliminary testing_
     <img src="sourcing_dongle.jpg" alt="Dongle" width="40%">
 </p>
 
-
+**Dynamixel U2D2:** DYNAMIXELs are smart servo motors that require configuration to work properly on Q8bot. I’ve provided a simple firmware that guides you through the required setup without extra hardware (see [robot_assembly](robot_assembly.md)). However, for easier debugging and troubleshooting, I highly recommend purchasing the [U2D2](https://www.robotis.us/u2d2/) and [U2D2 Power Hub](https://www.robotis.us/u2d2-power-hub-board-set/). This setup allows you to configure individual DYNAMIXEL motors directly from your laptop, which is more convenient compared to using the ESP32.

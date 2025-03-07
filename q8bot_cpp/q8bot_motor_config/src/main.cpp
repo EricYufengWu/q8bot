@@ -103,7 +103,6 @@ void loop() {
     delay(5000);
     finishSetup();
   }
-  finishSetup();
 }
 
 void finishSetup() {

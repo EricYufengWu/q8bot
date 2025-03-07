@@ -6,7 +6,7 @@ The "Front" silkscreen marking on the front side of the PCB is the front of the 
 ![Q8bot](dxl_manual_setup.png)
 
 ## Robot joint assignment
-**Note: J1-J8 markings on the PCB are for the PCB only. For the remaining of this doc, please follow the robot image above for actual joint assignment.**
+**Note: On the image above, J1 is equivalent to J11, J2 is equivalent to J12, etc.**
 
 Using Dynamixel Wizard 2.0 and an U2D2 hub, configure each motor's ID, baudrate, and other parameters before mounting them to the robot.
 
