@@ -123,7 +123,7 @@
     <img src="assem_motor3.jpg" width="90%">
 </p>
 
-18. Repeat 9-11 for the remaining motors: ID12 - ID18. Reminder to follow the labeling numbers sequentially, as the calibration code is written to only look for the next available motor.
+18. Repeat steps 15-17 for the remaining motors: ID12 - ID18. Reminder to follow the labeling numbers sequentially, as the calibration code is written to only look for the next available motor.
 <p align="center">
     <img src="assem_motor4.jpg" width="90%">
 </p>
