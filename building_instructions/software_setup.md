@@ -8,7 +8,7 @@
 
 [Back to Project Page](https://github.com/EricYufengWu/q8bot)
 
-## Software Setup
+## Software Overview
 
 Please excuse my messy code as I am a mechanical engineer by training :D
 
@@ -18,17 +18,21 @@ Currently, all computation regarding gait generation and FK/IK happens on the la
     <img src="High_Level_Flowchart.jpg" alt="High level flowchart" width="60%">
 </p>
 
-### Seeed Studio XIAO MCU Setup (Robot + Controller)
+## Seeed Studio XIAO MCU Setup (Robot + Controller)
 
 The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to their official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
 
-Open the folder "q8bot_robot" with PlatformIO and upload it to Q8bot's XIAO board.
+Different firmware need to be uploaded to Q8bot ("robot") and the separate Seeed Studio XIAO ESP32C3 ("controller"): `q8bot_cpp/q8bot_robot` and `q8bot_cpp/q8bot_controller`. Before they are ready to upload, you need to:
+- Navigate to `q8bot_cpp/q8bot_robot/main.cpp` and update the MAC address to match your controller
+- Navigate to `q8bot_cpp/q8bot_controller/main.cpp` and update the MAC address to match your robot.
+- A quick way to find the MAC address of your device is by selecting the specific COM port in PlatformIO.
+<p align="center">
+    <img src="sw_MAC.png" width="90%">
+</p>
 
-Currently, Q8bot uses another ESP32C3 connected to the host PC/laptop. Whether you are using the additional XIAO board as is or in its [dongle form](https://github.com/EricYufengWu/ESPNowDongle), you need to open the folder "q8bot_controller" with PlatformIO and upload it to the controller board.
+Upload `q8bot_cpp/q8bot_robot` to the Q8bot PCB, and upload `q8bot_cpp/q8bot_controller` to the separate Seeed Studio XIAO board to use it as a wireless control dongle. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md), 
 
-The MAC address in the controller's code need to be modified to match the address of your robot board.
-
-### Python Setup
+## Python Setup
 Navigate to the `/q8bot_python` folder and run:
 
     pip install -r requirements.txt

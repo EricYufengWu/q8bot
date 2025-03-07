@@ -14,7 +14,6 @@ from q8_helpers import *
 
 # User-modifiable constants
 PORT = 'COM14'
-# Pygame speed. This will change robot's gait frequency globally.
 SPEED = 200
 res = 0.2
 y_min = 15
@@ -225,7 +224,6 @@ pygame.quit()
 
 # if __name__ == "__main__":
 #     main()
-
 
 '''
 To do:
