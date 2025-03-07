@@ -30,36 +30,47 @@ Different firmware need to be uploaded to Q8bot ("robot") and the separate Seeed
     <img src="sw_MAC.png" width="90%">
 </p>
 
-Upload `q8bot_cpp/q8bot_robot` to the Q8bot PCB, and upload `q8bot_cpp/q8bot_controller` to the separate Seeed Studio XIAO board to use it as a wireless control dongle. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md), 
+Upload `q8bot_cpp/q8bot_robot` to the Q8bot PCB, and upload `q8bot_cpp/q8bot_controller` to the controller ESP32C3. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md), 
 
 ## Python Setup
-Navigate to the `/q8bot_python` folder and run:
+Install python locally on your computer if you have not already. The simplest way is through the [official website](https://www.python.org/downloads/) (the latest version will do). **Make sure to check the "add python.exe to PATH" option.**
+<p align="center">
+    <img src="sw_python.png" width="60%">
+</p>
 
-    pip install -r requirements.txt
+It's is best to set up a virtual environment to prevent dependency conflicts between different projects.
 
-This will install necessary dependencies (there aren't alot so you mey have already had all libraries installed).
+Using a terminal of your choise, navigate to the `/q8bot_python` folder and run the following to create a virtual environment for your project:
 
-Modify the COM port value in `/q8bot_python/q8bot/q8_operate.py` to match the COM port of your controller board.
+    python -m venv venv
 
-    PORT = 'COM6' 
+In the same directory, activate the virtual environment.
 
-### Running the Robot
+    .\venv\Scripts\activate
+
+In the same directory, run the following:
+
+    pip install --upgrade --force-reinstall -r requirements.txt
+
+This will force install necessary dependencies in your venv only (there aren't alot so you mey have already had all libraries installed).
+
+## Running the Robot
 Attach the batteries to the robot (double-check polarity!). Power on the robot with the onboard slide switch and you should see the onboard LED light up.
 
 Plug in the controller board to your laptop/PC.
 
 Navigate to `/q8bot_python/q8bot` folder and run:
 
-    python q8_operate.py
+    python operate.py
 
 If everything works, you should see a small pygame window pop up and the robot move its joints to their initial location. Robot keyboard control instructions are as follows:
 - WASD for robot movement. Q and E are used to partial turning in amber gait.
 - G two cycle between different gaits.
 - J for jumping.
-- Keyboard up and down for adjusting robot stance.
-- "+" and "-" for adjusting stride size.
 - R for resetting stance, size, etc.
-- (More functions comming soon).
+- The terminal/console will output useful information depending on your input.
+
+Have fun!
 
 ## Appendix
 
