@@ -9,8 +9,8 @@
 #include <WiFi.h>
 #include <ESPNowW.h>
 
-// This Q8bot's MAC address. Change this to yours. 24:EC:4A:C9:91:7C
-uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x91, 0x7C};
+// This Q8bot's MAC address. Change this to yours.
+uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x5D, 0x20};
 // uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xF8, 0xC8};
 
 // Char array for sending and receiving data

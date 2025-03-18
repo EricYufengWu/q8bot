@@ -21,6 +21,14 @@ R8 = [-20, 200, -20, 200, -20, 200, -20, 200]
 R9 = [30, 150, 30, 150, 30, 150, 30, 150]
 R = [R1, R2, R3, R4, R5, R6, R7, R8, R9]
 
+# Q8bot greet motion via points
+G1 = [-90, 45, -90, 45, -90, 45, -90, 45]
+G2 = [0, 45, 0, 45, 0, 45, 0, 45]
+G3 = [-45, 45, -45, 45, 50, 75, 50, 75]
+G4 = [45, 90, -45, 45, 50, 75, 50, 75]
+G5 = [-45, 45, 45, 90, 50, 75, 50, 75]
+G6 = [-90, 45, -90, 45, -90, 45, -90, 45]
+
 def generate_gait(leg, dir, gait_params):
     # Generate two sets of single-leg position lists (forward + backward). 
     # Mix and match to create an aggregated list for 4 legs.

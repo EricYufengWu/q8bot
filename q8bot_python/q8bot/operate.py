@@ -54,12 +54,30 @@ def show_range():
         time.sleep(1.5)
     return
 
+def greet(x, y):
+    q8.move_all(G1, 1000, False)
+    time.sleep(1.5)
+    q8.move_all(G2, 1000, False)
+    time.sleep(2)
+    q8.move_all(G3, 500, False)
+    time.sleep(1)
+    for i in range (3):
+        q8.move_all(G4, 200, False)
+        time.sleep(0.25)
+        q8.move_all(G5, 200, False)
+        time.sleep(0.25)
+    time.sleep(0.75)
+    q8.move_all(G6, 500, False)
+    time.sleep(0.7)
+    move_xy(x, y, 1000)
+    return
+
 def move_xy(x, y, dur = 0, deg = True):
     q1, q2, success = leg.ik_solve(x, y, deg, 1)
     q8.move_mirror([q1, q2], dur)
     return success
 
-def movement_start(leg, dir, x_0, y_0, x_size, y_size, move_type = 'AMBER'):
+def movement_start(leg, dir, move_type = 'AMBER'):
     # start movement by generating the position list
     global ongoing
     ongoing = True
@@ -116,32 +134,32 @@ while True:
     if movement:
         if keys[pygame.K_w]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'f', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'f', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_s]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'b', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'b', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_a]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'l', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'l', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_d]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'r', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'r', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_q]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'fl', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'fl', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         elif keys[pygame.K_e]:
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'fr', pos_x, pos_y, step_size, step_size, gait[0])
+                move_list, y_list = movement_start(leg, 'fr', gait[0])
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         else:
@@ -181,6 +199,10 @@ while True:
         elif keys[pygame.K_c]:
             print(f"Show Range")
             show_range()
+            time.sleep(0.2)
+        elif keys[pygame.K_h]:
+            print(f"Greet")
+            greet(pos_x, pos_y)
             time.sleep(0.2)
         elif keys[pygame.K_ESCAPE]:
             break

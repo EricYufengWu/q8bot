@@ -3,6 +3,8 @@ DynamixelSDK/
 tests/forward_kinematics.ipynb
 tests/inverse_kinematics.ipynb
 experiments/
+q8bot/Manual.jpg
+q8bot/q8botGPD.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
