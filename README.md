@@ -1,12 +1,20 @@
 # Q8bot Quadruped
 
-**03/03/2025 Update: Q8bot is now officially a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
+**03/03/2025 Update: Q8bot is now a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
 
 [![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
-Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
+## Featured Media & Demos
+
+Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB-HlDlHGtaq-xd7&t=1208) by UnrealScience, a famous Korean science Youtube channel.
+
+[This video]() demonstrates the latest capabilities of the robot, made possibly by ongoing improvements in software control and mechanical design. (link coming soon!).
 
 See the robot in action on [YouTube](https://youtu.be/YJDc1xAhaOI)!
+
+## Overview
+
+Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
 
 <p align="center">
   <img src="documentation_public/Q8bot_Rev2_Hero.jpeg" alt="Image 1" width="49%">
