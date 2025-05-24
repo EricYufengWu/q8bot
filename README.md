@@ -10,7 +10,7 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 
 [This video]() demonstrates the latest capabilities of the robot, made possibly by ongoing improvements in software control and mechanical design. (link coming soon!).
 
-See the robot in action on [YouTube](https://youtu.be/YJDc1xAhaOI)!
+See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
 ## Overview
 
