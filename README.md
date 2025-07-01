@@ -8,7 +8,7 @@
 
 Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB-HlDlHGtaq-xd7&t=1208) by UnrealScience, a famous Korean science Youtube channel.
 
-[This video]() demonstrates the latest capabilities of the robot, made possibly by ongoing improvements in software control and mechanical design. (link coming soon!).
+[This video](https://youtu.be/0dk7lYoITQw) demonstrates the latest capabilities of the robot, made possibly by ongoing improvements in software control and mechanical design.
 
 See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
