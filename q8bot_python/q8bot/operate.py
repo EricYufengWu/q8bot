@@ -10,7 +10,7 @@ import pygame
 import sys
 import serial.tools.list_ports
 from kinematics_solver import *
-from espnow import *
+from espnow import q8_espnow
 from helpers import *
 
 # User-modifiable constants
