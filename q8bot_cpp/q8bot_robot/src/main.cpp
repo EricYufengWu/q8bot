@@ -1,123 +1,204 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <esp_wifi.h>
+#include <esp_now.h>
 #include <Wire.h>
 #include <Dynamixel2Arduino.h>
-#include <ESPNowW.h>
 #include <MAX17043.h>
+
+// Q8bot-specific Modules
 #include "q8Dynamixel.h"
+#include "userParams.h"
+#include "systemParams.h"
+#include "pinMapping.h"
 
-// Change this to your controller's MAC address if doing bi-directional ESPNow
-uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x36, 0x10, 0xF0};
-// uint8_t receiver_mac[] = {0xEC, 0xDA, 0x3B, 0x38, 0x0C, 0x1C};
-
-// ESPNow
-uint16_t myData[100];
-char theirData[100];
-bool incoming = false;
+// Initialize global objects
 esp_now_peer_info_t peerInfo;
-// Dynamixel
-HardwareSerial ser(0);
-Dynamixel2Arduino q8dxl(ser, 8); // DIR pin on Q8bot is 8
-q8Dynamixel q8(q8dxl);
-bool recordData = false;
-size_t masterSize;
-size_t smallerSize = 4;
-uint16_t* rData = nullptr;
-// LED
-const uint8_t LED_PIN = D0;
-const uint8_t MODE_PIN = D3;
-// MAX17043
-float raw;
-char intStr[10];
+HardwareSerial          ser(0);
+Dynamixel2Arduino       q8dxl(ser, DXL_DIR_PIN);
+q8Dynamixel             q8(q8dxl);
 
-// Callback when data is received
-void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
-  // char macStr[18];
-  // snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
-  //          mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
-  //          mac_addr[5]);
-  memcpy(&theirData, incomingData, sizeof(theirData));
-  // Serial.print("Received from ["); Serial.print(macStr); Serial.print("]: "); 
-  // Serial.println(theirData);
-  uint8_t result = q8.parseData(theirData);
-  if (result == 0) {  // No special instruction.
-    return;
-  } else {
-    switch (result) {
-      case 1:
-        Serial.println("Send battery level");
-        myData[0] = (uint16_t)FuelGauge.percent();
-        esp_now_send(receiver_mac, (uint8_t *) &myData, sizeof(myData));
-        return;
+// Helper functions for ESP-NOW
+void printMAC(const uint8_t* mac) {
+  char buff[18];
+  sprintf(buff, "%02X:%02X:%02X:%02X:%02X:%02X",
+          mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  Serial.println(buff);
+}
 
-      case 2: {
-        // Serial.print("Record data: ");
-        uint16_t* posArray = q8.syncRead();
+bool addPeer(const uint8_t* mac) {
+  esp_now_peer_info_t peer = {};
+  memcpy(peer.peer_addr, mac, 6);
+  peer.channel = chan;
+  peer.encrypt = false;
+  return esp_now_add_peer(&peer) == ESP_OK;
+}
 
-        // If rData is not nullptr, continue appending posArray to it
-        if (rData != nullptr) {
-          rData = (uint16_t*)realloc(rData, (masterSize + smallerSize) * sizeof(uint16_t));
-          for (size_t j = 0; j < smallerSize; ++j) {
-            rData[masterSize + j] = posArray[j];
-          }
-          masterSize += smallerSize;
-        } else {
-          // If rData is nullptr, initialize it for the first time
-          rData = new uint16_t[smallerSize];
-          for (size_t j = 0; j < smallerSize; ++j) {
-            rData[j] = posArray[j];
-          }
-          masterSize = smallerSize;
-        }
+// Callbacks
+void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
+  // if (data[1] == 0) return;  // Don't process message if its from the server itself
+  uint8_t msgType = data[0];
+  if (msgType == PAIRING && !paired) {
+    memcpy(&pairingData, data, sizeof(PairingMessage));
+    Serial.print("Pairing request from: "); printMAC(mac);
+    memcpy(clientMac, mac, 6);
 
-        // for (size_t j = 0; j < smallerSize; ++j) {
-        //     Serial.print(posArray[j]); Serial.print(" ");
-        // } Serial.println();
-        delete[] posArray;
-        return; }
+    WiFi.softAPmacAddress(pairingData.macAddr);  // Overwrite with our own MAC
+    pairingData.channel = chan;
+    pairingData.id = 0;  // Server is ID 0
+    addPeer(clientMac);
+    esp_now_send(clientMac, (uint8_t*)&pairingData, sizeof(pairingData));
+    paired = true;
+  } else if (msgType == DATA) {
+    memcpy(&theirMsg, data, sizeof(DataMessage));
+    // Serial.print("Received a packet: ");
+    // Serial.println(dataMsg.myData);
 
-      case 3:
-        Serial.println("All recorded data: ");
-        if (rData != nullptr) {
-          for (size_t i = 0; i < masterSize; ++i) {
-            Serial.print(rData[i]);
-            Serial.print(" ");
-          } Serial.println();
-          size_t totalSize = masterSize;  // total data in rData
-          size_t chunkSize = 100;  // Chunk size for each ESPNow send
-          size_t offset = 0;  // To track the position in rData
+    uint8_t result = q8.parseData(theirMsg.data);
+    if (result == 0) {  // No special instruction.
+      return;
+    } else {            // When controller requests battery legel or data
+      switch (result) {
+        case 1:
+          Serial.println("Send battery level");
+          myMsg.data[0] = (uint16_t)FuelGauge.percent();
+          esp_now_send(receiver_mac, (uint8_t *) &myMsg, sizeof(myMsg));
+          return;
 
-          // Loop to send the data in chunks
-          while (offset < totalSize) {
-            // If rData is less than chunk size then use its size instead.
-            size_t currentChunkSize = (totalSize - offset < chunkSize) ? (totalSize - offset) : chunkSize;
-            // Copy the chunk from rData to myData
-            memcpy(myData, &rData[offset], currentChunkSize * sizeof(uint16_t));
-            // If the chunk is smaller than 100, fill the remaining spaces with zeros
-            if (currentChunkSize < chunkSize) {
-                memset(&myData[currentChunkSize], 0, (chunkSize - currentChunkSize));  // Fill remaining with zeros
+        case 2: {
+          uint16_t* posArray = q8.syncRead();
+
+          // If rData is not nullptr, continue appending posArray to it
+          if (rData != nullptr) {
+            rData = (uint16_t*)realloc(rData, (masterSize + smallerSize) * sizeof(uint16_t));
+            for (size_t j = 0; j < smallerSize; ++j) {
+              rData[masterSize + j] = posArray[j];
             }
-            // Send the chunk via ESP-NOW
-            esp_now_send(receiver_mac, (uint8_t *)myData, currentChunkSize * sizeof(uint16_t));
-            // Updata offset now that the current chunk is sent
-            offset += currentChunkSize;
-            // Reset myData in preparation for next chunk
-            memset(myData, 0, sizeof(myData));
+            masterSize += smallerSize;
+          } else {
+            // If rData is nullptr, initialize it for the first time
+            rData = new uint16_t[smallerSize];
+            for (size_t j = 0; j < smallerSize; ++j) {
+              rData[j] = posArray[j];
+            }
+            masterSize = smallerSize;
           }
+          delete[] posArray;
+          return; }
 
-          // Reset rData to nullptr
-          delete[] rData;
-          rData = nullptr;
-          masterSize = 0;  // Reset masterSize as well
-        } else {
-          Serial.println("No data to send");
-        }
-        return;
+        case 3:
+          if (rData != nullptr) {
+            // Serial.println("All recorded data: ");
+            // for (size_t i = 0; i < masterSize; ++i) {
+            //   Serial.print(rData[i]); Serial.print(" ");
+            // } Serial.println();
+            size_t totalSize = masterSize;  // total data in rData
+            size_t chunkSize = 100;         // Chunk size for each ESPNow send
+            size_t offset = 0;              // To track the position in rData
+
+            // Loop to send the data in chunks
+            while (offset < totalSize) {
+              // If rData is less than chunk size then use its size instead.
+              size_t currentChunkSize = (totalSize - offset < chunkSize) ? (totalSize - offset) : chunkSize;
+              memcpy(myMsg.data, &rData[offset], currentChunkSize * sizeof(uint16_t));
+              // If the chunk is smaller than 100, fill the remaining spaces with zeros
+              if (currentChunkSize < chunkSize) {
+                  memset(&myMsg.data[currentChunkSize], 0, (chunkSize - currentChunkSize));  // Fill remaining with zeros
+              }
+              // Send the chunk via ESP-NOW
+              esp_now_send(receiver_mac, (uint8_t *)&myMsg, currentChunkSize * sizeof(uint16_t));
+              // Updata offset and Reset myData
+              offset += currentChunkSize;
+              memset(myMsg.data, 0, sizeof(myMsg.data));
+            }
+            delete[] rData;
+            rData = nullptr;
+            masterSize = 0;
+          } else {
+            Serial.println("No data to send");
+          }
+          return;
+      }
     }
   }
 }
+// void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
+//   // char macStr[18];
+//   // snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+//   //          mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
+//   //          mac_addr[5]);
+//   memcpy(&theirData, incomingData, sizeof(theirData));
+//   // Serial.print("Received from ["); Serial.print(macStr); Serial.print("]: "); 
+//   // Serial.println(theirData);
+//   uint8_t result = q8.parseData(theirData);
+//   if (result == 0) {  // No special instruction.
+//     return;
+//   } else {
+//     switch (result) {
+//       case 1:
+//         Serial.println("Send battery level");
+//         myData[0] = (uint16_t)FuelGauge.percent();
+//         esp_now_send(receiver_mac, (uint8_t *) &myData, sizeof(myData));
+//         return;
+//       case 2: {
+//         uint16_t* posArray = q8.syncRead();
+//         // If rData is not nullptr, continue appending posArray to it
+//         if (rData != nullptr) {
+//           rData = (uint16_t*)realloc(rData, (masterSize + smallerSize) * sizeof(uint16_t));
+//           for (size_t j = 0; j < smallerSize; ++j) {
+//             rData[masterSize + j] = posArray[j];
+//           }
+//           masterSize += smallerSize;
+//         } else {
+//           // If rData is nullptr, initialize it for the first time
+//           rData = new uint16_t[smallerSize];
+//           for (size_t j = 0; j < smallerSize; ++j) {
+//             rData[j] = posArray[j];
+//           }
+//           masterSize = smallerSize;
+//         }
+//         // Serial.print("Record data: ");
+//         // for (size_t j = 0; j < smallerSize; ++j) {
+//         //     Serial.print(posArray[j]); Serial.print(" ");
+//         // } Serial.println();
+//         delete[] posArray;
+//         return; }
+//       case 3:
+//         if (rData != nullptr) {
+//           // Serial.println("All recorded data: ");
+//           // for (size_t i = 0; i < masterSize; ++i) {
+//           //   Serial.print(rData[i]);
+//           //   Serial.print(" ");
+//           // } Serial.println();
+//           size_t totalSize = masterSize;  // total data in rData
+//           size_t chunkSize = 100;  // Chunk size for each ESPNow send
+//           size_t offset = 0;  // To track the position in rData
+//           // Loop to send the data in chunks
+//           while (offset < totalSize) {
+//             // If rData is less than chunk size then use its size instead.
+//             size_t currentChunkSize = (totalSize - offset < chunkSize) ? (totalSize - offset) : chunkSize;
+//             memcpy(myData, &rData[offset], currentChunkSize * sizeof(uint16_t));
+//             // If the chunk is smaller than 100, fill the remaining spaces with zeros
+//             if (currentChunkSize < chunkSize) {
+//                 memset(&myData[currentChunkSize], 0, (chunkSize - currentChunkSize));  // Fill remaining with zeros
+//             }
+//             // Send the chunk via ESP-NOW
+//             esp_now_send(receiver_mac, (uint8_t *)myData, currentChunkSize * sizeof(uint16_t));
+//             // Updata offset and Reset myData
+//             offset += currentChunkSize;
+//             memset(myData, 0, sizeof(myData));
+//           }
+//           delete[] rData;
+//           rData = nullptr;
+//           masterSize = 0;
+//         } else {
+//           Serial.println("No data to send");
+//         }
+//         return;
+//     }
+//   }
+// }
 
-// Callback when data is sent. Not used ATM
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
@@ -141,97 +222,116 @@ void displayReading()
 void addElementToArray(uint16_t*& array, size_t& currentSize, uint16_t newElement) {
     // Allocate a new array with one extra element
     uint16_t* newArray = new uint16_t[currentSize + 1];
-    // Add new element to front
     newArray[0] = newElement;
-    // Copy the existing elements to the new array
     memcpy(newArray + 1, array, currentSize * sizeof(uint16_t));
     // Delete the old array (free the memory)
     delete[] array;
     // Update the original pointer and size
     array = newArray;
-    currentSize++;  // Increment the size of the array
+    currentSize++;
 }
 
 void setup() {
   Serial.begin(115200);
   pinMode(LED_PIN, OUTPUT);
   pinMode(MODE_PIN, OUTPUT);
+  delay(2000);
 
-  // // Only needed to grab the MAC address. Disable and upload again.
-  // while(!Serial){
-  //   delay(100);
-  // }
-  // Serial.println("Serial port initialized.\n");
-  // delay(5000);
+  // Init Wi-Fi
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP("esp-server", nullptr, chan); // Optional, just to enable softAP mode
+  chan = WiFi.channel();
+  WiFi.softAPmacAddress(serverMac);
 
-  Serial.println("q8bot ESPNOW receiver:");
-  WiFi.mode(WIFI_MODE_STA);
-  Serial.println(WiFi.macAddress());
-  WiFi.disconnect();
-
-  // ESPNow Init
-  ESPNow.init();
-  ESPNow.reg_recv_cb(onRecv);
-  // Register for Send CB. Register pair.
-  esp_now_register_send_cb(OnDataSent);
-  memcpy(peerInfo.peer_addr, receiver_mac, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;      
-  if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
+  // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("ESP-NOW init failed");
     return;
   }
+  esp_now_register_recv_cb(onRecv);  // Set up callback when data is received.
 
-  // MAX17043
-  // Initialize the fuel gauge.
+  // Serial.println("q8bot ESPNOW receiver:");
+  // WiFi.mode(WIFI_MODE_STA);
+  // Serial.println(WiFi.macAddress());
+  // WiFi.disconnect();
+
+  // // ESPNow Init
+  // ESPNow.init();
+  // ESPNow.reg_recv_cb(onRecv);
+  // // Register for Send CB. Register pair.
+  // esp_now_register_send_cb(OnDataSent);
+  // memcpy(peerInfo.peer_addr, receiver_mac, 6);
+  // peerInfo.channel = 0;  
+  // peerInfo.encrypt = false;      
+  // if (esp_now_add_peer(&peerInfo) != ESP_OK){
+  //   Serial.println("Failed to add peer");
+  //   return;
+  // }
+
+  // MAX17043 Init
   if (FuelGauge.begin()){
-    // Reset the device.
-    FuelGauge.reset();
+    FuelGauge.reset(); // Reset the device.
     delay(250);
-    // Issue a quickstart command and wait for the device to be ready.
     FuelGauge.quickstart();
     delay(125);
-    // Display an initial reading.
-    displayReading();
+    displayReading(); // Display an initial reading.
   } else{
     Serial.println("MAX17043 NOT found.\n");
   }
 
   q8.begin();
-  digitalWrite(MODE_PIN, HIGH);
+  digitalWrite(LED_PIN, HIGH);
+  delay(2000);
+  digitalWrite(LED_PIN, LOW);
+  delay(200);
 }
 
 void loop() {
-  while (!q8.commStart()){
-    delay(1000);
-    Serial.println("Waiting");
-  }
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_PIN, LOW);
-  Serial.println("Robot start!");
+  static bool started = false;
+  static unsigned long lastBlink = 0;
+  unsigned long now = millis();
 
-  while(1){
-    delay(9800);
-    digitalWrite(LED_PIN, HIGH);
-    delay(200);
-    digitalWrite(LED_PIN, LOW);
-    // q8.setProfile(0);
+  // Not paired
+  if (!paired) {
+    if (now - lastBlink >= 2000) {
+      lastBlink = now;
+      digitalWrite(LED_PIN, HIGH);
+      delay(1000);
+      digitalWrite(LED_PIN, LOW);
+      Serial.println("Waiting for pairing...");
+    }
+    return;
+  }
+
+  // Paired but not started
+  if (!started) {
+    if (!q8.commStart()) {
+      if (now - lastBlink >= 2000) {
+        lastBlink = now;
+        for (int i = 0; i < 2; i++) {
+          digitalWrite(LED_PIN, HIGH);
+          delay(1000);
+          digitalWrite(LED_PIN, LOW);
+          delay(1000);
+        }
+        Serial.println("Waiting for robot start...");
+      }
+      return;
+    }
+    started = true;
+    Serial.println("Robot start!");
+  }
+
+  // Robot started
+  if (now - lastBlink >= 10000) {
+    lastBlink = now;
+    for (int brightness = 0; brightness <= 255; brightness++) {
+      analogWrite(LED_PIN, brightness);
+      delay(5); // Adjust for speed
+    }
+    for (int brightness = 255; brightness >= 0; brightness--) {
+      analogWrite(LED_PIN, brightness);
+      delay(5); // Adjust for speed
+    }
   }
 }
-
-/*
-New main loop logic
-Have an extra parameter to process. Contains the type of info the controller is requesting. Examples include: 
-  - Battery level
-  - Current reading from the past 5 seconds of the gait
-  - IMU reading from the past 5 seconds of the gait (only roll and pitch is ok)
-When receiving this command, the robot starts the movement while simultaneous records
-data, but hold on to them until the current movement is over. Then after the current 
-movement has terminated, it will send the info in bulk to the controller which passes 
-all data to the python script. The python script will do all post processing.
-
-If movement duration was less than the duration of data requested, the robot will 
-return as much data as there was. Otherwise, it will only send back the most recent 
-5-second of data, or something similar depending on what the controller asks.
-*/
