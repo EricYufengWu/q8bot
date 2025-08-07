@@ -6,15 +6,20 @@ enum MsgType : uint8_t{
   DATA,
 };
 struct PairingMessage{
-  uint8_t msgType;
+  uint8_t msgType = PAIRING;
   uint8_t id;
   uint8_t macAddr[6];
   uint8_t channel;
 };
-struct DataMessage{
-  uint8_t msgType;
+struct CharMessage{
+  uint8_t msgType = DATA;
   uint8_t id;
   char data[100];
+};
+struct DataMessage{
+  uint8_t msgType = DATA;
+  uint8_t id;
+  uint16_t data[100];
 };
 
 // Dynamixel Variables
@@ -32,7 +37,7 @@ char intStr[10];
 // char theirData[100];
 bool incoming = false;
 PairingMessage pairingData;
-DataMessage theirMsg;
+CharMessage theirMsg;
 DataMessage myMsg;
 int chan = 1;
 int paired = false;

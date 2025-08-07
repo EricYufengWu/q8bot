@@ -6,20 +6,26 @@ enum MsgType : uint8_t{
   DATA,
 };
 struct PairingMessage{
-  uint8_t msgType;
+  uint8_t msgType = PAIRING;
   uint8_t id;
   uint8_t macAddr[6];
   uint8_t channel;
 };
-struct DataMessage{
-  uint8_t msgType;
+struct CharMessage{
+  uint8_t msgType = DATA;
   uint8_t id;
   char data[100];
+};
+struct IntMessage{
+  uint8_t msgType = DATA;
+  uint8_t id;
+  uint16_t data[100];
 };
 
 // ESP-NOW Comms
 PairingMessage pairingData;
-DataMessage dataMsg;
+CharMessage sendMsg;
+IntMessage recvMsg;
 int chan = 1;  // Must be the same(similar) across server and client
 bool paired = false;
 uint8_t serverMac[6];

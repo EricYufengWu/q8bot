@@ -216,11 +216,12 @@ while True:
                 if request == "battery":
                     print(f"Battery Level: {int(raw_data[0])}")
                 else:
+                    # print(f"Received data: {raw_data}")
                     processed_data = [int(x) for x in raw_data]
                     totalArray.extend(processed_data)
             request = "none"
             if len(totalArray) > 0:
-                # print(totalArray)
+                print(totalArray)
                 parse_data(totalArray, move_list, y_list)
 
 q8.disable_torque()

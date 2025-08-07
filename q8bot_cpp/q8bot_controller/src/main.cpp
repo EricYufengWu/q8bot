@@ -2,22 +2,11 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 #include <esp_now.h>
+
+// Q8bot-specific Modules
 #include "systemParams.h"
 
-// This Q8bot's MAC address. Change this to yours.
-// uint8_t receiver_mac[] = {0x24, 0xEC, 0x4A, 0xC9, 0x5D, 0x20};
-// uint8_t receiver_mac[] = {0x54, 0x32, 0x04, 0x86, 0xF8, 0xC8};
-
-// // Char array for sending and receiving data
-// char myData[100];
-// // char theirData[100];
-// uint16_t theirData[100];
-// bool incoming = false;
-
-// // String for storing serial command
-// String cmd;
-
-// PeerInfo
+// Initialize global objects
 esp_now_peer_info_t peerInfo;
 
 void printMAC(const uint8_t* mac) {
@@ -38,34 +27,19 @@ bool addPeer(const uint8_t* mac) {
 void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
   if (data[0] == PAIRING) {
     memcpy(&pairingData, data, sizeof(PairingMessage));
-    Serial.println("Paired with server: "); printMAC(mac);
+    // Serial.println("Paired with server: "); printMAC(mac);
     memcpy(serverMac, mac, sizeof(serverMac));
     addPeer(serverMac);
     paired = true;
   } else if (data[0] == DATA) {
+    memcpy(&recvMsg, data, sizeof(IntMessage));
     for (int i = 0; i < 100; i++) {
-      Serial.print(dataMsg.data[i]);
+      Serial.print(recvMsg.data[i]);
       Serial.print(" ");
     } Serial.println();
-    memset(&dataMsg, 0, sizeof(dataMsg));
+    memset(&recvMsg, 0, sizeof(recvMsg));
   }
 }
-
-// // Callback when data is received
-// void onRecv(const uint8_t *mac_addr, const uint8_t *incomingData, int len) {
-//   char macStr[18];
-//   snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
-//            mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
-//            mac_addr[5]);
-//   memcpy(&theirData, incomingData, len);
-//   // Serial.print("Received from ["); Serial.print(macStr); Serial.print("]: "); 
-//   // Serial.println(sizeof(theirData));
-//   for (int i = 0; i < 100; i++) {
-//     Serial.print(theirData[i]);
-//     Serial.print(" ");
-//   } Serial.println();
-//   memset(theirData, 0, sizeof(theirData));
-// }
 
 // Callback when data is sent. Not used ATM
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -75,7 +49,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(100);
-  delay(2000);
+  // delay(2000);  // Useful for debugging
 
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -95,7 +69,6 @@ void setup() {
   addPeer(broadcastMAC);
 
   // Prepare pairing request message
-  pairingData.msgType = PAIRING;
   pairingData.id = 1;
   memcpy(pairingData.macAddr, clientMac, sizeof(clientMac));
   pairingData.channel = chan;
@@ -105,20 +78,18 @@ void setup() {
 void loop() {
   if (!paired && millis() - lastPairAttempt > 2000) {
     lastPairAttempt = millis();
-    Serial.println("Sending a pairing request...");
+    // Serial.println("Sending a pairing request...");
     esp_now_send(broadcastMAC, (uint8_t*)&pairingData, sizeof(pairingData));
   } else if (Serial.available()) {
-    int bytesRead = Serial.readBytesUntil(';', dataMsg.data, sizeof(dataMsg.data) - 1);  // Read until newline or buffer size limit
+    int bytesRead = Serial.readBytesUntil(';', sendMsg.data, sizeof(sendMsg.data) - 1);  // Read until newline or buffer size limit
     if (bytesRead > 0) {
-      dataMsg.data[bytesRead] = '\0';  // Null-terminate the string
-      // Serial.print("Received input from serial monitor: ");
-      // Serial.println(dataMsg.myData); 
+      sendMsg.data[bytesRead] = '\0';  // Null-terminate the string
     }
 
     // Send to receiver's mac address
-    dataMsg.msgType = DATA;
-    dataMsg.id = 1;
-    esp_err_t result = esp_now_send(serverMac, (uint8_t*)&dataMsg, sizeof(dataMsg));
+    sendMsg.msgType = DATA;
+    sendMsg.id = 1;
+    esp_err_t result = esp_now_send(serverMac, (uint8_t*)&sendMsg, sizeof(sendMsg));
   }
   delay(1);
 }
