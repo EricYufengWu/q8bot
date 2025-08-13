@@ -114,10 +114,10 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
 
         case 3: {
           if (rData != nullptr) {
-            // Serial.println("All recorded data: ");
-            // for (size_t i = 0; i < masterSize; ++i) {
-            //   Serial.print(rData[i]); Serial.print(" ");
-            // } Serial.println();
+            Serial.println("All recorded data: ");
+            for (size_t i = 0; i < masterSize; ++i) {
+              Serial.print(rData[i]); Serial.print(" ");
+            } Serial.println();
             size_t totalSize = masterSize;  // total data in rData
             size_t chunkSize = 100;         // Chunk size for each ESPNow send
             size_t offset = 0;              // To track the position in rData

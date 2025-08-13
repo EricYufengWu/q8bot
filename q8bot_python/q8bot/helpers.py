@@ -180,6 +180,8 @@ def movement_tick(move_list):
 
 def parse_data(data, cmd, y_list):
     cur_1, cur_2, pos_1, pos_2 = [], [], [], []
+    complete_len = len(data) - (len(data) % 4)  # Only keep complete packets of 4
+    data = data[:complete_len]
     for i in range(0, len(data), 4):
         cur_1.append(data[i])
         pos_1.append(data[i+1])
@@ -189,6 +191,7 @@ def parse_data(data, cmd, y_list):
     cur_2 = np.array(cur_2) - 10000
     pos_1 = np.round(dxl2rad(np.array(pos_1)),2)
     pos_2 = np.round(dxl2rad(np.array(pos_2)),2)
+    print(f"cur1: {cur_1}, pos1: {pos_1}, cur2: {cur_2}, pos2: {pos_2}")
     cmd_1 = [q_val[0] for q_val in cmd]
     cmd_2 = [q_val[1] for q_val in cmd]
     y_length, d_length = len(y_list), len(cur_1)
