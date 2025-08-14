@@ -129,11 +129,11 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
               memcpy(myMsg.data, &rData[offset], currentChunkSize * sizeof(uint16_t));
               // If the chunk is smaller than 100, fill the remaining spaces with zeros
               if (currentChunkSize < chunkSize) {
-                  memset(&myMsg.data[currentChunkSize], 0, (chunkSize - currentChunkSize));  // Fill remaining with zeros
+                  memset(&myMsg.data[currentChunkSize], 0, (chunkSize - currentChunkSize));
               }
               // Send the chunk via ESP-NOW
-              esp_now_send(receiver_mac, (uint8_t *)&myMsg, currentChunkSize * sizeof(uint16_t));
-              // Updata offset and Reset myData
+              esp_now_send(receiver_mac, (uint8_t *)&myMsg, sizeof(myMsg));
+              // Update offset and Reset myData
               offset += currentChunkSize;
               memset(myMsg.data, 0, sizeof(myMsg.data));
             }

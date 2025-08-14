@@ -5,6 +5,8 @@ tests/inverse_kinematics.ipynb
 experiments/
 q8bot/Manual.jpg
 q8bot/q8botGPD.py
+q8bot/*.csv
+q8bot/*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
