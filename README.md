@@ -24,7 +24,7 @@ Q8bot is lucky to be featured in a number of blog posts:
 
 ## Overview
 
-Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
+Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current **[Bill of Materials (BOM)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**, without optimization, starts below $300. 
 
 <p align="center">
   <img src="documentation_public/Q8bot_Rev2_Hero.jpeg" alt="Image 1" width="49%">
