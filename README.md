@@ -4,7 +4,7 @@
 
 [![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
-## Featured Media & Publications
+## Featured Media & Demos
 
 Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB-HlDlHGtaq-xd7&t=1208) by UnrealScience, a famous Korean science Youtube channel.
 
@@ -12,7 +12,13 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 
 See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
-Related Publications:
+Q8bot is lucky to be featured in a number of blog posts:
+- Hackaday: https://hackaday.com/2024/10/29/little-quadruped-has-pcb-spine-and-no-wiring/#comments
+- Hackster.io: https://www.hackster.io/news/a-step-up-for-diy-robotics-8b04a2320861?f=1
+- Interesting Engineering: https://interestingengineering.com/innovation/palm-sized-quadruped-robot-redefines-design
+- Techblog: https://www.techeblog.com/spot-robot-dog-q8bot/
+
+## Publications
 - Design: https://arxiv.org/abs/2508.01149
 - Control & Data Acquisition: https://ieeexplore.ieee.org/abstract/document/11078123/
 
