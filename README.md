@@ -4,13 +4,17 @@
 
 [![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
-## Featured Media & Demos
+## Featured Media & Publications
 
 Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB-HlDlHGtaq-xd7&t=1208) by UnrealScience, a famous Korean science Youtube channel.
 
 [This video](https://youtu.be/0dk7lYoITQw) demonstrates the latest capabilities of the robot, made possibly by ongoing improvements in software control and mechanical design.
 
 See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
+
+Related Publications:
+Design: https://arxiv.org/abs/2508.01149
+Control & Data Acquisition: https://ieeexplore.ieee.org/abstract/document/11078123/
 
 ## Overview
 
