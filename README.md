@@ -13,8 +13,8 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
 Related Publications:
-Design: https://arxiv.org/abs/2508.01149
-Control & Data Acquisition: https://ieeexplore.ieee.org/abstract/document/11078123/
+- Design: https://arxiv.org/abs/2508.01149
+- Control & Data Acquisition: https://ieeexplore.ieee.org/abstract/document/11078123/
 
 ## Overview
 
