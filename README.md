@@ -12,9 +12,19 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 
 See the detailed robot building process on [YouTube](https://youtu.be/YJDc1xAhaOI)!
 
+Q8bot is lucky to be featured in a number of blog posts:
+- Hackaday: https://hackaday.com/2024/10/29/little-quadruped-has-pcb-spine-and-no-wiring/#comments
+- Hackster.io: https://www.hackster.io/news/a-step-up-for-diy-robotics-8b04a2320861?f=1
+- Interesting Engineering: https://interestingengineering.com/innovation/palm-sized-quadruped-robot-redefines-design
+- Techblog: https://www.techeblog.com/spot-robot-dog-q8bot/
+
+## Publications
+- Design: https://arxiv.org/abs/2508.01149
+- Control & Data Acquisition: https://ieeexplore.ieee.org/abstract/document/11078123/
+
 ## Overview
 
-Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current BOM, without optimization, starts below $300. 
+Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current **[Bill of Materials (BOM)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**, without optimization, starts below $300. 
 
 <p align="center">
   <img src="documentation_public/Q8bot_Rev2_Hero.jpeg" alt="Image 1" width="49%">
