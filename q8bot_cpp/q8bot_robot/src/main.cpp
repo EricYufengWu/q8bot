@@ -217,7 +217,7 @@ void loop() {
     if (now - lastBlink >= 2000) {
       lastBlink = now;
       digitalWrite(LED_PIN, HIGH);
-      delay(1000);
+      delay(200);
       digitalWrite(LED_PIN, LOW);
       Serial.println("Waiting for pairing...");
     }
@@ -231,9 +231,9 @@ void loop() {
         lastBlink = now;
         for (int i = 0; i < 2; i++) {
           digitalWrite(LED_PIN, HIGH);
-          delay(1000);
+          delay(200);
           digitalWrite(LED_PIN, LOW);
-          delay(1000);
+          delay(300);
         }
         Serial.println("Waiting for robot start...");
       }
