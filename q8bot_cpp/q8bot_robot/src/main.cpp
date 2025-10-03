@@ -64,8 +64,16 @@ void addElementToArray(uint16_t*& array, size_t& currentSize, uint16_t newElemen
 
 // Callbacks
 void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
+  // Validate minimum length
+  if (len < 1) return;
+
   uint8_t msgType = data[0];
   if (msgType == PAIRING && !paired) {
+    // Validate PAIRING message length
+    if (len < sizeof(PairingMessage)) {
+      Serial.println("Invalid pairing message length");
+      return;
+    }
     memcpy(&pairingData, data, sizeof(pairingData));
     Serial.print("Pairing request from: "); printMAC(mac);
     memcpy(clientMac, mac, 6);
@@ -76,6 +84,11 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
     esp_now_send(clientMac, (uint8_t*)&pairingData, sizeof(pairingData));
     paired = true;
   } else if (msgType == DATA) {
+    // Validate DATA message length
+    if (len < sizeof(CharMessage)) {
+      Serial.println("Invalid data message length");
+      return;
+    }
     memcpy(&theirMsg, data, sizeof(theirMsg));
     uint8_t result = q8.parseData(theirMsg.data);
     // myMsg params
@@ -87,7 +100,7 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
         case 1: {
           Serial.println("Send battery level");
           myMsg.data[0] = (uint16_t)FuelGauge.percent();
-          esp_now_send(receiver_mac, (uint8_t *) &myMsg, sizeof(myMsg));
+          esp_now_send(clientMac, (uint8_t *) &myMsg, sizeof(myMsg));
           return;
         }
 
@@ -132,7 +145,7 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
                   memset(&myMsg.data[currentChunkSize], 0, (chunkSize - currentChunkSize));
               }
               // Send the chunk via ESP-NOW
-              esp_now_send(receiver_mac, (uint8_t *)&myMsg, sizeof(myMsg));
+              esp_now_send(clientMac, (uint8_t *)&myMsg, sizeof(myMsg));
               // Update offset and Reset myData
               offset += currentChunkSize;
               memset(myMsg.data, 0, sizeof(myMsg.data));

@@ -25,13 +25,26 @@ bool addPeer(const uint8_t* mac) {
 }
 
 void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
+  // Validate minimum length
+  if (len < 1) return;
+
   if (data[0] == PAIRING) {
+    // Validate PAIRING message length
+    if (len < sizeof(PairingMessage)) {
+      Serial.println("Invalid pairing response length");
+      return;
+    }
     memcpy(&pairingData, data, sizeof(PairingMessage));
     // Serial.println("Paired with server: "); printMAC(mac);
     memcpy(serverMac, mac, sizeof(serverMac));
     addPeer(serverMac);
     paired = true;
   } else if (data[0] == DATA) {
+    // Validate DATA message length
+    if (len < sizeof(IntMessage)) {
+      Serial.println("Invalid data message length");
+      return;
+    }
     memcpy(&recvMsg, data, sizeof(IntMessage));
     for (int i = 0; i < 100; i++) {
       Serial.print(recvMsg.data[i]);
