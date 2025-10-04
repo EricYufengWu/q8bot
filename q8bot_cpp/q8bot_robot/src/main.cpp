@@ -11,12 +11,15 @@
 #include "userParams.h"
 #include "systemParams.h"
 #include "pinMapping.h"
+#include "macStorage.h"
 
 // Initialize global objects
 esp_now_peer_info_t peerInfo;
 HardwareSerial          ser(0);
 Dynamixel2Arduino       q8dxl(ser, DXL_DIR_PIN);
 q8Dynamixel             q8(q8dxl);
+bool started = false;  // Track robot start state
+macStorage storage;
 
 // Helper functions for ESP-NOW
 void printMAC(const uint8_t* mac) {
@@ -70,12 +73,11 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
   uint8_t msgType = data[0];
   if (msgType == PAIRING && !paired) {
     // Validate PAIRING message length
-    if (len < sizeof(PairingMessage)) {
-      Serial.println("Invalid pairing message length");
-      return;
-    }
+    if (len < sizeof(PairingMessage)) return;
     memcpy(&pairingData, data, sizeof(pairingData));
-    Serial.print("Pairing request from: "); printMAC(mac);
+    if (debugMode) {
+      Serial.print("[PAIRING] Pairing request from: "); printMAC(mac);
+    }
     memcpy(clientMac, mac, 6);
     WiFi.softAPmacAddress(pairingData.macAddr);  // Overwrite with our own MAC
     pairingData.channel = chan;
@@ -83,12 +85,27 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
     addPeer(clientMac);
     esp_now_send(clientMac, (uint8_t*)&pairingData, sizeof(pairingData));
     paired = true;
-  } else if (msgType == DATA) {
-    // Validate DATA message length
-    if (len < sizeof(CharMessage)) {
-      Serial.println("Invalid data message length");
-      return;
+    lastHeartbeatReceived = millis();
+
+    // Save the controller MAC address to EEPROM
+    storage.savePeerMAC(clientMac);
+    Serial.println("[STORAGE] Saved controller MAC to EEPROM");
+
+    if (debugMode) {
+      Serial.println("[PAIRING] Paired successfully");
     }
+  } else if (msgType == HEARTBEAT && paired) {
+    // Echo heartbeat back to controller
+    if (len < sizeof(HeartbeatMessage)) return;
+    lastHeartbeatReceived = millis();
+    if (debugMode) {
+      Serial.println("[HEARTBEAT] Received, echoing back");
+    }
+    esp_now_send(mac, data, len);
+  } else if (msgType == DATA && paired) {
+    // Validate DATA message length
+    if (len < sizeof(CharMessage)) return;
+    lastHeartbeatReceived = millis();  // Any DATA also counts as "alive"
     memcpy(&theirMsg, data, sizeof(theirMsg));
     uint8_t result = q8.parseData(theirMsg.data);
     // myMsg params
@@ -98,7 +115,9 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
     } else {            // When controller requests battery legel or data
       switch (result) {
         case 1: {
-          Serial.println("Send battery level");
+          if (debugMode) {
+            Serial.println("[DATA] Send battery level");
+          }
           myMsg.data[0] = (uint16_t)FuelGauge.percent();
           esp_now_send(clientMac, (uint8_t *) &myMsg, sizeof(myMsg));
           return;
@@ -127,10 +146,12 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
 
         case 3: {
           if (rData != nullptr) {
-            Serial.println("All recorded data: ");
-            for (size_t i = 0; i < masterSize; ++i) {
-              Serial.print(rData[i]); Serial.print(" ");
-            } Serial.println();
+            if (debugMode) {
+              Serial.println("[DATA] All recorded data: ");
+              for (size_t i = 0; i < masterSize; ++i) {
+                Serial.print(rData[i]); Serial.print(" ");
+              } Serial.println();
+            }
             size_t totalSize = masterSize;  // total data in rData
             size_t chunkSize = 100;         // Chunk size for each ESPNow send
             size_t offset = 0;              // To track the position in rData
@@ -161,6 +182,18 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
   }
 }
 
+void unpair() {
+  if (debugMode) {
+    Serial.println("[HEARTBEAT] Connection lost - returning to pairing mode");
+  }
+  esp_now_del_peer(clientMac);
+  storage.clearPeerMAC();
+  Serial.println("[STORAGE] Cleared controller MAC from EEPROM");
+  memset(clientMac, 0, sizeof(clientMac));
+  paired = false;
+  started = false;
+}
+
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
@@ -184,23 +217,16 @@ void setup() {
   }
   esp_now_register_recv_cb(onRecv);  // Set up callback when data is received.
 
-  // Serial.println("q8bot ESPNOW receiver:");
-  // WiFi.mode(WIFI_MODE_STA);
-  // Serial.println(WiFi.macAddress());
-  // WiFi.disconnect();
-
-  // // ESPNow Init
-  // ESPNow.init();
-  // ESPNow.reg_recv_cb(onRecv);
-  // // Register for Send CB. Register pair.
-  // esp_now_register_send_cb(OnDataSent);
-  // memcpy(peerInfo.peer_addr, receiver_mac, 6);
-  // peerInfo.channel = 0;  
-  // peerInfo.encrypt = false;      
-  // if (esp_now_add_peer(&peerInfo) != ESP_OK){
-  //   Serial.println("Failed to add peer");
-  //   return;
-  // }
+  // Check for saved MAC address
+  if (storage.loadPeerMAC(clientMac)) {
+    Serial.print("[STORAGE] Found saved controller MAC: "); printMAC(clientMac);
+    addPeer(clientMac);
+    paired = true;
+    lastHeartbeatReceived = millis();
+    Serial.println("[STORAGE] Attempting to reconnect to saved controller");
+  } else {
+    Serial.println("[STORAGE] No saved MAC found - waiting for pairing request");
+  }
 
   // MAX17043 Init
   if (FuelGauge.begin()){
@@ -221,9 +247,38 @@ void setup() {
 }
 
 void loop() {
-  static bool started = false;
   static unsigned long lastBlink = 0;
   unsigned long now = millis();
+
+  // Check for debug mode toggle
+  if (Serial.available()) {
+    char c = Serial.peek();
+    if (c == 'd') {
+      Serial.read(); // Consume the 'd'
+      debugMode = !debugMode;
+      Serial.print("Debug mode: ");
+      Serial.println(debugMode ? "ON" : "OFF");
+      return;
+    }
+  }
+
+  // Check for heartbeat timeout when paired
+  if (paired) {
+    // Avoid underflow: only check timeout if now >= lastHeartbeatReceived
+    if (now >= lastHeartbeatReceived) {
+      unsigned long timeSinceLastMsg = now - lastHeartbeatReceived;
+      if (timeSinceLastMsg > HEARTBEAT_TIMEOUT_ROBOT) {
+        if (debugMode) {
+          Serial.print("[HEARTBEAT] Timeout detected (");
+          Serial.print(timeSinceLastMsg);
+          Serial.println("ms since last message)");
+        }
+        q8.toggleTorque(0);        // Disable torque hardware
+        q8.resetTorqueState();     // Sync internal flag to match disabled state
+        unpair();
+      }
+    }
+  }
 
   // Not paired
   if (!paired) {
@@ -232,7 +287,9 @@ void loop() {
       digitalWrite(LED_PIN, HIGH);
       delay(200);
       digitalWrite(LED_PIN, LOW);
-      Serial.println("Waiting for pairing...");
+      if (debugMode) {
+        Serial.println("[PAIRING] Waiting for pairing...");
+      }
     }
     return;
   }
@@ -248,12 +305,16 @@ void loop() {
           digitalWrite(LED_PIN, LOW);
           delay(300);
         }
-        Serial.println("Waiting for robot start...");
+        if (debugMode) {
+          Serial.println("[ROBOT] Waiting for robot start...");
+        }
       }
       return;
     }
     started = true;
-    Serial.println("Robot start!");
+    if (debugMode) {
+      Serial.println("[ROBOT] Robot start!");
+    }
   }
 
   // Robot started

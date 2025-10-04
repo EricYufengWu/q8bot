@@ -86,6 +86,12 @@ void q8Dynamixel::toggleTorque(bool flag){
   }
 }
 
+void q8Dynamixel::resetTorqueState(){
+  // Reset the internal torque flag to match disabled state
+  // Used after connection loss when torque was already disabled
+  _torqueFlag = false;
+}
+
 void q8Dynamixel::setOpMode(){
   // Set operating mode. Torque off first if needed.
   if (!_torqueFlag){
@@ -213,7 +219,7 @@ uint8_t q8Dynamixel::parseData(const char* myData) {
     _profile = std::atoi(token);
     token = strtok(nullptr, ",");
     if (_profile != _prevProfile){
-      Serial.print("Profile changed: "); Serial.println(_profile);
+      Serial.print("[ROBOT] Profile changed: "); Serial.println(_profile);
       setProfile(_profile);
       _prevProfile = _profile;
     }
@@ -221,7 +227,7 @@ uint8_t q8Dynamixel::parseData(const char* myData) {
   if (token != nullptr) {                    // 1th value is torque enable/disable
     _torqueFlag = (std::atoi(token) == 1);
     if (_torqueFlag != _prevTorqueFlag){
-      Serial.println(_torqueFlag ? "Torque on" : "Torque off");
+      Serial.println(_torqueFlag ? "[ROBOT] Torque on" : "[ROBOT] Torque off");
       toggleTorque(_torqueFlag);
       _prevTorqueFlag = _torqueFlag;
       return 0;

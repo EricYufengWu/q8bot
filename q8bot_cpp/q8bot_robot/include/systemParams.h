@@ -4,6 +4,7 @@
 enum MsgType : uint8_t{
   PAIRING,
   DATA,
+  HEARTBEAT,
 };
 struct PairingMessage{
   uint8_t msgType = PAIRING;
@@ -20,6 +21,11 @@ struct DataMessage{
   uint8_t msgType = DATA;
   uint8_t id;
   uint16_t data[100];
+};
+struct HeartbeatMessage{
+  uint8_t msgType = HEARTBEAT;
+  uint8_t id;
+  uint32_t timestamp;
 };
 
 // Dynamixel Variables
@@ -43,3 +49,10 @@ int chan = 1;
 int paired = false;
 uint8_t clientMac[6];  // This is the controller MCU.
 uint8_t serverMac[6];  // This us. The robot is the server.
+
+// Heartbeat tracking (robot side)
+unsigned long lastHeartbeatReceived = 0;
+const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 20000;  // Unpair after 20s no heartbeat from controller
+
+// Debug mode
+bool debugMode = false;

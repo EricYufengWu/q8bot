@@ -22,6 +22,7 @@ class q8Dynamixel
     void enableTorque();
     void disableTorque();
     void toggleTorque(bool flag);
+    void resetTorqueState();  // Reset internal torque flag without changing hardware state
     void setOpMode();
     void setProfile(uint16_t dur);
     void setGain(uint16_t p_gain);
