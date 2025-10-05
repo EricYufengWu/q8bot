@@ -213,6 +213,7 @@ while True:
                 raw_data = raw_data.split()
                 while raw_data and raw_data[-1] == '0':
                     raw_data.pop()
+                # print(f"Received data: {raw_data}")
                 if request == "battery":
                     print(f"Battery Level: {int(raw_data[0])}")
                 else:
@@ -221,7 +222,7 @@ while True:
                     totalArray.extend(processed_data)
             request = "none"
             if len(totalArray) > 0:
-                print(totalArray)
+                # print(totalArray)
                 parse_data(totalArray, move_list, y_list)
 
 q8.disable_torque()
