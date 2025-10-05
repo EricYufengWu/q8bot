@@ -13,6 +13,14 @@ esp_now_peer_info_t peerInfo;
 Preferences prefs;
 macStorage storage;
 
+// ============================================================================
+// FreeRTOS Handles (Added for FreeRTOS migration - not yet used)
+// ============================================================================
+QueueHandle_t rxQueue = NULL;
+QueueHandle_t debugQueue = NULL;
+QueueHandle_t dataOutputQueue = NULL;
+EventGroupHandle_t eventGroup = NULL;
+
 void printMAC(const uint8_t* mac) {
   char buff[18];
   sprintf(buff, "%02X:%02X:%02X:%02X:%02X:%02X",
@@ -51,6 +59,11 @@ void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
     if (debugMode) {
       Serial.println("[HEARTBEAT] Connection established, heartbeat timer started");
     }
+
+    // Signal pairing task to stop broadcasting (if FreeRTOS is running)
+    if (eventGroup != NULL) {
+      xEventGroupSetBits(eventGroup, EVENT_PAIRED);
+    }
   } else if (data[0] == HEARTBEAT) {
     // Robot echoed heartbeat back
     if (len < sizeof(HeartbeatMessage)) return;
@@ -86,11 +99,57 @@ void unpair() {
   memset(serverMac, 0, sizeof(serverMac));
   paired = false;
   lastPairAttempt = millis();
+
+  // Signal pairing task to resume broadcasting (if FreeRTOS is running)
+  if (eventGroup != NULL) {
+    xEventGroupSetBits(eventGroup, EVENT_UNPAIRED);
+  }
 }
 
 // Callback when data is sent. Not used ATM
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
+
+// ============================================================================
+// FreeRTOS Task: Pairing Manager (Priority 0 - LOWEST)
+// ============================================================================
+void pairingTask(void *param) {
+  TickType_t lastWake = xTaskGetTickCount();
+
+  while (1) {
+    // Check pairing state (use old global for now, will migrate to atomic later)
+    bool isPaired = paired;
+
+    if (!isPaired) {
+      // Send pairing broadcast every 2s
+      if (debugMode) {
+        Serial.println("[PAIRING] Sending broadcast...");
+      }
+
+      PairingMessage pairingMsg;
+      pairingMsg.msgType = PAIRING;
+      pairingMsg.id = 1;
+      memcpy(pairingMsg.macAddr, clientMac, 6);
+      pairingMsg.channel = chan;
+
+      esp_now_send(broadcastMAC, (uint8_t*)&pairingMsg, sizeof(pairingMsg));
+
+      vTaskDelayUntil(&lastWake, pdMS_TO_TICKS(2000));
+    } else {
+      // Block until unpaired event
+      EventBits_t bits = xEventGroupWaitBits(
+        eventGroup,
+        EVENT_UNPAIRED,
+        pdTRUE,   // Clear on exit
+        pdFALSE,  // Wait for any bit
+        portMAX_DELAY
+      );
+
+      // Reset timing after unpair event
+      lastWake = xTaskGetTickCount();
+    }
+  }
 }
  
 void setup() {
@@ -132,6 +191,39 @@ void setup() {
   memcpy(pairingData.macAddr, clientMac, sizeof(clientMac));
   pairingData.channel = chan;
   lastPairAttempt = millis();
+
+  // ============================================================================
+  // FreeRTOS Initialization (Added for migration)
+  // ============================================================================
+
+  // Create event group for task synchronization
+  eventGroup = xEventGroupCreate();
+  if (eventGroup == NULL) {
+    Serial.println("[RTOS] Failed to create event group");
+    return;
+  }
+
+  // Create pairing task (Priority 0 - lowest)
+  BaseType_t taskCreated = xTaskCreate(
+    pairingTask,        // Task function
+    "Pairing",          // Task name
+    3072,               // Stack size (bytes)
+    NULL,               // Parameters
+    0,                  // Priority (lowest)
+    NULL                // Task handle
+  );
+
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create pairing task");
+    return;
+  }
+
+  Serial.println("[RTOS] Pairing task created successfully");
+
+  // If already paired from saved MAC, signal paired event
+  if (paired) {
+    xEventGroupSetBits(eventGroup, EVENT_PAIRED);
+  }
 }
 
 void loop() {
@@ -148,7 +240,9 @@ void loop() {
   }
 
   if (!paired) {
-    // Pairing mode
+    // Pairing mode - NOW HANDLED BY FREERTOS TASK
+    // (Old pairing code disabled to avoid conflict with pairingTask)
+    /*
     if (millis() - lastPairAttempt > 2000) {
       lastPairAttempt = millis();
       if (debugMode) {
@@ -156,6 +250,7 @@ void loop() {
       }
       esp_now_send(broadcastMAC, (uint8_t*)&pairingData, sizeof(pairingData));
     }
+    */
   } else {
     // Connected mode
 

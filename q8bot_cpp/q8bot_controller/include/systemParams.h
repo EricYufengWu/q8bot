@@ -1,4 +1,9 @@
 #include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <freertos/queue.h>
+#include <freertos/semphr.h>
+#include <freertos/event_groups.h>
 
 // ESP-NOW Messaging Types
 enum MsgType : uint8_t{
@@ -48,3 +53,34 @@ const unsigned long HEARTBEAT_TIMEOUT = 15000;      // Unpair after 15s no respo
 
 // Debug mode
 bool debugMode = false;
+
+// ============================================================================
+// FreeRTOS Data Structures (Added for FreeRTOS migration - not yet used)
+// ============================================================================
+
+// Message queue structure for ISR → RX Handler
+typedef struct {
+  uint8_t mac[6];
+  uint8_t data[250];
+  int len;
+  uint32_t timestamp;
+} ESPNowMessage;
+
+// Lock-free shared state
+typedef struct {
+  volatile bool paired;
+  uint8_t serverMac[6];
+  volatile uint32_t lastHeartbeatRx;
+  bool debugMode;
+} ControllerState;
+
+// FreeRTOS Handles (to be initialized in setup)
+extern QueueHandle_t rxQueue;
+extern QueueHandle_t debugQueue;
+extern QueueHandle_t dataOutputQueue;
+extern EventGroupHandle_t eventGroup;
+
+// Event group bits
+#define EVENT_PAIRED        (1 << 0)
+#define EVENT_UNPAIRED      (1 << 1)
+#define EVENT_HEARTBEAT_RX  (1 << 2)
