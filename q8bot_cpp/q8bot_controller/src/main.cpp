@@ -112,10 +112,45 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 }
 
 // ============================================================================
+// FreeRTOS Task: Serial Output / Debug (Priority 1 - LOW)
+// ============================================================================
+void serialOutputTask(void *param) {
+  SerialMessage msg;
+
+  while (1) {
+    // Check for serial output messages (blocking with timeout)
+    if (xQueueReceive(debugQueue, &msg, pdMS_TO_TICKS(10)) == pdTRUE) {
+      // Print based on message type
+      if (msg.type == MSG_INFO) {
+        // INFO messages always printed
+        Serial.print(msg.text);
+      } else if (msg.type == MSG_DEBUG && debugMode) {
+        // DEBUG messages only when debugMode is ON
+        Serial.print(msg.text);
+      }
+    }
+
+    // Check for debug toggle command
+    if (Serial.available()) {
+      char c = Serial.peek();
+      if (c == 'd') {
+        Serial.read(); // Consume the 'd'
+        debugMode = !debugMode;
+        Serial.printf("Debug mode: %s\n", debugMode ? "ON" : "OFF");
+      }
+    }
+
+    // Low priority - yield to other tasks
+    vTaskDelay(pdMS_TO_TICKS(10));
+  }
+}
+
+// ============================================================================
 // FreeRTOS Task: Pairing Manager (Priority 0 - LOWEST)
 // ============================================================================
 void pairingTask(void *param) {
   TickType_t lastWake = xTaskGetTickCount();
+  SerialMessage msg;
 
   while (1) {
     // Check pairing state (use old global for now, will migrate to atomic later)
@@ -123,8 +158,10 @@ void pairingTask(void *param) {
 
     if (!isPaired) {
       // Send pairing broadcast every 2s
-      if (debugMode) {
-        Serial.println("[PAIRING] Sending broadcast...");
+      if (debugQueue != NULL) {
+        msg.type = MSG_DEBUG;
+        snprintf(msg.text, sizeof(msg.text), "[PAIRING] Sending broadcast...\n");
+        xQueueSend(debugQueue, &msg, 0);
       }
 
       PairingMessage pairingMsg;
@@ -196,6 +233,13 @@ void setup() {
   // FreeRTOS Initialization (Added for migration)
   // ============================================================================
 
+  // Create queues
+  debugQueue = xQueueCreate(20, sizeof(SerialMessage));
+  if (debugQueue == NULL) {
+    Serial.println("[RTOS] Failed to create debug queue");
+    return;
+  }
+
   // Create event group for task synchronization
   eventGroup = xEventGroupCreate();
   if (eventGroup == NULL) {
@@ -203,8 +247,23 @@ void setup() {
     return;
   }
 
-  // Create pairing task (Priority 0 - lowest)
+  // Create serial output task (Priority 1 - low)
   BaseType_t taskCreated = xTaskCreate(
+    serialOutputTask,   // Task function
+    "SerialOut",        // Task name
+    3072,               // Stack size (bytes)
+    NULL,               // Parameters
+    1,                  // Priority (low)
+    NULL                // Task handle
+  );
+
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create serial output task");
+    return;
+  }
+
+  // Create pairing task (Priority 0 - lowest)
+  taskCreated = xTaskCreate(
     pairingTask,        // Task function
     "Pairing",          // Task name
     3072,               // Stack size (bytes)
@@ -218,7 +277,7 @@ void setup() {
     return;
   }
 
-  Serial.println("[RTOS] Pairing task created successfully");
+  Serial.println("[RTOS] FreeRTOS tasks created successfully");
 
   // If already paired from saved MAC, signal paired event
   if (paired) {
@@ -227,7 +286,9 @@ void setup() {
 }
 
 void loop() {
-  // Check for debug mode toggle
+  // Debug mode toggle - NOW HANDLED BY FREERTOS serialOutputTask
+  // (Old debug toggle disabled to avoid conflict)
+  /*
   if (Serial.available()) {
     char c = Serial.peek();
     if (c == 'd') {
@@ -238,6 +299,7 @@ void loop() {
       return;
     }
   }
+  */
 
   if (!paired) {
     // Pairing mode - NOW HANDLED BY FREERTOS TASK

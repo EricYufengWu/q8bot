@@ -66,6 +66,17 @@ typedef struct {
   uint32_t timestamp;
 } ESPNowMessage;
 
+// Serial output message types
+enum SerialMsgType : uint8_t {
+  MSG_DEBUG,  // Can be toggled off with 'd' command
+  MSG_INFO    // Always printed (system events)
+};
+
+typedef struct {
+  SerialMsgType type;
+  char text[128];
+} SerialMessage;
+
 // Lock-free shared state
 typedef struct {
   volatile bool paired;
