@@ -13,19 +13,26 @@ esp_now_peer_info_t peerInfo;
 Preferences prefs;
 macStorage storage;
 
-// ============================================================================
-// FreeRTOS Handles (Added for FreeRTOS migration - not yet used)
-// ============================================================================
+// FreeRTOS Handles
 QueueHandle_t rxQueue = NULL;
 QueueHandle_t debugQueue = NULL;
 QueueHandle_t dataOutputQueue = NULL;
 EventGroupHandle_t eventGroup = NULL;
 
-void printMAC(const uint8_t* mac) {
-  char buff[18];
-  sprintf(buff, "%02X:%02X:%02X:%02X:%02X:%02X",
-          mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-  Serial.println(buff);
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+void queuePrint(SerialMsgType type, const char* format, ...) {
+  SerialMessage msg;
+  msg.type = type;
+
+  va_list args;
+  va_start(args, format);
+  vsnprintf(msg.text, sizeof(msg.text), format, args);
+  va_end(args);
+
+  xQueueSend(debugQueue, &msg, 0);
 }
 
 bool addPeer(const uint8_t* mac) {
@@ -36,66 +43,13 @@ bool addPeer(const uint8_t* mac) {
   return esp_now_add_peer(&peer) == ESP_OK;
 }
 
-void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
-  // Validate minimum length
-  if (len < 1) return;
-
-  if (data[0] == PAIRING) {
-    // Validate PAIRING message length
-    if (len < sizeof(PairingMessage)) return;
-    memcpy(&pairingData, data, sizeof(PairingMessage));
-    if (debugMode) {
-      Serial.print("[PAIRING] Paired with server: "); printMAC(mac);
-    }
-    memcpy(serverMac, mac, sizeof(serverMac));
-    addPeer(serverMac);
-    paired = true;
-    lastHeartbeatReceived = millis();
-
-    // Save the MAC address to EEPROM
-    storage.savePeerMAC(serverMac);
-    Serial.println("[STORAGE] Saved peer MAC to EEPROM");
-
-    if (debugMode) {
-      Serial.println("[HEARTBEAT] Connection established, heartbeat timer started");
-    }
-
-    // Signal pairing task to stop broadcasting (if FreeRTOS is running)
-    if (eventGroup != NULL) {
-      xEventGroupSetBits(eventGroup, EVENT_PAIRED);
-    }
-  } else if (data[0] == HEARTBEAT) {
-    // Robot echoed heartbeat back
-    if (len < sizeof(HeartbeatMessage)) return;
-    lastHeartbeatReceived = millis();
-    if (debugMode) {
-      HeartbeatMessage hbMsg;
-      memcpy(&hbMsg, data, sizeof(HeartbeatMessage));
-      uint32_t rtt = millis() - hbMsg.timestamp;
-      Serial.print("[HEARTBEAT] ACK received, RTT: ");
-      Serial.print(rtt);
-      Serial.println("ms");
-    }
-  } else if (data[0] == DATA) {
-    // Validate DATA message length
-    if (len < sizeof(IntMessage)) return;
-    memcpy(&recvMsg, data, sizeof(IntMessage));
-    lastHeartbeatReceived = millis();  // Any DATA also counts as "alive"
-    for (int i = 0; i < 100; i++) {
-      Serial.print(recvMsg.data[i]);
-      Serial.print(" ");
-    } Serial.println();
-    memset(&recvMsg, 0, sizeof(recvMsg));
-  }
-}
-
 void unpair() {
-  if (debugMode) {
-    Serial.println("[HEARTBEAT] Connection lost - returning to pairing mode");
-  }
+  queuePrint(MSG_DEBUG, "[HEARTBEAT] Connection lost - returning to pairing mode\n");
+
   esp_now_del_peer(serverMac);
   storage.clearPeerMAC();
-  Serial.println("[STORAGE] Cleared peer MAC from EEPROM");
+  queuePrint(MSG_INFO, "[STORAGE] Cleared peer MAC from EEPROM\n");
+
   memset(serverMac, 0, sizeof(serverMac));
   paired = false;
   lastPairAttempt = millis();
@@ -106,14 +60,155 @@ void unpair() {
   }
 }
 
-// Callback when data is sent. Not used ATM
+
+// ============================================================================
+// ESPNOW Callbacks: ISR-Like, Highest Priority
+// ============================================================================
+void onRecv(const uint8_t* mac, const uint8_t* data, int len) {
+  // Validate minimum length
+  if (len < 1 || len > 250) return;
+
+  // Copy to queue structure
+  ESPNowMessage msg;
+  memcpy(msg.mac, mac, 6);
+  memcpy(msg.data, data, len);
+  msg.len = len;
+  msg.timestamp = millis();
+
+  // Non-blocking send; drop if full
+  (void)xQueueSend(rxQueue, &msg, 0);
+}
+
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  // Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
 // ============================================================================
-// FreeRTOS Task: Serial Output / Debug (Priority 1 - LOW)
+// FreeRTOS Tasks (Ranked by Priority)
 // ============================================================================
+// FreeRTOS Task: Command Forwarding (Priority 4 - HIGHEST)
+void commandForwardingTask(void *param) {
+  TickType_t lastWake = xTaskGetTickCount();
+
+  while (1) {
+    if (Serial.available()) {
+      char c = Serial.peek();
+
+      if (c == 'd') {
+        Serial.read();
+        debugMode = !debugMode;
+        queuePrint(MSG_INFO, "Debug mode: %s\n", debugMode ? "ON" : "OFF");
+      } else if (paired) {
+        // Forward joint commands to robot
+        int bytesRead = Serial.readBytesUntil(';', sendMsg.data, sizeof(sendMsg.data) - 1);
+        if (bytesRead > 0) {
+          sendMsg.data[bytesRead] = '\0';
+
+          // Send to robot's MAC address
+          sendMsg.msgType = DATA;
+          sendMsg.id = 1;
+          esp_now_send(serverMac, (uint8_t*)&sendMsg, sizeof(sendMsg));
+        }
+      }
+    }
+
+    // Run at 250 Hz (4ms period)
+    vTaskDelayUntil(&lastWake, pdMS_TO_TICKS(4));
+  }
+}
+
+// FreeRTOS Task: ESP-NOW RX Handler (Priority 3)
+void espnowRxTask(void *param) {
+  ESPNowMessage msg;
+
+  while (1) {
+    // Block waiting for messages from ISR queue
+    if (xQueueReceive(rxQueue, &msg, portMAX_DELAY) == pdTRUE) {
+
+      // Process based on message type
+      if (msg.data[0] == PAIRING) {
+        // Validate PAIRING message length
+        if (msg.len < sizeof(PairingMessage)) continue;
+
+        memcpy(&pairingData, msg.data, sizeof(PairingMessage));
+        queuePrint(MSG_DEBUG, "[PAIRING] Paired with server: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                   msg.mac[0], msg.mac[1], msg.mac[2], msg.mac[3], msg.mac[4], msg.mac[5]);
+
+        memcpy(serverMac, msg.mac, sizeof(serverMac));
+        addPeer(serverMac);
+        paired = true;
+        lastHeartbeatReceived = millis();
+
+        // Save the MAC address to EEPROM
+        storage.savePeerMAC(serverMac);
+        queuePrint(MSG_INFO, "[STORAGE] Saved peer MAC to EEPROM\n");
+        queuePrint(MSG_DEBUG, "[HEARTBEAT] Connection established, heartbeat timer started\n");
+
+        // Signal pairing task to stop broadcasting
+        if (eventGroup != NULL) {
+          xEventGroupSetBits(eventGroup, EVENT_PAIRED);
+        }
+
+      } else if (msg.data[0] == HEARTBEAT) {
+        // Robot echoed heartbeat back
+        if (msg.len < sizeof(HeartbeatMessage)) continue;
+
+        lastHeartbeatReceived = millis();
+
+        HeartbeatMessage hbMsg;
+        memcpy(&hbMsg, msg.data, sizeof(HeartbeatMessage));
+        uint32_t rtt = millis() - hbMsg.timestamp;
+        queuePrint(MSG_DEBUG, "[HEARTBEAT] ACK received, RTT: %ums\n", rtt);
+
+      } else if (msg.data[0] == DATA) {
+        // Validate DATA message length
+        if (msg.len < sizeof(IntMessage)) continue;
+
+        memcpy(&recvMsg, msg.data, sizeof(IntMessage));
+        lastHeartbeatReceived = millis();  // Any DATA also counts as "alive"
+
+        // Print data array
+        for (int i = 0; i < 100; i++) {
+          Serial.print(recvMsg.data[i]);
+          Serial.print(" ");
+        }
+        Serial.println();
+        memset(&recvMsg, 0, sizeof(recvMsg));
+      }
+    }
+  }
+}
+
+// FreeRTOS Task: Heartbeat Manager (Priority 2)
+void heartbeatTask(void *param) {
+  TickType_t lastWake = xTaskGetTickCount();
+
+  while (1) {
+    // Only send heartbeat when paired
+    if (paired) {
+      // Send heartbeat
+      heartbeatMsg.msgType = HEARTBEAT;
+      heartbeatMsg.id = 1;
+      heartbeatMsg.timestamp = millis();
+      lastHeartbeatSent = millis();
+
+      unsigned long timeSinceLastHB = millis() - lastHeartbeatReceived;
+      queuePrint(MSG_DEBUG, "[HEARTBEAT] Sending heartbeat (last response: %lums ago)\n", timeSinceLastHB);
+
+      esp_now_send(serverMac, (uint8_t*)&heartbeatMsg, sizeof(heartbeatMsg));
+
+      // Check for timeout
+      if (timeSinceLastHB > HEARTBEAT_TIMEOUT) {
+        queuePrint(MSG_DEBUG, "[HEARTBEAT] Timeout detected (%lums since last response)\n", timeSinceLastHB);
+        unpair();
+      }
+    }
+
+    // Run at frequency defined by constant
+    vTaskDelayUntil(&lastWake, pdMS_TO_TICKS(HEARTBEAT_INTERVAL));
+  }
+}
+
+// FreeRTOS Task: Serial Output / Debug (Priority 1)
 void serialOutputTask(void *param) {
   SerialMessage msg;
 
@@ -130,27 +225,35 @@ void serialOutputTask(void *param) {
       }
     }
 
-    // Check for debug toggle command
-    if (Serial.available()) {
-      char c = Serial.peek();
-      if (c == 'd') {
-        Serial.read(); // Consume the 'd'
-        debugMode = !debugMode;
-        Serial.printf("Debug mode: %s\n", debugMode ? "ON" : "OFF");
-      }
-    }
-
     // Low priority - yield to other tasks
     vTaskDelay(pdMS_TO_TICKS(10));
   }
 }
 
-// ============================================================================
 // FreeRTOS Task: Pairing Manager (Priority 0 - LOWEST)
-// ============================================================================
 void pairingTask(void *param) {
   TickType_t lastWake = xTaskGetTickCount();
-  SerialMessage msg;
+
+  // On first run, check for saved MAC address
+  if (storage.loadPeerMAC(serverMac)) {
+    char macStr[18];
+    sprintf(macStr, "%02X:%02X:%02X:%02X:%02X:%02X",
+            serverMac[0], serverMac[1], serverMac[2],
+            serverMac[3], serverMac[4], serverMac[5]);
+    queuePrint(MSG_INFO, "[PAIRING] Found saved MAC: %s\n", macStr);
+
+    addPeer(serverMac);
+    paired = true;
+    lastHeartbeatReceived = millis();
+    lastHeartbeatSent = millis();
+
+    queuePrint(MSG_INFO, "[PAIRING] Attempting to reconnect to saved peer\n");
+
+    // Signal that we're already paired
+    xEventGroupSetBits(eventGroup, EVENT_PAIRED);
+  } else {
+    queuePrint(MSG_INFO, "[PAIRING] No saved MAC found - entering pairing mode\n");
+  }
 
   while (1) {
     // Check pairing state (use old global for now, will migrate to atomic later)
@@ -159,9 +262,7 @@ void pairingTask(void *param) {
     if (!isPaired) {
       // Send pairing broadcast every 2s
       if (debugQueue != NULL) {
-        msg.type = MSG_DEBUG;
-        snprintf(msg.text, sizeof(msg.text), "[PAIRING] Sending broadcast...\n");
-        xQueueSend(debugQueue, &msg, 0);
+        queuePrint(MSG_DEBUG, "[PAIRING] Sending broadcast...\n");
       }
 
       PairingMessage pairingMsg;
@@ -188,11 +289,15 @@ void pairingTask(void *param) {
     }
   }
 }
- 
+
+
+// ============================================================================
+// Arduino Setup. Configures ESP-NOW and FreeRTOS tasks.
+// ============================================================================
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(100);
-  // delay(2000);  // Useful for debugging
+  delay(2000);  // Useful for debugging
 
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -211,29 +316,14 @@ void setup() {
   esp_now_register_send_cb(OnDataSent);
   addPeer(broadcastMAC);
 
-  // Check for saved MAC address
-  if (storage.loadPeerMAC(serverMac)) {
-    Serial.print("[STORAGE] Found saved MAC: "); printMAC(serverMac);
-    addPeer(serverMac);
-    paired = true;
-    lastHeartbeatReceived = millis();
-    lastHeartbeatSent = millis();
-    Serial.println("[STORAGE] Attempting to reconnect to saved peer");
-  } else {
-    Serial.println("[STORAGE] No saved MAC found - entering pairing mode");
+  // FreeRTOS Initialization
+  // Create queues
+  rxQueue = xQueueCreate(10, sizeof(ESPNowMessage));
+  if (rxQueue == NULL) {
+    Serial.println("[RTOS] Failed to create RX queue");
+    return;
   }
 
-  // Prepare pairing request message
-  pairingData.id = 1;
-  memcpy(pairingData.macAddr, clientMac, sizeof(clientMac));
-  pairingData.channel = chan;
-  lastPairAttempt = millis();
-
-  // ============================================================================
-  // FreeRTOS Initialization (Added for migration)
-  // ============================================================================
-
-  // Create queues
   debugQueue = xQueueCreate(20, sizeof(SerialMessage));
   if (debugQueue == NULL) {
     Serial.println("[RTOS] Failed to create debug queue");
@@ -247,18 +337,63 @@ void setup() {
     return;
   }
 
-  // Create serial output task (Priority 1 - low)
+  // Create command forwarding task (Priority 4 - HIGHEST)
   BaseType_t taskCreated = xTaskCreate(
+    commandForwardingTask, // Task function
+    "CmdFwd",              // Task name
+    3072,                  // Stack size (bytes)
+    NULL,                  // Parameters
+    4,                     // Priority (highest - 200 Hz critical timing)
+    NULL                   // Task handle
+  );
+
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create command forwarding task");
+    return;
+  }
+
+  // Create serial output task (Priority 1)
+  taskCreated = xTaskCreate(
     serialOutputTask,   // Task function
     "SerialOut",        // Task name
     3072,               // Stack size (bytes)
     NULL,               // Parameters
-    1,                  // Priority (low)
+    1,                  // Priority (low - non-critical output)
     NULL                // Task handle
   );
 
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create serial output task");
+    return;
+  }
+
+  // Create ESP-NOW RX handler task (Priority 3)
+  taskCreated = xTaskCreate(
+    espnowRxTask,       // Task function
+    "ESPNowRX",         // Task name
+    3072,               // Stack size (bytes)
+    NULL,               // Parameters
+    3,                  // Priority (high - process messages quickly)
+    NULL                // Task handle
+  );
+
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create ESP-NOW RX task");
+    return;
+  }
+
+  // Create heartbeat manager task (Priority 2)
+  taskCreated = xTaskCreate(
+    heartbeatTask,      // Task function
+    "Heartbeat",        // Task name
+    3072,               // Stack size (bytes)
+    NULL,               // Parameters
+    2,                  // Priority (medium - send/monitor heartbeats)
+    NULL                // Task handle
+  );
+
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create heartbeat task");
     return;
   }
 
@@ -278,82 +413,9 @@ void setup() {
   }
 
   Serial.println("[RTOS] FreeRTOS tasks created successfully");
-
-  // If already paired from saved MAC, signal paired event
-  if (paired) {
-    xEventGroupSetBits(eventGroup, EVENT_PAIRED);
-  }
 }
 
+// Loop does nothing - all work done in FreeRTOS tasks
 void loop() {
-  // Debug mode toggle - NOW HANDLED BY FREERTOS serialOutputTask
-  // (Old debug toggle disabled to avoid conflict)
-  /*
-  if (Serial.available()) {
-    char c = Serial.peek();
-    if (c == 'd') {
-      Serial.read(); // Consume the 'd'
-      debugMode = !debugMode;
-      Serial.print("Debug mode: ");
-      Serial.println(debugMode ? "ON" : "OFF");
-      return;
-    }
-  }
-  */
-
-  if (!paired) {
-    // Pairing mode - NOW HANDLED BY FREERTOS TASK
-    // (Old pairing code disabled to avoid conflict with pairingTask)
-    /*
-    if (millis() - lastPairAttempt > 2000) {
-      lastPairAttempt = millis();
-      if (debugMode) {
-        Serial.println("[PAIRING] Sending pairing request...");
-      }
-      esp_now_send(broadcastMAC, (uint8_t*)&pairingData, sizeof(pairingData));
-    }
-    */
-  } else {
-    // Connected mode
-
-    // Check for connection timeout
-    unsigned long timeSinceLastHB = millis() - lastHeartbeatReceived;
-    if (timeSinceLastHB > HEARTBEAT_TIMEOUT) {
-      if (debugMode) {
-        Serial.print("[HEARTBEAT] Timeout detected (");
-        Serial.print(timeSinceLastHB);
-        Serial.println("ms since last response)");
-      }
-      unpair();
-      return;
-    }
-
-    // Send periodic heartbeat
-    if (millis() - lastHeartbeatSent > HEARTBEAT_INTERVAL) {
-      lastHeartbeatSent = millis();
-      heartbeatMsg.msgType = HEARTBEAT;
-      heartbeatMsg.id = 1;
-      heartbeatMsg.timestamp = millis();
-      if (debugMode) {
-        Serial.print("[HEARTBEAT] Sending heartbeat (last response: ");
-        Serial.print(timeSinceLastHB);
-        Serial.println("ms ago)");
-      }
-      esp_now_send(serverMac, (uint8_t*)&heartbeatMsg, sizeof(heartbeatMsg));
-    }
-
-    // Handle serial data
-    if (Serial.available()) {
-      int bytesRead = Serial.readBytesUntil(';', sendMsg.data, sizeof(sendMsg.data) - 1);
-      if (bytesRead > 0) {
-        sendMsg.data[bytesRead] = '\0';
-      }
-
-      // Send to receiver's mac address
-      sendMsg.msgType = DATA;
-      sendMsg.id = 1;
-      esp_err_t result = esp_now_send(serverMac, (uint8_t*)&sendMsg, sizeof(sendMsg));
-    }
-  }
   delay(1);
 }

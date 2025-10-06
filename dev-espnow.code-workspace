@@ -10,5 +10,9 @@
 			"path": "q8bot_cpp/q8bot_robot"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"cstdio": "cpp"
+		}
+	}
 }
