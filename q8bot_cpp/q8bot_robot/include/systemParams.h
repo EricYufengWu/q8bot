@@ -55,4 +55,41 @@ unsigned long lastHeartbeatReceived = 0;
 const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 5000;  // Unpair after 20s no heartbeat from controller
 
 // Debug mode
-bool debugMode = false;
+bool debugMode = true;
+
+// FreeRTOS Handles (to be initialized in setup)
+extern QueueHandle_t rxQueue;
+extern QueueHandle_t debugQueue;
+extern EventGroupHandle_t eventGroup;
+
+// FreeRTOS Event Bits
+#define EVENT_PAIRED    (1 << 0)
+#define EVENT_UNPAIRED  (1 << 1)
+#define EVENT_STARTED   (1 << 2)
+
+// Robot State Machine
+enum RobotState : uint8_t {
+  STATE_UNPAIRED,      // Waiting for controller pairing
+  STATE_PAIRED,        // Paired but torque not enabled
+  STATE_STARTED        // Torque enabled, robot operational
+};
+
+extern volatile RobotState robotState;
+
+// FreeRTOS Message Structures
+struct ESPNowMessage {
+  uint8_t mac[6];
+  uint8_t data[250];
+  int len;
+  uint32_t timestamp;
+};
+
+enum SerialMsgType : uint8_t {
+  MSG_INFO,
+  MSG_DEBUG
+};
+
+struct SerialMessage {
+  SerialMsgType type;
+  char text[128];
+};

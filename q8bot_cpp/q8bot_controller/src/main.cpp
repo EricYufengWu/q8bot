@@ -48,7 +48,7 @@ void unpair() {
 
   esp_now_del_peer(serverMac);
   storage.clearPeerMAC();
-  queuePrint(MSG_INFO, "[STORAGE] Cleared peer MAC from EEPROM\n");
+  queuePrint(MSG_DEBUG, "[STORAGE] Cleared peer MAC from EEPROM\n");
 
   memset(serverMac, 0, sizeof(serverMac));
   paired = false;
@@ -140,7 +140,7 @@ void espnowRxTask(void *param) {
 
         // Save the MAC address to EEPROM
         storage.savePeerMAC(serverMac);
-        queuePrint(MSG_INFO, "[STORAGE] Saved peer MAC to EEPROM\n");
+        queuePrint(MSG_DEBUG, "[STORAGE] Saved peer MAC to EEPROM\n");
         queuePrint(MSG_DEBUG, "[HEARTBEAT] Connection established, heartbeat timer started\n");
 
         // Signal pairing task to stop broadcasting
