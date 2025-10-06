@@ -52,7 +52,7 @@ uint8_t serverMac[6];  // This us. The robot is the server.
 
 // Heartbeat tracking (robot side)
 unsigned long lastHeartbeatReceived = 0;
-const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 20000;  // Unpair after 20s no heartbeat from controller
+const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 5000;  // Unpair after 20s no heartbeat from controller
 
 // Debug mode
 bool debugMode = false;
