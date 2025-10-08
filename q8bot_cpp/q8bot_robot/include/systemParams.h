@@ -39,8 +39,6 @@ float raw;
 char intStr[10];
 
 // ESP-Now Comms
-// uint16_t myData[100];
-// char theirData[100];
 bool incoming = false;
 PairingMessage pairingData;
 CharMessage theirMsg;
@@ -55,7 +53,7 @@ unsigned long lastHeartbeatReceived = 0;
 const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 5000;  // Unpair after 20s no heartbeat from controller
 
 // Debug mode
-bool debugMode = true;
+bool debugMode = false;
 
 // FreeRTOS Handles (to be initialized in setup)
 extern QueueHandle_t rxQueue;

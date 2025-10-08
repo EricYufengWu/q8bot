@@ -297,63 +297,34 @@ void pairingTask(void *param) {
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(100);
-  delay(2000);  // Useful for debugging
+  // delay(2000);  // Useful for debugging
 
-  // Set device as a Wi-Fi Station
-  WiFi.mode(WIFI_STA);
-  WiFi.macAddress(clientMac);
-  esp_wifi_start();
-  esp_wifi_set_promiscuous(true);
-  esp_wifi_set_channel(chan, WIFI_SECOND_CHAN_NONE);
-  esp_wifi_set_promiscuous(false);
-
-  // Init ESP-NOW
-  if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
-    return;
-  }
-  esp_now_register_recv_cb(onRecv);
-  esp_now_register_send_cb(OnDataSent);
-  addPeer(broadcastMAC);
+  bool initSuccess = true;
 
   // FreeRTOS Initialization
   // Create queues
   rxQueue = xQueueCreate(10, sizeof(ESPNowMessage));
   if (rxQueue == NULL) {
     Serial.println("[RTOS] Failed to create RX queue");
-    return;
+    initSuccess = false;
   }
 
   debugQueue = xQueueCreate(20, sizeof(SerialMessage));
   if (debugQueue == NULL) {
     Serial.println("[RTOS] Failed to create debug queue");
-    return;
+    initSuccess = false;
   }
 
   // Create event group for task synchronization
   eventGroup = xEventGroupCreate();
   if (eventGroup == NULL) {
     Serial.println("[RTOS] Failed to create event group");
-    return;
+    initSuccess = false;
   }
 
-  // Create command forwarding task (Priority 4 - HIGHEST)
-  BaseType_t taskCreated = xTaskCreate(
-    commandForwardingTask, // Task function
-    "CmdFwd",              // Task name
-    3072,                  // Stack size (bytes)
-    NULL,                  // Parameters
-    4,                     // Priority (highest - 200 Hz critical timing)
-    NULL                   // Task handle
-  );
-
-  if (taskCreated != pdPASS) {
-    Serial.println("[RTOS] Failed to create command forwarding task");
-    return;
-  }
-
+  // Create FreeRTOS tasks
   // Create serial output task (Priority 1)
-  taskCreated = xTaskCreate(
+  BaseType_t taskCreated = xTaskCreate(
     serialOutputTask,   // Task function
     "SerialOut",        // Task name
     3072,               // Stack size (bytes)
@@ -361,10 +332,9 @@ void setup() {
     1,                  // Priority (low - non-critical output)
     NULL                // Task handle
   );
-
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create serial output task");
-    return;
+    initSuccess = false;
   }
 
   // Create ESP-NOW RX handler task (Priority 3)
@@ -376,10 +346,9 @@ void setup() {
     3,                  // Priority (high - process messages quickly)
     NULL                // Task handle
   );
-
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create ESP-NOW RX task");
-    return;
+    initSuccess = false;
   }
 
   // Create heartbeat manager task (Priority 2)
@@ -391,10 +360,23 @@ void setup() {
     2,                  // Priority (medium - send/monitor heartbeats)
     NULL                // Task handle
   );
-
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create heartbeat task");
-    return;
+    initSuccess = false;
+  }
+
+  // Create command forwarding task (Priority 4 - HIGHEST)
+  taskCreated = xTaskCreate(
+    commandForwardingTask, // Task function
+    "CmdFwd",              // Task name
+    3072,                  // Stack size (bytes)
+    NULL,                  // Parameters
+    4,                     // Priority (highest - 200 Hz critical timing)
+    NULL                   // Task handle
+  );
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create command forwarding task");
+    initSuccess = false;
   }
 
   // Create pairing task (Priority 0 - lowest)
@@ -406,11 +388,33 @@ void setup() {
     0,                  // Priority (lowest)
     NULL                // Task handle
   );
-
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create pairing task");
+    initSuccess = false;
+  }
+
+  // Check if all FreeRTOS initialization succeeded
+  if (!initSuccess) {
+    Serial.println("[RTOS] Initialization failed - halting system");
+    while(1) { delay(1000); }  // Halt system indefinitely
+  }
+
+  // Init Wi-Fi; set device as a Wi-Fi Station (after FreeRTOS primitives are ready)
+  WiFi.mode(WIFI_STA);
+  WiFi.macAddress(clientMac);
+  esp_wifi_start();
+  esp_wifi_set_promiscuous(true);
+  esp_wifi_set_channel(chan, WIFI_SECOND_CHAN_NONE);
+  esp_wifi_set_promiscuous(false);
+
+  // Init ESP-NOW (after FreeRTOS primitives are ready)
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
     return;
   }
+  esp_now_register_recv_cb(onRecv);
+  esp_now_register_send_cb(OnDataSent);
+  addPeer(broadcastMAC);
 
   Serial.println("[RTOS] FreeRTOS tasks created successfully");
 }
