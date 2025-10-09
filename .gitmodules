@@ -1,0 +1,3 @@
+[submodule "q8bot_cpp/autoMCU"]
+	path = q8bot_cpp/autoMCU
+	url = https://github.com/EricYufengWu/autoMCU.git
