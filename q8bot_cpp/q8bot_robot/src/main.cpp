@@ -280,12 +280,15 @@ void heartbeatMonitorTask(void* parameter) {
       if (now >= lastHeartbeatReceived) {
         unsigned long timeSinceLastMsg = now - lastHeartbeatReceived;
 
+        // Check for timeout (only in auto-pairing mode)
+#ifndef PERMANENT_PAIRING_MODE
         if (timeSinceLastMsg > HEARTBEAT_TIMEOUT_ROBOT) {
           queuePrint(MSG_DEBUG, "[HEARTBEAT] Timeout detected (%lums since last message)\n", timeSinceLastMsg);
           q8.toggleTorque(0);        // Disable torque hardware
           q8.resetTorqueState();     // Sync internal flag to match disabled state
           unpair();
         }
+#endif
       }
     }
 
@@ -368,13 +371,10 @@ void robotStateTask(void* parameter) {
         if (now - lastActivity >= 10000) {
           lastActivity = now;
 
-          // Fade in (128 iterations × 2ms = 256ms)
           for (int brightness = 0; brightness <= 255; brightness += 2) {
             analogWrite(LED_PIN, brightness);
             vTaskDelay(pdMS_TO_TICKS(2));
           }
-
-          // Fade out (128 iterations × 2ms = 256ms)
           for (int brightness = 255; brightness >= 0; brightness -= 2) {
             analogWrite(LED_PIN, brightness);
             vTaskDelay(pdMS_TO_TICKS(2));
@@ -404,6 +404,22 @@ void serialOutputTask(void* parameter) {
         Serial.print(msg.text);
       }
     }
+
+    // Check for incoming serial commands
+#ifdef PERMANENT_PAIRING_MODE
+    if (Serial.available()) {
+      char c = Serial.read();
+      if (c == 'p') {
+        queuePrint(MSG_INFO, "[PAIRING] Force pairing mode requested\n");
+        q8.toggleTorque(0);        // Disable torque hardware
+        q8.resetTorqueState();     // Sync internal flag to match disabled state
+        unpair();
+      } else if (c == 'd') {
+        debugMode = !debugMode;
+        queuePrint(MSG_INFO, "Debug mode: %s\n", debugMode ? "ON" : "OFF");
+      }
+    }
+#endif
 
     // Low priority - yield to other tasks
     vTaskDelay(pdMS_TO_TICKS(10));

@@ -97,7 +97,15 @@ void commandForwardingTask(void *param) {
         Serial.read();
         debugMode = !debugMode;
         queuePrint(MSG_INFO, "Debug mode: %s\n", debugMode ? "ON" : "OFF");
-      } else if (paired) {
+      }
+#ifdef PERMANENT_PAIRING_MODE
+      else if (c == 'p') {
+        Serial.read();
+        queuePrint(MSG_INFO, "[PAIRING] Force pairing mode requested\n");
+        unpair();
+      }
+#endif
+      else if (paired) {
         // Forward joint commands to robot
         int bytesRead = Serial.readBytesUntil(';', sendMsg.data, sizeof(sendMsg.data) - 1);
         if (bytesRead > 0) {
@@ -196,11 +204,13 @@ void heartbeatTask(void *param) {
 
       esp_now_send(serverMac, (uint8_t*)&heartbeatMsg, sizeof(heartbeatMsg));
 
-      // Check for timeout
+      // Check for timeout (only in auto-pairing mode)
+#ifndef PERMANENT_PAIRING_MODE
       if (timeSinceLastHB > HEARTBEAT_TIMEOUT) {
         queuePrint(MSG_DEBUG, "[HEARTBEAT] Timeout detected (%lums since last response)\n", timeSinceLastHB);
         unpair();
       }
+#endif
     }
 
     // Run at frequency defined by constant
