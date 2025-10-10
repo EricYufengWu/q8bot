@@ -1,5 +1,6 @@
 documentation_private/
 releases/
+firmware/tests/
 .claude/
 TODO.md
 devlog.md
