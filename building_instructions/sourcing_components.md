@@ -15,7 +15,7 @@ The BOM of this robot is so short that I can afford to explain every single comp
 
 ## Required Tools
 This instruction assumes you have the following tools at a minimum:
-- A PH-0 or JIS-1 screwdriver (I an iFixit Mako Driver Kit).
+- A PH-0 or JIS-1 screwdriver (I used an iFixit Mako Driver Kit).
 - A soldering iron with basic consumables (I used a Pinecil V2).
 - A modern laptop capable of running Microsoft Visual Studio Code.
 - A USB Type-A to Type-C (or Type-C to Type-C) cable for uploading firmware.
