@@ -11,4 +11,4 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 ### 03/03/2025 Project Update
  Update: Q8bot is now a research project at the [UCLA Robotics and Mechanisms Lab (RoMeLa)](https://www.romela.org/). The open-source nature of this project remains unchanged. We are working on an improved version of this platform and will potentially release it under a different name. Stay tuned!** 
 
-[![Q8bot](documentation_public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
+[![Q8bot](docs/public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)

@@ -3,9 +3,9 @@
 Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current **[Bill of Materials (BOM)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**, without optimization, ranges between $300 - $400 depending on the listed options. 
 
 <p align="center">
-  <img src="documentation_public/Q8bot_Hero_With_Dimension.jpg" alt="Image 1" width="98.5%">
-  <img src="documentation_public/Q8bot_10s.gif" alt="Image 2" width="49%">
-  <img src="documentation_public/Q8bot_Weight.jpg" alt="Image 3" width="49%">
+  <img src="docs/public/Q8bot_Hero_With_Dimension.jpg" alt="Image 1" width="98.5%">
+  <img src="docs/public/Q8bot_10s.gif" alt="Image 2" width="49%">
+  <img src="docs/public/Q8bot_Weight.jpg" alt="Image 3" width="49%">
 </p>
 
 ## LATEST UPDATE: 10/09/2025
@@ -54,11 +54,11 @@ School: ericyufengwu@ucla.edu
 ## Building Instruction
 The building instructions have moved to a dedicated folder:
 
-[Sourcing Components](building_instructions/sourcing_components.md)
+[Sourcing Components](docs/instructions/sourcing_components.md)
 
-[Assembling the Robot](building_instructions/robot_assembly.md)
+[Assembling the Robot](docs/instructions/robot_assembly.md)
 
-[Software Setup](building_instructions/software_setup.md)
+[Software Setup](docs/instructions/software_setup.md)
 
 
 ## Note on Project Ownership

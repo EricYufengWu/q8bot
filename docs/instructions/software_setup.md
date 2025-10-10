@@ -22,15 +22,15 @@ Currently, all computation regarding gait generation and FK/IK happens on the la
 
 The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to their official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
 
-Different firmware need to be uploaded to Q8bot ("robot") and the separate Seeed Studio XIAO ESP32C3 ("controller"): `q8bot_cpp/q8bot_robot` and `q8bot_cpp/q8bot_controller`. Before they are ready to upload, you need to:
-- Navigate to `q8bot_cpp/q8bot_robot/main.cpp` and update the MAC address to match your controller
-- Navigate to `q8bot_cpp/q8bot_controller/main.cpp` and update the MAC address to match your robot.
+Different firmware need to be uploaded to Q8bot ("robot") and the separate Seeed Studio XIAO ESP32C3 ("controller"): `firmware/q8bot_robot` and `firmware/q8bot_controller`. Before they are ready to upload, you need to:
+- Navigate to `firmware/q8bot_robot/main.cpp` and update the MAC address to match your controller
+- Navigate to `firmware/q8bot_controller/main.cpp` and update the MAC address to match your robot.
 - A quick way to find the MAC address of your device is by selecting the specific COM port in PlatformIO.
 <p align="center">
     <img src="sw_MAC.png" width="90%">
 </p>
 
-Upload `q8bot_cpp/q8bot_robot` to the Q8bot PCB, and upload `q8bot_cpp/q8bot_controller` to the controller ESP32C3. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md), 
+Upload `firmware/q8bot_robot` to the Q8bot PCB, and upload `firmware/q8bot_controller` to the controller ESP32C3. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md), 
 
 ## Python Setup
 Install python locally on your computer if you have not already. The simplest way is through the [official website](https://www.python.org/downloads/) (the latest version will do). **Make sure to check the "add python.exe to PATH" option.**
@@ -40,7 +40,7 @@ Install python locally on your computer if you have not already. The simplest wa
 
 It's is best to set up a virtual environment to prevent dependency conflicts between different projects.
 
-Using a terminal of your choise, navigate to the `/q8bot_python` folder and run the following to create a virtual environment for your project:
+Using a terminal of your choise, navigate to the `/python-tools` folder and run the following to create a virtual environment for your project:
 
     python -m venv venv
 
@@ -59,7 +59,7 @@ Attach the batteries to the robot (double-check polarity!). Power on the robot w
 
 Plug in the controller board to your laptop/PC.
 
-Navigate to `/q8bot_python/q8bot` folder and run:
+Navigate to `/python-tools/q8bot` folder and run:
 
     python operate.py
 
