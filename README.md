@@ -5,16 +5,13 @@ Q8bot is a miniature quadruped robot with the size and weight comparable to a mo
 <p align="center">
   <img src="docs/public/Q8bot_Hero_With_Dimension.jpg" alt="Image 1" width="98.5%">
   <img src="docs/public/Q8bot_10s.gif" alt="Image 2" width="49%">
-  <img src="docs/public/Q8bot_Weight.jpg" alt="Image 3" width="49%">
+  <img src="docs/public/Q8bot_Components.jpg" alt="Image 3" width="49%">
 </p>
 
-## LATEST UPDATE: 10/09/2025
-I am making major updates to the repository's structure to make it more organized and easy to navigate. I appreciate your patience as things may get a bit messy for a short while! Major changes include:
-- Move the current main branch to a protected, legacy branch to help with transition
-- Retrospectively publishing release bundles containing legacy software and hardware packages for those who may need them.
-- Moving hardware source files (STEP, STL, Gerber, etc.) out of the main repository and including them only as part of releases — done to save space and keep Git tracking clean.
+## LATEST UPDATE: 10/11/2025
+Repository Restructuring is complete! 
 
-In the meantime, I’m also making major updates to the software stack. Please stay tuned for updated firmware and setup instructions!
+**TL;DR:** Clone the repository for all software-related setup, and go to [the latest release](https://github.com/EricYufengWu/q8bot/releases/tag/v1.1.0) to download the compressed file containing hardware source files (STLs, Gerbers, CAD). Go to the bottom of this page for building instructions.
 
 **For a full history of updates, please go to [UPDATES.md](UPDATES.md)**
 
@@ -59,6 +56,34 @@ The building instructions have moved to a dedicated folder:
 [Assembling the Robot](docs/instructions/robot_assembly.md)
 
 [Software Setup](docs/instructions/software_setup.md)
+
+## Compatibility & Recommended Versions
+
+Below is a reference matrix showing which hardware, firmware, and Python tool versions
+have been tested together.
+
+### 🧩 Compatibility Matrix
+
+| Component ↔ | **Hardware v2.2** | **Hardware v2.4** | Notes |
+|--------------|------------------|------------------|--------|
+| **Firmware v1.0.0 – v1.9.x** | ✅ Compatible | ✅ Compatible | Legacy firmware (pre-ESP-NOW). |
+| **Firmware v2.0.0 – v2.0.1** | ✅ Compatible | ✅ **Recommended** | ESP-NOW stack; tested primarily on HW v2.4. |
+| **Python Tools v1.0.0** | ✅ Compatible | ✅ Compatible | Initial host stack. |
+| **Python Tools v1.1.0+** | ✅ Compatible | ✅ **Recommended** | Latest host utilities; tested with FW v2.0.1 + HW v2.4. |
+
+✅ = Compatible  ✅ **Recommended** = Officially tested combination  
+⚠️ Legacy = Functional but not regularly tested
+
+### 🧭 Recommended Configuration
+
+| Component | Version | Tag / Link |
+|------------|----------|------------|
+| **Hardware** | v2.4 | [hw-v2.4](https://github.com/EricYufengWu/q8bot/releases/tag/hw-v2.4) |
+| **Firmware** | v2.0.1 | [fw-v2.0.1](https://github.com/EricYufengWu/q8bot/releases/tag/fw-v2.0.1) |
+| **Python Tools** | v1.1.0 | [python-tools-v1.1.0](https://github.com/EricYufengWu/q8bot/releases/tag/python-tools-v1.1.0) |
+
+---
+
 
 
 ## Note on Project Ownership

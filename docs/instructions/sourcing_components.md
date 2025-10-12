@@ -9,7 +9,9 @@
 [Back to Project Page](https://github.com/EricYufengWu/q8bot)
 
 
-**The complete bill of materials (BOM) of Q8bot can be accessed [here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. **We are currently on hardware version V2.4.**
+The complete **bill of materials (BOM)** of Q8bot can be accessed [**here**](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing). The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. 
+
+**We are currently on hardware version V2.4. Download the zipped folder from the latest release to access all hardware-related files (STLs, Gerbers, CAD, and more).**
 
 The BOM of this robot is so short that I can afford to explain every single component in detail :D
 
@@ -62,7 +64,7 @@ However, you will still need to purchase some battery clips which will go into t
 </p>
 
 ### Option 2: Purchase Components and Reflow Yourself
-You can order the blank PCB from JLC, PCBWay, or similar, and order the components separately to assemble the PCB yourself. The zipped Gerber files, along with a read-friendly pick-and-place file, can be found under the `/PCBA` folder. Remember to also order stencils (top and bottom) when purchasing the blank PCBs. 
+You can order the blank PCB from JLC, PCBWay, or similar, and order the components separately to assemble the PCB yourself. The zipped Gerber files, along with a read-friendly pick-and-place file, can be found under the `hw-vx.x/PCBA` folder. Remember to also order stencils (top and bottom) when purchasing the blank PCBs. 
 
 I used a [MHP50](https://www.adafruit.com/product/5903) mini hot plate and a stencil holder setup similar to [this one](https://youtu.be/F9zNtQTpbms?si=rfB_CtxsjbDME_TU). See my [YouTube video](https://youtu.be/YJDc1xAhaOI) for details. 
 
@@ -81,10 +83,10 @@ There are 2 options for 3D-printing parts for Q8bot. Regardless of outsourcing o
 - `Q8bot_UL2`: Print 4.
 
 ### Option 1: Order MJF parts from Online Vendors
-Multi Jet Fusion (MJF) is an isotropic 3D-printing technology similar to SLS. Many domestic and international companies offer printing service with relatively affordable price. To order, you typically need to upload the .STL files in the `/CAD/Q8_VX.X_MJF` folder to the vendor's website and configure the materials and quantity. I ordered the MJF parts together with my JLCPCB order to simplify the purchasing process.
+Multi Jet Fusion (MJF) is an isotropic 3D-printing technology similar to SLS. Many domestic and international companies offer printing service with relatively affordable price. To order, you typically need to upload the .STL files under `hw-vx.x/CAD/Q8_VX.X_MJF` to the vendor's website and configure the materials and quantity. I ordered the MJF parts together with my JLCPCB order to simplify the purchasing process.
 
 ### Option 2: 3D-Print Yourself using FDM
-If you own a Bambu Lab, Prusa, or similar 3D-printer, you can print the parts yourself by downloading and slicing the files under `/CAD/Q8_VX.X_FDM`. I printed mine on a Bambu Lab A1 mini with the default 0.12mm settings. **The cost of filament is less than $1 for a $20 spool.**
+If you own a Bambu Lab, Prusa, or similar 3D-printer, you can print the parts yourself by downloading and slicing the files under `hw-vx.x/CAD/Q8_VX.X_FDM`. I printed mine on a Bambu Lab A1 mini with the default 0.12mm settings. **The cost of filament is less than $1 for a $20 spool.**
 
 Here is a table comparing MJF and FDM 3D-printed parts:
 
