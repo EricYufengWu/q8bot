@@ -21,5 +21,5 @@ Q8bot was recently featured in a [tour video](https://youtu.be/FAo-BCnxW9A?si=LB
 
 [![Q8bot](docs/public/Q8bot_RoMeLa.jpg)](https://www.romela.org/)
 
-### 10/17/2025 Thanks for Checking out my Project!
+### 10/17/2024 Thanks for Checking out my Project!
 After releasing the first "polished" video on [YouTube](https://youtu.be/YJDc1xAhaOI?si=9ayzV78TSruOL7K_), I am surprised that so many of you are checking out my project and this repository. Thank you all for the interest, and I will try my best to improve the platform in the future!
