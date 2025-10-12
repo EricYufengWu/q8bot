@@ -9,7 +9,7 @@
 [Back to Project Page](https://github.com/EricYufengWu/q8bot)
 
 
-**The complete bill of materials (BOM) of Q8bot can be accessed [here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. 
+**The complete bill of materials (BOM) of Q8bot can be accessed [here](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**. The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. **We are currently on hardware version V2.4.**
 
 The BOM of this robot is so short that I can afford to explain every single component in detail :D
 
@@ -24,21 +24,23 @@ This instruction assumes you have the following tools at a minimum:
 ## Off-The-Shelf Components
 These are the components you need to purchase regardless of build configurations.
 
-[Dynamixel XL330-M077-T](https://www.robotis.us/dynamixel-xl330-m077-t/): You need a total of **8 motors** for the robot. Each motor comes with a set of M2 self-tapping screws, which will be used to assemble Q8bot.
+[DYNAMIXEL XL330-M077-T](https://www.robotis.us/dynamixel-xl330-m077-t/): You need a total of **8 motors** for the robot. Each motor comes with a set of M2 self-tapping screws, which will be used to assemble Q8bot.
 <p align="center">
-    <img src="sourcing_dxl.png" alt="Dynamixel XL330-M077-T" width="50%">
+    <img src="sourcing_dxl.jpg" alt="DYNAMIXEL XL330-M077-T" width="50%">
 </p>
 
 [692ZZ Ball Bearing](https://www.amazon.com/uxcell-Groove-Bearings-Double-Shielded/dp/B082PR238V/ref=sr_1_2): You need a total of **12 bearings** with the trade number **692ZZ** (2mm x 6mm x 3mm). At the time of this writing, Amazon only sells them for pack of 10, so you'll end up with some extras. You can probably find cheaper alternatives on AliExpress or Ebay - any bearing with the same dimensions will work.
 
 <p align="center">
-    <img src="sourcing_692ZZ.png" alt="692ZZ Bearing" width="30%">
+    <img src="sourcing_692ZZ.jpg" alt="692ZZ Bearing" width="30%">
 </p>
 
 [14500 KeepPower 1000mAh P1450C2](https://illumn.com/14500-keeppower-1000mah-p1450c2-protected-button-top.html): You need **2 batteries** to run the robot and can purchase more pairs for hot-swapping. Keep in mind that these are Lithium-ion batteries in a AA form-factor, but **regular AA batteries will not work**. This particular model also has a built-in protection circuit so it is safer to work with.
 
+Also note that you should also purchase a lithium-ion battery charger (an example one can be find in the BOM under "Recommended Tools") if you don't have one already.
+
 <p align="center">
-    <img src="sourcing_battery.png" alt="KeepPower Battery" width="50%">
+    <img src="sourcing_battery.jpg" alt="KeepPower Battery" width="50%">
 </p>
 
 ## Main PCB
@@ -49,18 +51,18 @@ There are two options for acquiring the main PCB for Q8bot.
 
 <p align="center">
     <a href="https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html"><img src="https://www.pcbway.com/project/img/images/frompcbway-1220.png" alt="PCB from PCBWay" /></a>
-    <img src="sourcing_order.png" alt="Ordering" width="31.5%">
+    <img src="sourcing_order.jpg" alt="Ordering" width="31.5%">
 </p>
 
-However, you will still need to purchase some battery clips which will go into the 3D-printed main frames to hold the batteries. [This link](https://www.digikey.com/short/8w05tttf) directs you to a DigiKey shopping cart that contains 2x 1087-1 and 2x 1087-2 from Keystone Electronics.
+However, you will still need to purchase some battery clips which will go into the 3D-printed main frames to hold the batteries. [This link](https://www.digikey.com/short/8w05tttf) directs you to a DigiKey shopping cart that contains 2x 1087-1 and 2x 1087-2 from Keystone Electronics (also in BOM).
 
 <p align="center">
-    <img src="sourcing_1087-1.png" alt="1087-1" width="25%">
-    <img src="sourcing_1087-2.png" alt="1087-2" width="25%">
+    <img src="sourcing_1087-1.jpg" alt="1087-1" width="25%">
+    <img src="sourcing_1087-2.jpg" alt="1087-2" width="25%">
 </p>
 
 ### Option 2: Purchase Components and Reflow Yourself
-You can order the blank PCB from JLC, PCBWay, or similar, and order the components separately to assemble the PCB youself. The zipped Gerber files, along with a read-friendly pick-and-place file, can be found under the `/PCBA` folder. Remember to also order stencils (top and bottom) when purchasing the blank PCBs. 
+You can order the blank PCB from JLC, PCBWay, or similar, and order the components separately to assemble the PCB yourself. The zipped Gerber files, along with a read-friendly pick-and-place file, can be found under the `/PCBA` folder. Remember to also order stencils (top and bottom) when purchasing the blank PCBs. 
 
 I used a [MHP50](https://www.adafruit.com/product/5903) mini hot plate and a stencil holder setup similar to [this one](https://youtu.be/F9zNtQTpbms?si=rfB_CtxsjbDME_TU). See my [YouTube video](https://youtu.be/YJDc1xAhaOI) for details. 
 
@@ -68,7 +70,7 @@ I used a [MHP50](https://www.adafruit.com/product/5903) mini hot plate and a ste
     <img src="sourcing_reflow.jpg" alt="Reflow" width="50%">
 </p>
 
-[This link](https://www.digikey.com/short/n7vrz77m) directs you to a DigiKey shopping cart that contains all required PCB components, including the battery clips from earlier.
+[This link](https://www.digikey.com/short/n7vrz77m) directs you to a DigiKey shopping cart that contains all required PCB components, including the battery clips from earlier (also in BOM).
 
 ## 3D-Printed Parts
 There are 2 options for 3D-printing parts for Q8bot. Regardless of outsourcing or printing them yourselves, you will need the following quantity to build 1x Q8bot. It never hurts to print/order some extras in case the robot breaks.
@@ -107,4 +109,4 @@ _*Not rigorously tested. Robot survives 1-meter drop during preliminary testing_
     <img src="sourcing_dongle.jpg" alt="Dongle" width="40%">
 </p>
 
-**Dynamixel U2D2:** DYNAMIXELs are smart servo motors that require configuration to work properly on Q8bot. I’ve provided a simple firmware that guides you through the required setup without extra hardware (see [robot_assembly](robot_assembly.md)). However, for easier debugging and troubleshooting, I highly recommend purchasing the [U2D2](https://www.robotis.us/u2d2/) and [U2D2 Power Hub](https://www.robotis.us/u2d2-power-hub-board-set/). This setup allows you to configure individual DYNAMIXEL motors directly from your laptop, which is more convenient compared to using the ESP32.
+**DYNAMIXEL U2D2:** DYNAMIXELs are smart servo motors that require configuration to work properly on Q8bot. I’ve provided a simple firmware that guides you through the required setup without extra hardware (see [robot_assembly](robot_assembly.md)). However, for easier debugging and troubleshooting, I highly recommend purchasing the [U2D2](https://www.robotis.us/u2d2/) and [U2D2 Power Hub](https://www.robotis.us/u2d2-power-hub-board-set/). This setup allows you to configure individual DYNAMIXEL motors directly from your laptop, which is more convenient compared to using the ESP32.

@@ -101,7 +101,7 @@ void commandForwardingTask(void *param) {
 #ifdef PERMANENT_PAIRING_MODE
       else if (c == 'p') {
         Serial.read();
-        queuePrint(MSG_INFO, "[PAIRING] Force pairing mode requested\n");
+        queuePrint(MSG_DEBUG, "[PAIRING] Force pairing mode requested\n");
         unpair();
       }
 #endif
@@ -250,19 +250,19 @@ void pairingTask(void *param) {
     sprintf(macStr, "%02X:%02X:%02X:%02X:%02X:%02X",
             serverMac[0], serverMac[1], serverMac[2],
             serverMac[3], serverMac[4], serverMac[5]);
-    queuePrint(MSG_INFO, "[PAIRING] Found saved MAC: %s\n", macStr);
+    queuePrint(MSG_DEBUG, "[PAIRING] Found saved MAC: %s\n", macStr);
 
     addPeer(serverMac);
     paired = true;
     lastHeartbeatReceived = millis();
     lastHeartbeatSent = millis();
 
-    queuePrint(MSG_INFO, "[PAIRING] Attempting to reconnect to saved peer\n");
+    queuePrint(MSG_DEBUG, "[PAIRING] Attempting to reconnect to saved peer\n");
 
     // Signal that we're already paired
     xEventGroupSetBits(eventGroup, EVENT_PAIRED);
   } else {
-    queuePrint(MSG_INFO, "[PAIRING] No saved MAC found - entering pairing mode\n");
+    queuePrint(MSG_DEBUG, "[PAIRING] No saved MAC found - entering pairing mode\n");
   }
 
   while (1) {
@@ -419,14 +419,11 @@ void setup() {
 
   // Init ESP-NOW (after FreeRTOS primitives are ready)
   if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
     return;
   }
   esp_now_register_recv_cb(onRecv);
   esp_now_register_send_cb(OnDataSent);
   addPeer(broadcastMAC);
-
-  Serial.println("[RTOS] FreeRTOS tasks created successfully");
 }
 
 // Loop does nothing - all work done in FreeRTOS tasks

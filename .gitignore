@@ -2,6 +2,7 @@ documentation_private/
 releases/
 firmware/tests/
 .claude/
+.vscode/
 TODO.md
 devlog.md
 dev-espnow.code-workspace

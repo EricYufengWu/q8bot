@@ -23,14 +23,14 @@
     - 3D-printed parts
     - 12x 692ZZ ball bearings
     - Battery clips
-    - Separate Seeet Studio XIAO ESP32C3 (connect to PC for wireless control)
+    - A Separate Seeed Studio XIAO ESP32C3 (connect to PC for wireless control)
     - Fully-assembled Q8bot PCB
-    - 8x brand new Dynamixel XL330-M077-T (which contains the screws needed for assembly)
+    - 8x brand new DYNAMIXEL XL330-M077-T (which contains the screws needed for assembly)
 <p align="center">
     <img src="assem_components.jpg" alt="Components" width="90%">
 </p>
 
-* Here is another look at the components with all package removed. Note that we will only use the 6mm screws that came with the DYNAMIXEL motors. It would be a good idea to start charging your batteriesso that they will be ready later in the assembly process.
+* Here is another look at the components with all package removed. Note that we will only use the 6mm screws that came with the DYNAMIXEL motors. It would be a good idea to start charging your batteries so that they will be ready later in the assembly process.
 <p align="center">
     <img src="assem_nopackage.jpg" alt="Components" width="90%">
 </p>
@@ -88,22 +88,22 @@
 
 11. Select the correct COM port by clicking the button circled in read, or leave it as "Auto" which will detect the correct port most of the time.
 <p align="center">
-    <img src="assem_port.png" width="90%">
+    <img src="assem_port.jpg" width="90%">
 </p>
 
 12. Upload the q8bot_motor_config firmware to the Q8bot PCB by clicking the button with an arrow shape (circled in read).
 <p align="center">
-    <img src="assem_upload.png" width="90%">
+    <img src="assem_upload.jpg" width="90%">
 </p>
 
 13. If upload is successful, proceed to open the serial monitor by clicking the button with the shape of a cable plug.
 <p align="center">
-    <img src="assem_serial.png" width="90%">
+    <img src="assem_serial.jpg" width="90%">
 </p>
 
 14. In the serial monitor, you should see the message "No new Dynamixel motors found" being printed out every 5 seconds or so.
 <p align="center">
-    <img src="assem_nofound.png" width="90%">
+    <img src="assem_nofound.jpg" width="90%">
 </p>
 
 15. We will be attaching the motors and configuring each of them at the same time. Grab one of the new motors with its back shell removed, and locate the location of the PCB marked with "ID 11" (the latest published Gerber should have the IDs printed on the silkscreen layer as opposed to a separate label as shown in the image).
@@ -119,6 +119,8 @@
 </p>
 
 17. You may now use the long screws from detaching the shells to secure the first motor in place. Note that only 2 screws are needed instead of 4.
+
+    **In some PCBWay assembly services, longer (black) female pin headers were used which would be too tall. In this case, you can either use a flush cutter or sandpapers to trim the headers down to appropriate height.**
 <p align="center">
     <img src="assem_motor3.jpg" width="90%">
 </p>

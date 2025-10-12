@@ -3,7 +3,7 @@
 ## Identify the front of the robot:
 The "Front" silkscreen marking on the front side of the PCB is the front of the actual robot. When the robot is pointing forward, the Seeed XIAO board and most of the electronics are facing left.
 
-![Q8bot](dxl_manual_setup.png)
+![Q8bot](dxl_manual_setup.jpg)
 
 ## Robot joint assignment
 **Note: On the image above, J1 is equivalent to J11, J2 is equivalent to J12, etc.**

@@ -187,7 +187,6 @@ while True:
             move_xy(pos_x, pos_y, 500)
             time.sleep(0.2)
         elif keys[pygame.K_b]:
-            # print(f"Requesting battery info")
             q8.check_battery()
             request = "battery"
             time.sleep(0.2)
@@ -208,22 +207,25 @@ while True:
             break
         else:
             totalArray = []
-            while q8.serialHandler.in_waiting > 0:  # Check if there is any data waiting to be read
-                raw_data = q8.serialHandler.readline().decode('utf-8').strip() # Read a line and decode it
-                raw_data = raw_data.split()
-                while raw_data and raw_data[-1] == '0':
-                    raw_data.pop()
-                # print(f"Received data: {raw_data}")
-                if request == "battery":
-                    print(f"Battery Level: {int(raw_data[0])}")
-                else:
+            try:
+                while q8.serialHandler.in_waiting > 0:  # Check if there is any data waiting to be read
+                    raw_data = q8.serialHandler.readline().decode('utf-8').strip() # Read a line and decode it
+                    raw_data = raw_data.split()
+                    while raw_data and raw_data[-1] == '0':
+                        raw_data.pop()
                     # print(f"Received data: {raw_data}")
-                    processed_data = [int(x) for x in raw_data]
-                    totalArray.extend(processed_data)
-            request = "none"
-            if len(totalArray) > 0:
-                # print(totalArray)
-                parse_data(totalArray, move_list, y_list)
+                    if request == "battery":
+                        print(f"Battery Level: {int(raw_data[0])}")
+                    else:
+                        # print(f"Received data: {raw_data}")
+                        processed_data = [int(x) for x in raw_data]
+                        totalArray.extend(processed_data)
+                request = "none"
+                if len(totalArray) > 0:
+                    # print(totalArray)
+                    parse_data(totalArray, move_list, y_list)
+            except:
+                print("Data reading failed. Continuing...")
 
 q8.disable_torque()
 pygame.quit()
