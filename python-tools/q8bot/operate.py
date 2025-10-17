@@ -20,15 +20,15 @@ res = 0.2
 y_min = 15
 
 # Gait params dictionary. Add your own gaits here
-# 'NAME': [STACKTYPE, x0, y0, xrange, yrange, yrange2, s1_count, s2_count] 
+# 'NAME': [STACKTYPE, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
 gaits = {
     'TROT':      ['trot', 9.75, 43.36, 40, 20, 0, 15, 30],
     'TROT_HIGH': ['trot', 9.75, 60, 20, 10, 0, 15, 30],
     'TROT_LOW':  ['trot', 9.75, 25, 20, 10, 0, 15, 30],
     'TROT_FAST': ['trot', 9.75, 43.36, 50, 20, 0, 12, 24],
-    'WALK':       ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
-    'BOUND':      ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
-    'PRONK':      ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
+    # 'WALK':       ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
+    # 'BOUND':      ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
+    # 'PRONK':      ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
 }
 
 # Helper Functions
@@ -119,7 +119,7 @@ q8 = q8_espnow(com_port)
 q8.enable_torque()
 
 # Starting location of leg end effector in x and y
-gait = ['TROT', 'TROT_HIGH', 'TROT_LOW', 'TROT_FAST', 'WALK', 'BOUND', 'PRONK']
+gait = ['TROT', 'TROT_HIGH', 'TROT_LOW', 'TROT_FAST'] #, 'WALK', 'BOUND', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
 pos_y = round((leg.l1 + leg.l2) * 0.667, 2)
