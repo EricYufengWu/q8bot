@@ -22,10 +22,10 @@ y_min = 15
 # Gait params dictionary. Add your own gaits here
 # 'NAME': [STACKTYPE, x0, y0, xrange, yrange, yrange2, s1_count, s2_count] 
 gaits = {
-    'AMBER':      ['amber', 9.75, 43.36, 40, 20, 0, 15, 30],
-    'AMBER_HIGH': ['amber', 9.75, 60, 20, 10, 0, 15, 30],
-    'AMBER_LOW':  ['amber', 9.75, 25, 20, 10, 0, 15, 30],
-    'AMBER_FAST': ['amber', 9.75, 43.36, 50, 20, 0, 12, 24],
+    'TROT':      ['trot', 9.75, 43.36, 40, 20, 0, 15, 30],
+    'TROT_HIGH': ['trot', 9.75, 60, 20, 10, 0, 15, 30],
+    'TROT_LOW':  ['trot', 9.75, 25, 20, 10, 0, 15, 30],
+    'TROT_FAST': ['trot', 9.75, 43.36, 50, 20, 0, 12, 24],
     'WALK':       ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
     'BOUND':      ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
     'PRONK':      ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
@@ -77,7 +77,7 @@ def move_xy(x, y, dur = 0, deg = True):
     q8.move_mirror([q1, q2], dur)
     return success
 
-def movement_start(leg, dir, move_type = 'AMBER'):
+def movement_start(leg, dir, move_type = 'TROT'):
     # start movement by generating the position list
     global ongoing
     ongoing = True
@@ -119,7 +119,7 @@ q8 = q8_espnow(com_port)
 q8.enable_torque()
 
 # Starting location of leg end effector in x and y
-gait = ['AMBER', 'AMBER_HIGH', 'AMBER_LOW', 'AMBER_FAST', 'WALK', 'BOUND', 'PRONK']
+gait = ['TROT', 'TROT_HIGH', 'TROT_LOW', 'TROT_FAST', 'WALK', 'BOUND', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
 pos_y = round((leg.l1 + leg.l2) * 0.667, 2)

@@ -90,14 +90,14 @@ def generate_gait(leg, dir, gait_params):
     
     if stacktype == 'walk':
         return stack_walk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-    elif stacktype == 'amber':
-        return stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list + y_list2), y_list + y_list2
+    elif stacktype == 'trot':
+        return stack_trot(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list + y_list2), y_list + y_list2
     elif stacktype == 'bound':
         return stack_bound(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     elif stacktype == 'pronk':
         return stack_pronk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
     
-def stack_amber(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list):
+def stack_trot(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list):
     len_factor = (s1_count+s2_count)/s1_count
     split = int(s1_count * len_factor/2)
     move_p2 = move_p[split:] + move_p[:split]
