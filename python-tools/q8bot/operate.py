@@ -12,7 +12,12 @@ import serial.tools.list_ports
 from kinematics_solver import *
 from espnow import q8_espnow
 from helpers import *
-from trajectory_generator import generate_trot_trajectories
+from trajectory_generator import (
+    generate_trot_trajectories,
+    generate_walk_trajectories,
+    generate_bound_trajectories,
+    generate_pronk_trajectories
+)
 from input_handler import InputHandler, detect_and_init_joystick
 
 # User-modifiable constants
@@ -27,9 +32,9 @@ gaits = {
     'TROT_HIGH': ['trot', 9.75, 60, 20, 10, 0, 15, 30],
     'TROT_LOW':  ['trot', 9.75, 25, 20, 10, 0, 15, 30],
     'TROT_FAST': ['trot', 9.75, 43.36, 50, 20, 0, 12, 24],
-    # 'WALK':       ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
-    # 'BOUND':      ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
-    # 'PRONK':      ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
+    'WALK':      ['walk',  9.75, 43.36, 30, 20, 0, 20, 140],
+    'BOUND':     ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
+    'PRONK':     ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
 }
 
 # Helper Functions
@@ -94,12 +99,12 @@ def generate_trajectories_for_gait(leg, gait_name):
 
     if stacktype == 'trot':
         return generate_trot_trajectories(leg, gait_params)
-    # elif stacktype == 'walk':
-    #     return generate_walk_trajectories(leg, gait_params)
-    # elif stacktype == 'bound':
-    #     return generate_bound_trajectories(leg, gait_params)
-    # elif stacktype == 'pronk':
-    #     return generate_pronk_trajectories(leg, gait_params)
+    elif stacktype == 'walk':
+        return generate_walk_trajectories(leg, gait_params)
+    elif stacktype == 'bound':
+        return generate_bound_trajectories(leg, gait_params)
+    elif stacktype == 'pronk':
+        return generate_pronk_trajectories(leg, gait_params)
     else:
         print(f"Unsupported stacktype: {stacktype}")
         return None
@@ -201,7 +206,7 @@ q8 = q8_espnow(com_port)
 q8.enable_torque()
 
 # Starting location of leg end effector in x and y
-gait = ['TROT', 'TROT_HIGH', 'TROT_LOW', 'TROT_FAST'] #, 'WALK', 'BOUND', 'PRONK']
+gait = ['TROT', 'TROT_HIGH', 'TROT_LOW', 'TROT_FAST', 'WALK', 'BOUND', 'PRONK']
 step_size = 20
 pos_x = leg.d/2
 pos_y = round((leg.l1 + leg.l2) * 0.667, 2)

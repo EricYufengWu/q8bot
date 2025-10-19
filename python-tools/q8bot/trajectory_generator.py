@@ -8,198 +8,6 @@ This module contains functions for generating and managing gait trajectories.
 import math
 from kinematics_solver import *
 
-
-def generate_gait(leg, dir, gait_params):
-    """
-    Generate two sets of single-leg position lists (forward + backward).
-    Mix and match to create an aggregated list for 4 legs.
-
-    Args:
-        leg: Kinematics solver instance
-        dir: Direction string ('f', 'b', 'l', 'r', 'fl', 'fr')
-        gait_params: [stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
-
-    Returns:
-        Tuple of (trajectory_list, y_list)
-    """
-    stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
-    move_p, move_ps, move_n= [], [], []
-    x_list_p, x_list_n, x_p_s, y_list = [], [], [], []
-    x_list_p2, y_list2 = [], []
-    x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
-    x_ps = x_p * 0.5 + 9.75 *0.5
-    x_lift_step = xrange / s1_count
-    x_down_step = xrange / s2_count
-    q1_d, q2_d, success = leg.ik_solve(x0, y0, True, 1)
-
-    if y0 - yrange < 5:
-        print("Invalid: y below physical limit.")
-        return dummy_movement(q1_d, q2_d)
-
-    for i in range(s1_count + s2_count):
-        if i < s1_count:
-            x_p += x_lift_step
-            x_ps += x_lift_step * 0.5
-            x_n -= x_lift_step
-            freq = math.pi / s1_count
-            y = y0 - math.sin((i+1) * freq) * yrange
-            x_list_p.append(x_p)
-            y_list.append(y)
-        else:
-            x_p = x_p - x_down_step
-            x_ps = x_ps - x_down_step * 0.5
-            x_n = x_n + x_down_step
-            freq = math.pi / s2_count
-            y = y0 + math.sin((i-s1_count+1) * freq) * yrange2
-            x_list_p2.append(x_p)
-            y_list2.append(y)
-        q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
-        q1_ps, q2_ps, check3 = leg.ik_solve(x_ps, y, True, 1) # smaller gait
-        q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
-        x_list_n.append(x_n)
-        x_p_s.append(x_ps)
-
-        if len(str(q1_p))>5 or len(str(q2_p))>5:
-            print("Invalid: ",x_p, x_n, y, check1, check2)
-            xr_new, yr_new, yr_new2 = xrange - 1, yrange - 1, yrange2
-            print(xr_new, yr_new)
-            if xr_new > 0 and yr_new > 0:
-                print("Retry with smaller step size")
-                return generate_gait(leg, dir, x0, y0, xr_new, yr_new, yr_new2, gait_params)
-            return dummy_movement(q1_d, q2_d)
-        move_p.append([q1_p, q2_p])
-        move_ps.append([q1_ps, q2_ps])
-        move_n.append([q1_n, q2_n])
-
-    if stacktype == 'walk':
-        return stack_walk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-    elif stacktype == 'trot':
-        return stack_trot(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list + y_list2), y_list + y_list2
-    elif stacktype == 'bound':
-        return stack_bound(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-    elif stacktype == 'pronk':
-        return stack_pronk(dir, s1_count, s2_count, move_p, move_n), y_list + y_list2
-
-
-def stack_trot(dir, s1_count, s2_count, move_p, move_n, move_ps, y_list):
-    """
-    Stack trajectory arrays for trot gait pattern.
-    Trot gait has diagonal leg pairs moving in phase.
-
-    Args:
-        dir: Direction ('f', 'b', 'l', 'r', 'fl', 'fr')
-        s1_count: Step 1 count (lift phase)
-        s2_count: Step 2 count (down phase)
-        move_p: Forward movement trajectory
-        move_n: Backward movement trajectory
-        move_ps: Forward movement trajectory (scaled)
-        y_list: Y-coordinate trajectory list
-
-    Returns:
-        Stacked position list for all 4 legs
-    """
-    len_factor = (s1_count+s2_count)/s1_count
-    split = int(s1_count * len_factor/2)
-    move_p2 = move_p[split:] + move_p[:split]
-    move_ps2 = move_ps[split:] + move_ps[:split]
-    move_n2 = move_n[split:] + move_n[:split]
-    y_2 = y_list[split:] + y_list[:split]
-
-    if dir == 'f':
-        return append_pos_list(move_p, move_p2, move_p2, move_p)
-    elif dir == 'r':
-        return append_pos_list(move_p, move_n2, move_p2, move_n)
-    elif dir == 'l':
-        return append_pos_list(move_n, move_p2, move_n2, move_p)
-    elif dir == 'fr':
-        return append_pos_list(move_p, move_ps2, move_p2, move_ps)
-    elif dir == 'fl':
-        return append_pos_list(move_ps, move_p2, move_ps2, move_p)
-    else: # all other conditions default to "back"
-        return append_pos_list(move_n, move_n2, move_n2, move_n)
-
-
-def stack_walk(dir, s1_count, s2_count, move_p, move_n):
-    """
-    Stack trajectory arrays for walk gait pattern.
-    Walk gait has each leg moving sequentially with 1/4 phase offset.
-
-    Args:
-        dir: Direction ('f', 'b', 'l', 'r')
-        s1_count: Step 1 count (lift phase)
-        s2_count: Step 2 count (down phase)
-        move_p: Forward movement trajectory
-        move_n: Backward movement trajectory
-
-    Returns:
-        Stacked position list for all 4 legs
-    """
-    len_factor = (s1_count+s2_count)/s1_count
-    split = int(s1_count * len_factor/4)
-    print(split)
-    move_p2 = move_p[split:] + move_p[:split]
-    move_p3 = move_p[split*2:] + move_p[:split*2]
-    move_p4 = move_p[split*3:] + move_p[:split*3]
-    move_n2 = move_n[split:] + move_n[:split]
-    move_n3 = move_n[split*2:] + move_n[:split*2]
-    move_n4 = move_n[split*3:] + move_n[:split*3]
-
-    if dir == 'f':
-        return append_pos_list(move_p, move_p2, move_p3, move_p4)
-    elif dir == 'r':
-        return append_pos_list(move_p, move_n2, move_p3, move_n4)
-    elif dir == 'l':
-        return append_pos_list(move_n, move_p2, move_n3, move_p4)
-    else: # all other conditions default to "back"
-        return append_pos_list(move_n, move_n2, move_n3, move_n4)
-
-
-def stack_bound(dir, s1_count, s2_count, move_p, move_n):
-    """
-    Stack trajectory arrays for bound gait pattern.
-    Bound gait has front and back leg pairs moving together.
-
-    Args:
-        dir: Direction ('f', 'b')
-        s1_count: Step 1 count (lift phase)
-        s2_count: Step 2 count (down phase)
-        move_p: Forward movement trajectory
-        move_n: Backward movement trajectory
-
-    Returns:
-        Stacked position list for all 4 legs
-    """
-    split = int((s2_count + s1_count)/4)
-    move_p2 = move_p[split:] + move_p[:split]
-    move_n2 = move_n[split:] + move_n[:split]
-
-    if dir == 'f':
-        return append_pos_list(move_p, move_p, move_p2, move_p2)
-    else: # all other conditions default to "back"
-        return append_pos_list(move_n, move_n, move_n2, move_n2)
-
-
-def stack_pronk(dir, s1_count, s2_count, move_p, move_n):
-    """
-    Stack trajectory arrays for pronk gait pattern.
-    Pronk gait has all legs moving in phase (jumping).
-
-    Args:
-        dir: Direction ('f', 'b')
-        s1_count: Step 1 count (lift phase)
-        s2_count: Step 2 count (down phase)
-        move_p: Forward movement trajectory
-        move_n: Backward movement trajectory
-
-    Returns:
-        Stacked position list for all 4 legs
-    """
-    if dir == 'f':
-        return append_pos_list(move_p, move_p, move_p, move_p)
-    else: # all other conditions default to "back"
-        return append_pos_list(move_n, move_n, move_n, move_n)
-
-
 def append_pos_list(list_1, list_2, list_3, list_4):
     """
     Append values to overall movement list in specific order.
@@ -350,6 +158,156 @@ def generate_trot_trajectories(leg, gait_params):
         'bl_0.5':  append_pos_list(move_0_5_backward, n_full, n_0_5, move_full_backward),
         'br_0.75': append_pos_list(move_full_backward, n_0_75, n_full, move_0_75_backward),
         'br_0.5':  append_pos_list(move_full_backward, n_0_5, n_full, move_0_5_backward),
+    }
+
+    return trajectories
+
+
+def generate_walk_trajectories(leg, gait_params):
+    """
+    Generate complete set of trajectories for WALK gait.
+    Walk uses 4-leg phasing with each leg offset by 25%.
+
+    Args:
+        leg: Kinematics solver instance
+        gait_params: [stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
+
+    Returns:
+        Dictionary mapping movement types to trajectory arrays:
+        {
+            'f': forward (n x 8),
+            'b': backward (n x 8),
+            'l': left turn (n x 8),
+            'r': right turn (n x 8)
+        }
+        where n = s1_count + s2_count (complete cycle)
+    """
+    stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
+
+    # Generate base trajectories
+    move_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=1.0
+    )
+    move_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-1.0
+    )
+
+    if move_forward is None or move_backward is None:
+        print("Failed to generate walk base trajectories")
+        return None
+
+    # Phase shift for walk gait (each leg offset by 25%)
+    len_factor = (s1_count + s2_count) / s1_count
+    phase_shift_25 = int(s1_count * len_factor / 4)
+
+    # Create phase-shifted versions (4 phases for 4 legs)
+    p1 = move_forward
+    p2 = move_forward[phase_shift_25:] + move_forward[:phase_shift_25]
+    p3 = move_forward[phase_shift_25*2:] + move_forward[:phase_shift_25*2]
+    p4 = move_forward[phase_shift_25*3:] + move_forward[:phase_shift_25*3]
+
+    n1 = move_backward
+    n2 = move_backward[phase_shift_25:] + move_backward[:phase_shift_25]
+    n3 = move_backward[phase_shift_25*2:] + move_backward[:phase_shift_25*2]
+    n4 = move_backward[phase_shift_25*3:] + move_backward[:phase_shift_25*3]
+
+    # Robot leg layout:
+    #       Front
+    #   FL        FR
+    #   BL        BR
+    trajectories = {
+        'f': append_pos_list(p1, p2, p3, p4),      # Forward
+        'b': append_pos_list(n1, n2, n3, n4),      # Backward
+        'l': append_pos_list(n1, p2, n3, p4),      # Left turn
+        'r': append_pos_list(p1, n2, p3, n4),      # Right turn
+    }
+
+    return trajectories
+
+
+def generate_bound_trajectories(leg, gait_params):
+    """
+    Generate complete set of trajectories for BOUND gait.
+    Bound has front and back legs moving together in pairs.
+
+    Args:
+        leg: Kinematics solver instance
+        gait_params: [stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
+
+    Returns:
+        Dictionary mapping movement types to trajectory arrays:
+        {
+            'f': forward (n x 8),
+            'b': backward (n x 8)
+        }
+        where n = s1_count + s2_count (complete cycle)
+    """
+    stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
+
+    # Generate base trajectories
+    move_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=1.0
+    )
+    move_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-1.0
+    )
+
+    if move_forward is None or move_backward is None:
+        print("Failed to generate bound base trajectories")
+        return None
+
+    # Phase shift for bound (front/back pairs offset)
+    split = int((s2_count + s1_count) / 4)
+    p2 = move_forward[split:] + move_forward[:split]
+    n2 = move_backward[split:] + move_backward[:split]
+
+    # Robot leg layout (pairs move together):
+    #       Front
+    #   FL        FR  (same phase)
+    #   BL        BR  (offset phase)
+    trajectories = {
+        'f': append_pos_list(move_forward, move_forward, p2, p2),  # Forward
+        'b': append_pos_list(move_backward, move_backward, n2, n2), # Backward
+    }
+
+    return trajectories
+
+
+def generate_pronk_trajectories(leg, gait_params):
+    """
+    Generate complete set of trajectories for PRONK gait.
+    Pronk has all legs moving in phase (jumping).
+
+    Args:
+        leg: Kinematics solver instance
+        gait_params: [stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
+
+    Returns:
+        Dictionary mapping movement types to trajectory arrays:
+        {
+            'f': forward (n x 8),
+            'b': backward (n x 8)
+        }
+        where n = s1_count + s2_count (complete cycle)
+    """
+    stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
+
+    # Generate base trajectories
+    move_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=1.0
+    )
+    move_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-1.0
+    )
+
+    if move_forward is None or move_backward is None:
+        print("Failed to generate pronk base trajectories")
+        return None
+
+    # All legs move together (no phase shift)
+    trajectories = {
+        'f': append_pos_list(move_forward, move_forward, move_forward, move_forward),  # Forward
+        'b': append_pos_list(move_backward, move_backward, move_backward, move_backward), # Backward
     }
 
     return trajectories
