@@ -12,9 +12,10 @@ import serial.tools.list_ports
 from kinematics_solver import *
 from espnow import q8_espnow
 from helpers import *
+from trajectory_generator import generate_trot_trajectories
+from input_handler import InputHandler, detect_and_init_joystick
 
 # User-modifiable constants
-PORT = 'COM14'
 SPEED = 200
 res = 0.2
 y_min = 15
@@ -77,11 +78,87 @@ def move_xy(x, y, dur = 0, deg = True):
     q8.move_mirror([q1, q2], dur)
     return success
 
-def movement_start(leg, dir, move_type = 'TROT'):
-    # start movement by generating the position list
-    global ongoing
-    ongoing = True
-    return generate_gait(leg, dir, gaits[move_type])
+def generate_trajectories_for_gait(leg, gait_name):
+    """
+    Generate complete trajectory set for a given gait based on its stacktype.
+
+    Args:
+        leg: Kinematics solver instance
+        gait_name: Name of the gait (e.g., 'TROT', 'TROT_HIGH')
+
+    Returns:
+        Dictionary of trajectories for all movement types, or None if stacktype not supported
+    """
+    gait_params = gaits[gait_name]
+    stacktype = gait_params[0]
+
+    if stacktype == 'trot':
+        return generate_trot_trajectories(leg, gait_params)
+    # elif stacktype == 'walk':
+    #     return generate_walk_trajectories(leg, gait_params)
+    # elif stacktype == 'bound':
+    #     return generate_bound_trajectories(leg, gait_params)
+    # elif stacktype == 'pronk':
+    #     return generate_pronk_trajectories(leg, gait_params)
+    else:
+        print(f"Unsupported stacktype: {stacktype}")
+        return None
+
+def movement_start(dir, move_type = 'TROT'):
+    """
+    Start movement by looking up pre-calculated trajectory.
+    Includes fallback logic for gaits with limited movement types.
+
+    Args:
+        dir: Direction string (e.g., 'f', 'b', 'l', 'r', 'fl_0.75', 'fl_0.5', etc.)
+        move_type: Gait type name (e.g., 'TROT')
+
+    Returns:
+        Tuple of (trajectory_list, empty_list) or None if movement not found
+    """
+    global ongoing, current_trajectories
+
+    # Check if we have trajectories for this gait
+    if move_type not in current_trajectories:
+        print(f"No trajectories loaded for {move_type}")
+        return None, []
+
+    gait_trajectories = current_trajectories[move_type]
+
+    # Try to find exact match first
+    if dir in gait_trajectories:
+        ongoing = True
+        return gait_trajectories[dir], []
+
+    # Fallback logic for gaits with limited movement types
+    # Try to find closest available movement
+    fallback_map = {
+        # Map complex turns to simpler turns if not available
+        'fl_0.5': ['fl_0.75', 'fl', 'f'],  # Try gentler turn, then basic, then straight
+        'fl_0.75': ['fl', 'f'],
+        'fr_0.5': ['fr_0.75', 'fr', 'f'],
+        'fr_0.75': ['fr', 'f'],
+        'bl_0.5': ['bl_0.75', 'bl', 'b'],
+        'bl_0.75': ['bl', 'b'],
+        'br_0.5': ['br_0.75', 'br', 'b'],
+        'br_0.75': ['br', 'b'],
+        'fl': ['f'],  # Basic turns fall back to straight
+        'fr': ['f'],
+        'bl': ['b'],
+        'br': ['b'],
+    }
+
+    # Try fallbacks
+    if dir in fallback_map:
+        for fallback in fallback_map[dir]:
+            if fallback in gait_trajectories:
+                print(f"Movement '{dir}' not available for {move_type}, using '{fallback}' instead")
+                ongoing = True
+                return gait_trajectories[fallback], []
+
+    # No suitable trajectory found
+    print(f"Movement type '{dir}' not available for {move_type} (no fallback found)")
+    return None, []
 
 # Main code
 # Seeed Studio XIAO devices have the following VID and PID
@@ -94,6 +171,7 @@ ongoing = False
 exit = False
 record = False
 request = "none"
+current_direction = None  # Track current movement direction
 
 # find a serial port and connect
 if len(sys.argv) > 1:
@@ -114,6 +192,10 @@ pygame.init()
 window = pygame.display.set_mode((300, 300))
 clock = pygame.time.Clock()
 
+# Detect and initialize input device (joystick or keyboard)
+use_joystick, joystick, joystick_mapping = detect_and_init_joystick()
+input_handler = InputHandler(use_joystick, joystick, joystick_mapping)
+
 leg = k_solver(19.5, 25, 40, 25, 40)
 q8 = q8_espnow(com_port)
 q8.enable_torque()
@@ -124,86 +206,108 @@ step_size = 20
 pos_x = leg.d/2
 pos_y = round((leg.l1 + leg.l2) * 0.667, 2)
 move_xy(pos_x, pos_y, 1000)
+
+# Pre-calculate trajectories for default gait (following flowchart)
+print(f"Calculating trajectories for default gait: {gait[0]}")
+current_trajectories = {}
+default_gait_trajectories = generate_trajectories_for_gait(leg, gait[0])
+if default_gait_trajectories:
+    current_trajectories[gait[0]] = default_gait_trajectories
+    print(f"Loaded {len(default_gait_trajectories)} movement types for {gait[0]}")
+else:
+    print(f"Failed to generate trajectories for {gait[0]}")
+    sys.exit(1)
+
 time.sleep(2)
 
 while True:
     clock.tick(SPEED)
     pygame.event.get()
-    keys = pygame.key.get_pressed()
 
     if movement:
-        if keys[pygame.K_w]:
+        # Get requested direction from input handler
+        requested_direction = input_handler.get_movement_direction()
+
+        if requested_direction:
+            # Check if direction changed mid-movement
+            if ongoing and requested_direction != current_direction:
+                # Switch to new trajectory
+                ongoing = False
+                print(f"Switching from {current_direction} to {requested_direction}")
+
+            # Load trajectory if not ongoing or direction changed
             if not ongoing:
-                move_list, y_list = movement_start(leg, 'f', gait[0])
-            pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0, record)
-        elif keys[pygame.K_s]:
-            if not ongoing:
-                move_list, y_list = movement_start(leg, 'b', gait[0])
-            pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0, record)
-        elif keys[pygame.K_a]:
-            if not ongoing:
-                move_list, y_list = movement_start(leg, 'l', gait[0])
-            pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0, record)
-        elif keys[pygame.K_d]:
-            if not ongoing:
-                move_list, y_list = movement_start(leg, 'r', gait[0])
-            pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0, record)
-        elif keys[pygame.K_q]:
-            if not ongoing:
-                move_list, y_list = movement_start(leg, 'fl', gait[0])
-            pos, move_list = movement_tick(move_list)
-            q8.move_all(pos, 0, record)
-        elif keys[pygame.K_e]:
-            if not ongoing:
-                move_list, y_list = movement_start(leg, 'fr', gait[0])
+                move_list, y_list = movement_start(requested_direction, gait[0])
+                if move_list is None:  # moveFound = False
+                    movement = False
+                    current_direction = None
+                    continue
+                current_direction = requested_direction
+
+            # Execute current trajectory
             pos, move_list = movement_tick(move_list)
             q8.move_all(pos, 0, record)
         else:
+            # No movement input - transition to idle
             move_xy(pos_x, pos_y, 0)
             q8.finish_recording()
             record = False
             ongoing = False
             movement = False
+            current_direction = None
     else:
-        if (keys[pygame.K_w] or keys[pygame.K_a] or keys[pygame.K_s] or 
-            keys[pygame.K_d] or keys[pygame.K_q] or keys[pygame.K_e] ):
+        # Check for movement input
+        if input_handler.is_movement_input():
             movement = True
-        elif keys[pygame.K_r]:                                # reset step
+        # Check action inputs using generalized interface
+        elif input_handler.is_action_pressed('reset'):
             move_xy(pos_x, pos_y, 500)
-        elif keys[pygame.K_j]:
+        elif input_handler.is_action_pressed('jump'):
             print("Jump")
             q8.send_jump()
             time.sleep(5)
             move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
             move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
-        elif keys[pygame.K_g]:
+        elif input_handler.is_action_pressed('switch_gait'):
             gait.append(gait.pop(0))
-            print(f"Changed gait to: {gait[0]}")
+            print(f"Switching to gait: {gait[0]}")
+
+            # Completely scrap old trajectories and calculate new ones
+            print(f"Calculating new trajectories for {gait[0]}...")
+            current_trajectories = {}  # Clear all previous trajectories
+            new_trajectories = generate_trajectories_for_gait(leg, gait[0])
+            if new_trajectories:
+                current_trajectories[gait[0]] = new_trajectories
+                print(f"Loaded {len(new_trajectories)} movement types")
+            else:
+                print(f"Failed to generate trajectories for {gait[0]}")
+                gait.insert(0, gait.pop())  # Revert gait change
+                time.sleep(0.2)
+                continue
+
+            # Update position to match new gait
             pos_x, pos_y = gaits[gait[0]][1], gaits[gait[0]][2]
             move_xy(pos_x, pos_y, 500)
+            print(f"Changed gait to: {gait[0]}")
             time.sleep(0.2)
-        elif keys[pygame.K_b]:
+        elif input_handler.is_action_pressed('battery'):
             q8.check_battery()
             request = "battery"
             time.sleep(0.2)
-        elif keys[pygame.K_z]:
+        elif input_handler.is_action_pressed('record'):
             print(f"Record next movement")
             record = True
             request = "data"
             time.sleep(0.2)
-        elif keys[pygame.K_c]:
+        elif input_handler.is_action_pressed('show_range'):
             print(f"Show Range")
             show_range()
             time.sleep(0.2)
-        elif keys[pygame.K_h]:
+        elif input_handler.is_action_pressed('greet'):
             print(f"Greet")
             greet(pos_x, pos_y)
             time.sleep(0.2)
-        elif keys[pygame.K_ESCAPE]:
+        elif input_handler.is_action_pressed('exit'):
             break
         else:
             totalArray = []
@@ -228,4 +332,6 @@ while True:
                 print("Data reading failed. Continuing...")
 
 q8.disable_torque()
+if joystick:
+    joystick.quit()
 pygame.quit()

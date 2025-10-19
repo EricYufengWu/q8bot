@@ -259,7 +259,7 @@ def movement_tick(move_list):
 def generate_trot_trajectories(leg, gait_params):
     """
     Generate complete set of trajectories for TROT gait.
-    Creates pre-calculated trajectories for all movement types.
+    Creates pre-calculated trajectories for all movement types with variable stride lengths.
 
     Args:
         leg: Kinematics solver instance
@@ -268,51 +268,96 @@ def generate_trot_trajectories(leg, gait_params):
     Returns:
         Dictionary mapping movement types to trajectory arrays:
         {
-            'f': forward trajectory (n x 8),
-            'b': backward trajectory (n x 8),
-            'l': left trajectory (n x 8),
-            'r': right trajectory (n x 8),
-            'fl': forward-left trajectory (n x 8),
-            'fr': forward-right trajectory (n x 8)
+            'f': forward (n x 8),
+            'b': backward (n x 8),
+            'l': left turn (n x 8),
+            'r': right turn (n x 8),
+            'fl_0.75': forward-left 75% turn (n x 8),
+            'fl_0.5': forward-left 50% turn (n x 8),
+            'fr_0.75': forward-right 75% turn (n x 8),
+            'fr_0.5': forward-right 50% turn (n x 8),
+            'bl_0.75': backward-left 75% turn (n x 8),
+            'bl_0.5': backward-left 50% turn (n x 8),
+            'br_0.75': backward-right 75% turn (n x 8),
+            'br_0.5': backward-right 50% turn (n x 8)
         }
         where n = s1_count + s2_count (complete cycle)
     """
     stacktype, x0, y0, xrange, yrange, yrange2, s1_count, s2_count = gait_params
 
-    # Generate base single-leg trajectories (forward, backward, and scaled)
-    move_p, move_ps, move_n = _generate_base_trajectories(
-        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count
+    # Generate base single-leg trajectories with different stride scales
+    move_full_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=1.0
+    )
+    move_0_75_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=0.75
+    )
+    move_0_5_forward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=0.5
+    )
+    move_full_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-1.0
+    )
+    move_0_75_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-0.75
+    )
+    move_0_5_backward = _generate_base_trajectories(
+        leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=-0.5
     )
 
-    if move_p is None:
+    # Check for failures
+    if any(m is None for m in [move_full_forward, move_0_75_forward, move_0_5_forward,
+                                 move_full_backward, move_0_75_backward, move_0_5_backward]):
         print("Failed to generate base trajectories")
         return None
 
     # Phase shift for diagonal gait pattern (trot uses 50% offset)
     len_factor = (s1_count + s2_count) / s1_count
-    split = int(s1_count * len_factor / 2)
+    phase_shift = int(s1_count * len_factor / 2)
 
     # Create phase-shifted versions for diagonal leg coordination
-    move_p2 = move_p[split:] + move_p[:split]
-    move_ps2 = move_ps[split:] + move_ps[:split]
-    move_n2 = move_n[split:] + move_n[:split]
+    def phase_shift_trajectory(traj):
+        return traj[phase_shift:] + traj[:phase_shift]
 
-    # Generate complete trajectory set for all movement types
+    # Phase-shifted trajectories
+    p_full = phase_shift_trajectory(move_full_forward)
+    p_0_75 = phase_shift_trajectory(move_0_75_forward)
+    p_0_5 = phase_shift_trajectory(move_0_5_forward)
+    n_full = phase_shift_trajectory(move_full_backward)
+    n_0_75 = phase_shift_trajectory(move_0_75_backward)
+    n_0_5 = phase_shift_trajectory(move_0_5_backward)
+
+    # Generate complete trajectory set for all 12 movement types
+    # Robot leg layout:
+    #       Front
+    #   FL        FR
+    #   BL        BR
     trajectories = {
-        'f':  append_pos_list(move_p, move_p2, move_p2, move_p),    # Forward
-        'b':  append_pos_list(move_n, move_n2, move_n2, move_n),    # Backward
-        'l':  append_pos_list(move_n, move_p2, move_n2, move_p),    # Left
-        'r':  append_pos_list(move_p, move_n2, move_p2, move_n),    # Right
-        'fl': append_pos_list(move_ps, move_p2, move_ps2, move_p),  # Forward-Left
-        'fr': append_pos_list(move_p, move_ps2, move_p2, move_ps)   # Forward-Right
+        # Straight movements
+        'f': append_pos_list(move_full_forward, p_full, p_full, move_full_forward),
+        'b': append_pos_list(move_full_backward, n_full, n_full, move_full_backward),
+        'l': append_pos_list(move_full_backward, p_full, n_full, move_full_forward),
+        'r': append_pos_list(move_full_forward, n_full, p_full, move_full_backward),
+
+        # Forward turns (inside leg has reduced stride)
+        'fl_0.75': append_pos_list(move_0_75_forward, p_full, p_0_75, move_full_forward),
+        'fl_0.5':  append_pos_list(move_0_5_forward, p_full, p_0_5, move_full_forward),
+        'fr_0.75': append_pos_list(move_full_forward, p_0_75, p_full, move_0_75_forward),
+        'fr_0.5':  append_pos_list(move_full_forward, p_0_5, p_full, move_0_5_forward),
+
+        # Backward turns (inside leg has reduced stride)
+        'bl_0.75': append_pos_list(move_0_75_backward, n_full, n_0_75, move_full_backward),
+        'bl_0.5':  append_pos_list(move_0_5_backward, n_full, n_0_5, move_full_backward),
+        'br_0.75': append_pos_list(move_full_backward, n_0_75, n_full, move_0_75_backward),
+        'br_0.5':  append_pos_list(move_full_backward, n_0_5, n_full, move_0_5_backward),
     }
 
     return trajectories
 
 
-def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count):
+def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, s2_count, stride_scale=1.0):
     """
-    Generate base single-leg trajectories (forward, backward, scaled forward).
+    Generate base single-leg trajectory with variable stride length.
     This is the core trajectory calculation separated from the stacking logic.
 
     Args:
@@ -321,59 +366,51 @@ def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, 
         xrange, yrange, yrange2: Range parameters
         s1_count: Lift phase step count
         s2_count: Down phase step count
+        stride_scale: float, stride length multiplier (0.0 to 1.0)
+                     1.0 = full stride, 0.75 = 75% stride, 0.5 = 50% stride
 
     Returns:
-        Tuple of (move_p, move_ps, move_n) or (None, None, None) on failure
-        - move_p: Forward movement trajectory
-        - move_ps: Forward movement trajectory (50% scaled for turning)
-        - move_n: Backward movement trajectory
+        List of [q1, q2] joint angles or None on failure
     """
-    move_p, move_ps, move_n = [], [], []
-    x_p, x_n = x0 - xrange / 2, x0 + xrange / 2
-    x_ps = x_p * 0.5 + 9.75 * 0.5  # Scaled position (50% between x_p and center)
-    x_lift_step = xrange / s1_count
-    x_down_step = xrange / s2_count
+    move_trajectory = []
+    x_start = x0 - (xrange * stride_scale) / 2
+    x_end = x0 + (xrange * stride_scale) / 2
+    x_lift_step = (xrange * stride_scale) / s1_count
+    x_down_step = (xrange * stride_scale) / s2_count
+    x = x_start
 
     # Check physical limits
     if y0 - yrange < 5:
         print("Invalid: y below physical limit.")
-        return None, None, None
+        return None
 
     # Generate trajectory points for complete gait cycle
     for i in range(s1_count + s2_count):
         if i < s1_count:
             # Lift phase: sinusoidal lift trajectory
-            x_p += x_lift_step
-            x_ps += x_lift_step * 0.5
-            x_n -= x_lift_step
+            x += x_lift_step
             freq = math.pi / s1_count
             y = y0 - math.sin((i + 1) * freq) * yrange
         else:
             # Down phase: sinusoidal down trajectory
-            x_p = x_p - x_down_step
-            x_ps = x_ps - x_down_step * 0.5
-            x_n = x_n + x_down_step
+            x = x - x_down_step
             freq = math.pi / s2_count
             y = y0 + math.sin((i - s1_count + 1) * freq) * yrange2
 
-        # Solve inverse kinematics for each trajectory
-        q1_p, q2_p, check1 = leg.ik_solve(x_p, y, True, 1)
-        q1_ps, q2_ps, check3 = leg.ik_solve(x_ps, y, True, 1)
-        q1_n, q2_n, check2 = leg.ik_solve(x_n, y, True, 1)
+        # Solve inverse kinematics
+        q1, q2, check = leg.ik_solve(x, y, True, 1)
 
         # Validate IK solution
-        if len(str(q1_p)) > 5 or len(str(q2_p)) > 5:
-            print(f"Invalid IK solution: x_p={x_p}, x_n={x_n}, y={y}")
+        if len(str(q1)) > 5 or len(str(q2)) > 5:
+            print(f"Invalid IK solution: x={x}, y={y}, stride_scale={stride_scale}")
             xr_new, yr_new = xrange - 1, yrange - 1
             if xr_new > 0 and yr_new > 0:
                 print("Retrying with smaller step size")
                 return _generate_base_trajectories(
-                    leg, x0, y0, xr_new, yr_new, yrange2, s1_count, s2_count
+                    leg, x0, y0, xr_new, yr_new, yrange2, s1_count, s2_count, stride_scale
                 )
-            return None, None, None
+            return None
 
-        move_p.append([q1_p, q2_p])
-        move_ps.append([q1_ps, q2_ps])
-        move_n.append([q1_n, q2_n])
+        move_trajectory.append([q1, q2])
 
-    return move_p, move_ps, move_n
+    return move_trajectory
