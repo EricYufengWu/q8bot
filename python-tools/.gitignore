@@ -6,6 +6,7 @@ q8bot/Manual.jpg
 q8bot/q8botGPD.py
 q8bot/*.csv
 q8bot/*.txt
+devlog.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
