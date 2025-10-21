@@ -13,6 +13,7 @@ from control_config import (
     apply_deadzone,
     get_joystick_direction
 )
+from helpers import Q8Logger
 
 
 class InputHandler:
@@ -117,33 +118,33 @@ def detect_and_init_joystick():
     pygame.joystick.init()
     joystick_count = pygame.joystick.get_count()
 
-    print("=" * 60)
-    print(f"Detected {joystick_count} joystick(s)")
+    Q8Logger.debug("=" * 60)
+    Q8Logger.debug(f"Detected {joystick_count} joystick(s)")
 
     if joystick_count > 0:
         # Try each joystick until we find a compatible one
         for i in range(joystick_count):
             js = pygame.joystick.Joystick(i)
             js.init()
-            print(f"\nJoystick {i}: {js.get_name()}")
-            print(f"  Axes: {js.get_numaxes()}, Buttons: {js.get_numbuttons()}")
+            Q8Logger.debug(f"\nJoystick {i}: {js.get_name()}")
+            Q8Logger.debug(f"  Axes: {js.get_numaxes()}, Buttons: {js.get_numbuttons()}")
 
             if check_joystick_compatible(js):
                 joystick_mapping = get_joystick_mapping(js)
-                print(f"\n>>> Using joystick: '{js.get_name()}' <<<")
+                Q8Logger.debug(f"\n>>> Using joystick: '{js.get_name()}' <<<")
 
                 if joystick_mapping:
                     if joystick_mapping['recognized']:
-                        print(">>> Controller is RECOGNIZED (custom mapping loaded) <<<")
+                        Q8Logger.debug(">>> Controller is RECOGNIZED (custom mapping loaded) <<<")
                     else:
-                        print(">>> Controller not recognized - using GPDWIN fallback mapping <<<")
+                        Q8Logger.warning("Controller not recognized - using GPDWIN fallback mapping")
                 else:
-                    print(">>> Error loading joystick mapping <<<")
+                    Q8Logger.warning("Error loading joystick mapping")
                     continue
 
-                print("=" * 60)
+                Q8Logger.debug("=" * 60)
                 return True, js, joystick_mapping
 
-    print("\n>>> No compatible joystick found - using KEYBOARD control <<<")
-    print("=" * 60)
+    Q8Logger.debug("\n>>> No compatible joystick found - using KEYBOARD control <<<")
+    Q8Logger.debug("=" * 60)
     return False, None, None

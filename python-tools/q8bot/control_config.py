@@ -8,6 +8,7 @@ Defines keyboard and joystick control schemes using a two-layer mapping system.
 import pygame
 import json
 import os
+from helpers import Q8Logger
 
 # =============================================================================
 # KEYBOARD CONFIGURATION
@@ -50,10 +51,10 @@ def load_joystick_config():
         with open(config_path, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"Warning: joystick_config.json not found at {config_path}")
+        Q8Logger.warning(f"joystick_config.json not found at {config_path}")
         return None
     except json.JSONDecodeError as e:
-        print(f"Error parsing joystick_config.json: {e}")
+        Q8Logger.warning(f"Error parsing joystick_config.json: {e}")
         return None
 
 
@@ -91,7 +92,7 @@ def check_joystick_compatible(joystick):
 
     # Check if joystick is in our recognized list
     if joystick_name in JOYSTICK_CONFIG['controllers']:
-        print(f"Recognized joystick: '{joystick_name}'")
+        Q8Logger.debug(f"Recognized joystick: '{joystick_name}'")
         return True
 
     # Fall back to minimum requirements check
@@ -99,12 +100,12 @@ def check_joystick_compatible(joystick):
     required_buttons = JOYSTICK_CONFIG['requirements']['min_buttons']
 
     if num_axes < required_axes or num_buttons < required_buttons:
-        print(f"Warning: Joystick '{joystick_name}' does not meet requirements.")
-        print(f"  Required: {required_axes} axes, {required_buttons} buttons")
-        print(f"  Found: {num_axes} axes, {num_buttons} buttons")
+        Q8Logger.warning(f"Joystick '{joystick_name}' does not meet requirements.")
+        Q8Logger.warning(f"  Required: {required_axes} axes, {required_buttons} buttons")
+        Q8Logger.warning(f"  Found: {num_axes} axes, {num_buttons} buttons")
         return False
 
-    print(f"Joystick '{joystick_name}' meets minimum requirements (generic mode)")
+    Q8Logger.debug(f"Joystick '{joystick_name}' meets minimum requirements (generic mode)")
     return True
 
 

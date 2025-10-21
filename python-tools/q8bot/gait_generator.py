@@ -6,7 +6,7 @@ This module contains functions for generating and managing gait trajectories.
 '''
 
 import math
-from kinematics_solver import *
+# Note: No imports from kinematics_solver needed - leg is passed as parameter
 
 def append_pos_list(list_1, list_2, list_3, list_4):
     """
@@ -33,35 +33,6 @@ def append_pos_list(list_1, list_2, list_3, list_4):
                            list_3[i][0], list_3[i][1],
                            list_4[i][0], list_4[i][1]])
     return append_list
-
-
-def dummy_movement(q1 = 90, q2 = 90):
-    """
-    Movement placeholder for invalid or unimplemented gaits.
-
-    Args:
-        q1: Joint 1 angle (degrees)
-        q2: Joint 2 angle (degrees)
-
-    Returns:
-        Tuple of (dummy_trajectory_list, empty_y_list)
-    """
-    return[[q1 if i % 2 == 0 else q2 for i in range(8)] for j in range(10)], []
-
-
-def movement_tick(move_list):
-    """
-    For each step in a movement, cycle through pre-calculated list.
-
-    Args:
-        move_list: List of trajectory points
-
-    Returns:
-        Tuple of (current_position, updated_move_list)
-    """
-    pos = move_list[0]
-    new_list = move_list[1:] + [move_list[0]]
-    return pos, new_list
 
 
 def generate_trot_trajectories(leg, gait_params):
@@ -116,7 +87,6 @@ def generate_trot_trajectories(leg, gait_params):
     # Check for failures
     if any(m is None for m in [move_full_forward, move_0_75_forward, move_0_5_forward,
                                  move_full_backward, move_0_75_backward, move_0_5_backward]):
-        print("Failed to generate base trajectories")
         return None
 
     # Phase shift for diagonal gait pattern (trot uses 50% offset)
@@ -193,7 +163,6 @@ def generate_walk_trajectories(leg, gait_params):
     )
 
     if move_forward is None or move_backward is None:
-        print("Failed to generate walk base trajectories")
         return None
 
     # Phase shift for walk gait (each leg offset by 25%)
@@ -253,7 +222,6 @@ def generate_bound_trajectories(leg, gait_params):
     )
 
     if move_forward is None or move_backward is None:
-        print("Failed to generate bound base trajectories")
         return None
 
     # Phase shift for bound (front/back pairs offset)
@@ -301,7 +269,6 @@ def generate_pronk_trajectories(leg, gait_params):
     )
 
     if move_forward is None or move_backward is None:
-        print("Failed to generate pronk base trajectories")
         return None
 
     # All legs move together (no phase shift)
@@ -339,7 +306,6 @@ def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, 
 
     # Check physical limits
     if y0 - yrange < 5:
-        print("Invalid: y below physical limit.")
         return None
 
     # Generate trajectory points for complete gait cycle
@@ -360,10 +326,8 @@ def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, 
 
         # Validate IK solution
         if len(str(q1)) > 5 or len(str(q2)) > 5:
-            print(f"Invalid IK solution: x={x}, y={y}, stride_scale={stride_scale}")
             xr_new, yr_new = xrange - 1, yrange - 1
             if xr_new > 0 and yr_new > 0:
-                print("Retrying with smaller step size")
                 return _generate_base_trajectories(
                     leg, x0, y0, xr_new, yr_new, yrange2, s1_count, s2_count, stride_scale
                 )
