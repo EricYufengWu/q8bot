@@ -6,8 +6,6 @@ Defines keyboard and joystick control schemes using a two-layer mapping system.
 '''
 
 import pygame
-import json
-import os
 from helpers import Q8Logger
 
 # =============================================================================
@@ -39,27 +37,84 @@ KEYBOARD_MAPPING = {
 # JOYSTICK CONFIGURATION
 # =============================================================================
 
-def load_joystick_config():
-    """
-    Load joystick configuration from joystick_config.json.
-
-    Returns:
-        dict: Joystick configuration or None if loading failed
-    """
-    config_path = os.path.join(os.path.dirname(__file__), 'joystick_config.json')
-    try:
-        with open(config_path, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        Q8Logger.warning(f"joystick_config.json not found at {config_path}")
-        return None
-    except json.JSONDecodeError as e:
-        Q8Logger.warning(f"Error parsing joystick_config.json: {e}")
-        return None
-
-
-# Global joystick configuration (loaded from JSON)
-JOYSTICK_CONFIG = load_joystick_config()
+# Joystick configuration embedded as Python dictionary
+# This configuration defines controller mappings and action bindings
+JOYSTICK_CONFIG = {
+    "controllers": {
+        "Nintendo Switch Joy-Con (R)": {
+            "axes": {
+                "horizontal": 0,
+                "vertical": 1,
+                "deadzone": 0.2
+            },
+            "buttons": {
+                "top": 2,
+                "bottom": 1,
+                "left": 3,
+                "right": 0,
+                "side1": 16,
+                "side2": 18
+            }
+        },
+        "Controller for PC": {
+            "axes": {
+                "horizontal": 0,
+                "vertical": 1,
+                "deadzone": 0.1
+            },
+            "buttons": {
+                "top": 0,
+                "bottom": 2,
+                "left": 3,
+                "right": 1,
+                "side1": 4,
+                "side2": 9
+            }
+        },
+        "Xbox Wireless Controller": {
+            "axes": {
+                "horizontal": 0,
+                "vertical": 1,
+                "deadzone": 0.1
+            },
+            "buttons": {
+                "top": 3,
+                "bottom": 0,
+                "left": 2,
+                "right": 1,
+                "side1": 4,
+                "side2": 7
+            }
+        },
+        "Generic Controller": {
+            "axes": {
+                "horizontal": 0,
+                "vertical": 1,
+                "deadzone": 0.2
+            },
+            "buttons": {
+                "top": 0,
+                "bottom": 1,
+                "left": 2,
+                "right": 3,
+                "side1": 4,
+                "side2": 5
+            }
+        }
+    },
+    "requirements": {
+        "min_axes": 2,
+        "min_buttons": 6
+    },
+    "action_mapping": {
+        "greet": "top",
+        "battery": "right",
+        "switch_gait": "bottom",
+        "jump": "left",
+        "reset": "side1",
+        "exit": "side2"
+    }
+}
 
 # Movement control settings (universal for all joysticks)
 JOYSTICK_MOVEMENT = {
@@ -144,9 +199,9 @@ def get_joystick_mapping(joystick):
         controller_config = JOYSTICK_CONFIG['controllers'][joystick_name]
         recognized = True
     else:
-        # Fall back to GPDWIN mapping for unrecognized controllers
-        if 'GPD WIN Game Controller' in JOYSTICK_CONFIG['controllers']:
-            controller_config = JOYSTICK_CONFIG['controllers']['GPD WIN Game Controller']
+        # Fall back to Generic Controller mapping for unrecognized controllers
+        if 'Generic Controller' in JOYSTICK_CONFIG['controllers']:
+            controller_config = JOYSTICK_CONFIG['controllers']['Generic Controller']
             recognized = False  # Using generic fallback
         else:
             return None

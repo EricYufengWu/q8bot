@@ -66,6 +66,9 @@ pygame.init()
 window = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 
+# Set up pygame surface for logger
+Q8Logger.set_pygame_surface(window)
+
 # Detect and initialize input device (joystick or keyboard)
 use_joystick, joystick, joystick_mapping = detect_and_init_joystick()
 input_handler = InputHandler(use_joystick, joystick, joystick_mapping)
@@ -94,6 +97,11 @@ time.sleep(2)
 while True:
     clock.tick(SPEED)
     pygame.event.get()
+
+    # Clear screen and render logger messages
+    window.fill((0, 0, 0))  # Black background
+    Q8Logger.render_pygame_messages()
+    pygame.display.flip()
 
     if movement:
         # Get requested direction from input handler

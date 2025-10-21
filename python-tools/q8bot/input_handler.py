@@ -137,7 +137,7 @@ def detect_and_init_joystick():
                     if joystick_mapping['recognized']:
                         Q8Logger.debug(">>> Controller is RECOGNIZED (custom mapping loaded) <<<")
                     else:
-                        Q8Logger.warning("Controller not recognized - using GPDWIN fallback mapping")
+                        Q8Logger.warning("Controller not recognized - using Generic Controller fallback mapping")
                 else:
                     Q8Logger.warning("Error loading joystick mapping")
                     continue
