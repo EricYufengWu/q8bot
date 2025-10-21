@@ -2,6 +2,7 @@
 /DynamixelSDK/
 experiments/
 tests/
+archived/
 q8bot/Manual.jpg
 q8bot/q8botGPD.py
 q8bot/*.csv
