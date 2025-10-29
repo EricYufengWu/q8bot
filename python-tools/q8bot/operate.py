@@ -73,6 +73,33 @@ Q8Logger.set_pygame_surface(window)
 use_joystick, joystick, joystick_mapping = detect_and_init_joystick()
 input_handler = InputHandler(use_joystick, joystick, joystick_mapping)
 
+# Load appropriate instruction image based on input device
+import os
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        # Running in development mode
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+if use_joystick:
+    instruction_image_path = get_resource_path(os.path.join("docs", "Instruction_Joystick.jpg"))
+else:
+    instruction_image_path = get_resource_path(os.path.join("docs", "Instruction_Default.jpg"))
+
+try:
+    instruction_image = pygame.image.load(instruction_image_path)
+    # Scale image to fit the available space (1280x570)
+    instruction_image = pygame.transform.scale(instruction_image, (1280, 570))
+    log.info(f"Loaded instruction image: {os.path.basename(instruction_image_path)}")
+except Exception as e:
+    log.warning(f"Failed to load instruction image: {e}")
+    instruction_image = None
+
 # Initialize kinamatics solver and Q8bot ESPNow instance
 leg = k_solver(CENTER_DIST, L1, L2, L1, L2)
 q8 = q8_espnow(com_port)
@@ -100,7 +127,12 @@ while True:
 
     # Clear screen and render logger messages
     window.fill((0, 0, 0))  # Black background
-    Q8Logger.render_pygame_messages()
+
+    # Draw instruction image below logger (if loaded)
+    if instruction_image is not None:
+        window.blit(instruction_image, (0, 150))  # Position at y=150 (below logger)
+
+    Q8Logger.render_pygame_messages()  # Draw logger on top
     pygame.display.flip()
 
     if movement:
@@ -130,6 +162,7 @@ while True:
             movement = True
         # Check action inputs using generalized interface
         elif input_handler.is_action_pressed('reset'):
+            log.info("Gait Reset")
             move_xy(pos_x, pos_y, 500)
         elif input_handler.is_action_pressed('jump'):
             log.info("Jump")

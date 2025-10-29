@@ -23,7 +23,7 @@ class Q8Logger:
     _pygame_surface = None
     _pygame_font = None
     _message_log = []
-    _max_messages = 10
+    _max_messages = 5
 
     def __init__(self, debug=False):
         """
