@@ -2,6 +2,11 @@
 
 **[BACK TO PROJECT README](README.md)**
 
+### 10/11/2025 Repository Update
+Repository Restructuring is complete! 
+
+**TL;DR:** Clone the repository for all software-related setup, and go to [the latest release](https://github.com/EricYufengWu/q8bot/releases/tag/v1.1.0) to download the compressed file containing hardware source files (STLs, Gerbers, CAD). Go to the bottom of this page for building instructions.
+
 ### 10/09/2025 Repository Re-Organization
 I am making major updates to the repository's structure to make it more organized and easy to navigate. I appreciate your patience as things may get a bit messy for a short while! Major changes include:
 - Move the current main branch to a protected, legacy branch to help with transition

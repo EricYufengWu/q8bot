@@ -8,10 +8,15 @@ Q8bot is a miniature quadruped robot with the size and weight comparable to a mo
   <img src="docs/public/Q8bot_Components.jpg" alt="Image 3" width="49%">
 </p>
 
-## LATEST UPDATE: 10/11/2025
-Repository Restructuring is complete! 
+## LATEST UPDATE: 11/06/2025
 
-**TL;DR:** Clone the repository for all software-related setup, and go to [the latest release](https://github.com/EricYufengWu/q8bot/releases/tag/v1.1.0) to download the compressed file containing hardware source files (STLs, Gerbers, CAD). Go to the bottom of this page for building instructions.
+I've published python-tool v1.2.0 in Releases. It adds support for common joysticks, including Xbox controllers and Nintendo Switch Joy‑Con. Note that you'll still need a laptop and a wireless dongle to run Q8bot—the joystick provides more granular movement control than the discrete WASD keyboard commands.
+
+The updated python-tool also has a refreshed pygame interface that is no longer a blank screen :D.
+<p align="center">
+  <img src="docs/public/sw_joystick_screen.jpg" alt="Image 4" width="49%">
+  <img src="docs/public/Q8bot_joystick_update.gif" alt="Image 5" width="49%">
+</p>
 
 **For a full history of updates, please go to [UPDATES.md](UPDATES.md)**
 

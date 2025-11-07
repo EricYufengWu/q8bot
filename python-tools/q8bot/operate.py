@@ -164,12 +164,12 @@ while True:
         elif input_handler.is_action_pressed('reset'):
             log.info("Gait Reset")
             move_xy(pos_x, pos_y, 500)
+            time.sleep(0.2)
         elif input_handler.is_action_pressed('jump'):
             log.info("Jump")
             q8.send_jump()
             time.sleep(5)
-            move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
-            move_xy(leg.d/2, (leg.l1 + leg.l2) * 0.667, 500)
+            move_xy(pos_x, pos_y, 500)
         elif input_handler.is_action_pressed('switch_gait'):
             # Cycle to next gait
             gait_names.append(gait_names.pop(0))

@@ -28,7 +28,7 @@ If you check the latest project release, you will notice that we have two availa
 |---------------------------|----------------------------|----------------------------|
 | First time pairing        | Controller automatically pairs with the first robot it sees. Both devices store their counterpart's MAC address in the NVS memory (stays there after reset)| Same as `firmware-perm-espnow-x.bin` |
 | How to un-pair and repair | Manually send 'p' via serial monitor to both the controller and the robot| Both devices will automatically attempt to find new devices and re-pair after a 5-second timeout. |
-| Use this if...            | You want multiple robot-controller pairs to work reliably, such as in a class room setting (I generally recommend to start with this) | If you want one controller on multiple robots without manually un-pairing every time (gets messy with 2 or more pairs running at the same time) |
+| Use this if...            | You want multiple robot-controller pairs to work reliably, such as in a class room setting **(I generally recommend to start with this)** | If you want one controller on multiple robots without manually un-pairing every time (gets messy with 2 or more pairs running at the same time) |
 
 The microcontroller part of the code is developed in [PlatformIO](https://platformio.org/). If you haven't used it before, please refer to their official documentation and tutorials to setup the environment. Someone has also tried converting PlatformIO projects to Arduino IDE script [here](https://runningdeveloper.com/blog/platformio-project-to-arduino-ide/).
 
@@ -80,16 +80,37 @@ Navigate to `/python-tools/q8bot` folder and run:
 
     python operate.py
 
-If everything works, you should see a small pygame window pop up and the robot move its joints to their initial location. Robot keyboard control instructions are as follows (make sure the pygame window is selected):
-- WASD for robot movement. Q and E are used to partial turning in amber gait.
-- G two cycle between different gaits.
-- J for jumping.
-- H for a "greet" sequence I programmed.
-- B for the terminal to output the battery level from the robot.
-- R for resetting stance. This is useful when you notice the robot's movement suddenly becomes super slow (temporary fix to a know bug, possible EE-related). If you have to frequently do this, the robot's battery may be low.
-- The terminal/console will output useful information depending on your input.
+If everything works, a Pygame window should open with two partitions:
+
+- Top panel: live debug info
+- Bottom panel: a static image with keyboard controls
+
+Make sure the Pygame window has focus (click on it). On launch, the robot will move its joints to their initial (home) positions. 
+
+A quick note on **[R]**: This is useful when you notice the robot's movement suddenly becomes super slow (temporary fix to a know bug, possible EE-related). If you have to frequently do this, the robot's battery may be low.
+
+<p align="center">
+    <img src="sw_default_screen.jpg" alt="High level flowchart" width="60%">
+</p>
+
+If a joystick (USB or Bluetooth) is connected, a different Pygame screen appears showing button mappings and live input status.
+
+<p align="center">
+    <img src="sw_joystick_screen.jpg" alt="High level flowchart" width="60%">
+</p>
 
 Have fun!
+
+## Common Issues
+
+**Q: Pygame window launches but the robot is not moving with my command**
+
+A: Try restarting the robot, re-inserting the dongle, and rerun the python script. If you are still having trouble, follow the steps below to initiate a "force repair":
+- Connect both the robot and the dongle to your laptop.
+- Open two separate serial monitors (you can use the "Serial Monitor" plugin from VSCode). 
+- In both windows, type 'd' to turn on debugging for both devices.
+- Type 'p' to each device to turn on pairing mode. You should see successfull pairing message from their serial monitors.
+
 
 ## Appendix
 

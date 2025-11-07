@@ -71,7 +71,7 @@ JOYSTICK_CONFIG = {
                 "side2": 9
             }
         },
-        "Xbox Wireless Controller": {
+        "Xbox Series X Controller": {
             "axes": {
                 "horizontal": 0,
                 "vertical": 1,
