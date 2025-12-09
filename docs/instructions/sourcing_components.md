@@ -56,11 +56,12 @@ There are two options for acquiring the main PCB for Q8bot.
     <img src="sourcing_order.jpg" alt="Ordering" width="31.5%">
 </p>
 
-However, you will still need to purchase some battery clips which will go into the 3D-printed main frames to hold the batteries. [This link](https://www.digikey.com/short/8w05tttf) directs you to a DigiKey shopping cart that contains 2x 1087-1 and 2x 1087-2 from Keystone Electronics (also in BOM).
+However, you will still need to purchase some battery clips which will go into the 3D-printed main frames to hold the batteries, as well as the second Seeed Studio XIAO board we will use for wireless communication. [This link](https://www.digikey.com/short/p8vqdmdm) directs you to a DigiKey shopping cart that contains 2x 1087-1, 2x 1087-2 from Keystone Electronics, and 1x Seeed Studio XIAO ESP32C3. (thte same link is also in the BOM).
 
 <p align="center">
     <img src="sourcing_1087-1.jpg" alt="1087-1" width="25%">
     <img src="sourcing_1087-2.jpg" alt="1087-2" width="25%">
+    <img src="sourcing_xiao.jpg" alt="mcu" width="25%">
 </p>
 
 ### Option 2: Purchase Components and Reflow Yourself
@@ -72,7 +73,7 @@ I used a [MHP50](https://www.adafruit.com/product/5903) mini hot plate and a ste
     <img src="sourcing_reflow.jpg" alt="Reflow" width="50%">
 </p>
 
-[This link](https://www.digikey.com/short/n7vrz77m) directs you to a DigiKey shopping cart that contains all required PCB components, including the battery clips from earlier (also in BOM).
+[This link](https://www.digikey.com/short/509c9f3z) directs you to a DigiKey shopping cart that contains all required PCB components, including the battery clips from earlier (also in BOM). **Unfortunately, the MAX17043 battery fuel gauge is currently unavailable on DigiKey, so I have removed it in the DigiKey link.** If you can't find a substitute on other websited, leaving it unpopulated on the board does not affect the robot's performance, as its sole purpose is to provide an accurate battery percentage reaading.
 
 ## 3D-Printed Parts
 There are 2 options for 3D-printing parts for Q8bot. Regardless of outsourcing or printing them yourselves, you will need the following quantity to build 1x Q8bot. It never hurts to print/order some extras in case the robot breaks.
