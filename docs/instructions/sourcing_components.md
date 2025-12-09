@@ -11,7 +11,7 @@
 
 The complete **bill of materials (BOM)** of Q8bot can be accessed [**here**](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing). The links and prices are mainly for purchasing within the US. To accommodate different users, we've set up multiple "tiers" based on the tools you might have available. Please read the following sections carefully to choose the build configuration that works best for you. 
 
-**We are currently on hardware version V2.4. Download the zipped folder from the latest release to access all hardware-related files (STLs, Gerbers, CAD, and more).**
+**We are currently on hardware version V2.5. Download the zipped folder from the latest release to access all hardware-related files (STLs, Gerbers, CAD, and more).**
 
 The BOM of this robot is so short that I can afford to explain every single component in detail :D
 
