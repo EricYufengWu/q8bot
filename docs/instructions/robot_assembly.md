@@ -185,9 +185,15 @@ Take a moment to:
 
 ### 10. Motor configuration
 
-If this is your **first time using brand new motors**, please pause here and complete the [**Initial Motor Configuration**](#initial-motor-configuration) steps located at the end of this document **before continuing**. After that, jumps to step #13 directly.
+If this is your **first time using brand new motors**, please pause here and complete the
+[**Initial Motor Configuration**](#initial-motor-configuration)
+steps located at the end of this document **before continuing**.  
+After completing those steps, **jump directly to Step 13**.
 
 If you are working with a **pre-configured workshop kit** (or you have been told that the motors are already configured), you may proceed with the steps below.
+
+**For workshop facilitators:**  
+Prior to each robot assembly session, please ensure that the robot’s ESP32 microcontroller is reset by re-uploading `firmware/q8bot_motor_config` using PlatformIO.
 
 ---
 
