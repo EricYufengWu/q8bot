@@ -25,18 +25,36 @@ Download or clone the [**Q8bot repository**](https://github.com/EricYufengWu/q8b
     <img src="sw_repo.png" width="75%">
 </p>
 
-#### 2. Uploading firmware to your robot
-Open VSCode, and go to File -> Open Folder. Open `firmware/q8bot_motor_config`.
+#### 2. Open the PlatformIO project and prepare the robot
+Open VSCode, and go to File -> Open Folder. Open `firmware/q8bot_robot`. If you are opening this PlatformIO project for the first time, it might take a minute or so to install all the dependencies.
 
 With batteries installed on your robot and its power button switched on, connect your Q8bot PCB to your laptop using a USB-C cable.
 
-Upload `firmware/q8bot_robot` to the Q8bot robot, and upload `firmware/q8bot_controller` to the Q8bot controller. The process will be similar to steps 10 - 13 in [Robot Assembly](robot_assembly.md). Make sure you have selected your desired build (perm vs auto) as shown in the screenshot below.The default is robot_permanent/controller_permanent.
+#### 3. Configure the build environment
+
+In your PlatformIO window, first click the `env:robot_auto (q8bot_robot)` selector at the **bottom** of the window, then select `env:robot_permanent` from the drop-down menu.
 
 <p align="center">
-    <img src="sw_buildver.jpg" width="75%">
+    <img src="sw_firmware_env.png" width="75%">
+</p>
+
+You may also change the COM port to match the actual port your robot is plugged into.  
+Leaving it set to **“Auto”** works most of the time, as long as only one device is connected.
+
+<p align="center">
+    <img src="sw_firmware_com.png" width="75%">
+</p>
+
+#### 4. Upload firmware to the robot
+
+With your robot plugged in, click the **arrow button** to start the compiling and uploading process.
+
+<p align="center">
+    <img src="sw_firmware_upload.png" width="75%">
 </p>
 
 ## Python Setup 💻
+
 Install python locally on your computer if you have not already. The simplest way is through the [official website](https://www.python.org/downloads/) (the latest version will do). **Make sure to check the "add python.exe to PATH" option.**
 <p align="center">
     <img src="sw_python.jpg" width="60%">
@@ -44,13 +62,24 @@ Install python locally on your computer if you have not already. The simplest wa
 
 It's is best to set up a virtual environment to prevent dependency conflicts between different projects.
 
-Using a terminal of your choice, navigate to the `/python-tools` folder and run the following to create a virtual environment for your project:
+In VS Code, go to **File → New Window**, then **File → Open Folder**.  
+Open the `/python-tools` folder inside the main Q8bot repository.
+
+Under **TERMINAL**, run the following command to create a virtual environment for the project:
 
     python -m venv venv
 
-In the same directory, activate the virtual environment (the command is different for macOS/Linux).
+<p align="center">
+    <img src="sw_python_cmd.png" width="75%">
+</p>
+
+Wait for the command to finish, then activate the virtual environment:
 
     .\venv\Scripts\activate
+
+On macOS/Linus, run this instead:
+
+    source venv/bin/activate
 
 In the same directory, run the following:
 
@@ -104,7 +133,7 @@ A: Try restarting the robot, re-inserting the dongle, and rerun the python scrip
 
 # Appendix
 
-## Complete Frimware Uploading Instructions
+## Complete Firmware Uploading Instructions
 
 Different firmware need to be uploaded to Q8bot (subsequently called **"robot"**) and the separate Seeed Studio XIAO ESP32C3 connected to your host laptop (subsequently called **"controller"**). 
 

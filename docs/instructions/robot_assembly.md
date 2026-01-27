@@ -213,6 +213,13 @@ Let's start with **motor #11**.
 
 *(Note: Please disregard the USB cable shown in the images. You will not need this connection during this step.)*
 
+**⚠️ Important:** If you notice that the pin header is **too tall for the motor to sit flush with the plastic** (see example images below), use a **flush cutter** to carefully trim the header until the motor can sit properly.
+
+<p align="center">
+  <img src="assem_trim1.jpg" width="45%">
+  <img src="assem_trim2.jpg" width="45%">
+</p>
+
 ---
 
 ### 12. Repeat for remaining motors
@@ -228,11 +235,26 @@ Work slowly and double-check:
 
 ---
 
-### 13. Leg installation
+### 13. Antenna installation (optional)
 
-Once all motors are connected, switch the power back on by sliding the switch towards the battery. Within a few seconds, all motors should slowly move to an initial position that makes installation easy.
+Connect the U.FL antenna to the robot’s PCB.
 
-Install the legs. Make sure one identical pair of legs is installed on the left, and the other mirrored pair on the right. Refer to the CAD model of the robot if you find this confusing.
+You may use a **pointed tool** (such as a small screwdriver) to gently press on the connector **head** until it clicks into place.  
+⚠️ Avoid pressing on the cable itself, as this may damage the connector.
+
+<p align="center">
+  <img src="assem_ant1.jpg" width="32%">
+  <img src="assem_ant2.jpg" width="40%">
+</p>
+
+---
+
+### 14. Leg installation
+
+Once all motors are connected, switch the power back on by sliding the switch **toward the battery**.
+
+You should see the onboard LED on each motor briefly turn on for about **1 second**.  
+After roughly **10 more seconds**, all motors should slowly move to an initial position and hold, making leg installation easier.
 
 <p align="center">
     <img src="assem_attachlegs.jpg" width="75%">
