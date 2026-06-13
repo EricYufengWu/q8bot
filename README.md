@@ -3,6 +3,17 @@
 **Looking for hardware files? CAD, STL, and PCB files can be found in the [Releases](https://github.com/EricYufengWu/q8bot/releases)
  section of this repository.**
 
+## 🚀 **Interested in the next generation of Q8bot?**
+
+Q8botOne is launching soon on **Crowd Supply**. Click "Notify Me" to follow the project and be notified when the campaign goes live:
+
+https://www.crowdsupply.com/zerowire-robotics/q8botone
+
+
+**For a full history of updates, please go to [UPDATES.md](UPDATES.md)**
+
+## What is Q8bot?
+
 Q8bot is a miniature quadruped robot with the size and weight comparable to a modern smartphone. This robot is capable of dynamic movements like walking, trotting, bounding, jumping, and more. It also has NO WIRES AND CABLES - everything is directly plugged into the center PCB, greatly reducing complexity, weight, and cost. The current **[Bill of Materials (BOM)](https://docs.google.com/spreadsheets/d/1M1K_Dghia-Mn2t4RStW8juN6r4e3I3OBy6M_fPFHzs8/edit?usp=sharing)**, without optimization, ranges between $300 - $400 depending on the listed options. 
 
 <p align="center">
@@ -10,14 +21,6 @@ Q8bot is a miniature quadruped robot with the size and weight comparable to a mo
   <img src="docs/public/Q8bot_10s.gif" alt="Image 2" width="49%">
   <img src="docs/public/Q8bot_Components.jpg" alt="Image 3" width="49%">
 </p>
-
-## LATEST UPDATE: 01/01/2026
-
-🎉 **The Q8bot design paper is now available on IEEE Xplore.** Please see the publication section for links.
-
-For research or projects related to Q8bot, please consider citing our work! Citations help support continued open-source development and help the project reach a wider audience.
-
-**For a full history of updates, please go to [UPDATES.md](UPDATES.md)**
 
 
 ## Featured Media & Demos

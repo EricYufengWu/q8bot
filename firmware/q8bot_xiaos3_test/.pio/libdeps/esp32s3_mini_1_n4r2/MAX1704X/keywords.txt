@@ -1,0 +1,53 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+FuelGauge	KEYWORD1
+MAX1704X	KEYWORD1
+MAX17043	KEYWORD1
+MAX17044	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+address	KEYWORD2
+adc	KEYWORD2
+voltage	KEYWORD2
+percent	KEYWORD2
+percentN	KEYWORD2
+version	KEYWORD2
+compensation	KEYWORD2
+sleep	KEYWORD2
+isSleeping	KEYWORD2
+wake	KEYWORD2
+reset	KEYWORD2
+quickstart	KEYWORD2
+alertIsActive	KEYWORD2
+clearAlert	KEYWORD2
+getThreshold	KEYWORD2
+setThreshold	KEYWORD2
+deviceFound	KEYWORD2
+findFirstDevice	KEYWORD2
+
+######################################
+# Constants (LITERAL1)
+#######################################
+
+I2C_DEFAULT_ADDRESS	LITERAL1
+REGISTER_VCELL	LITERAL1
+REGISTER_SOC	LITERAL1
+REGISTER_MODE	LITERAL1
+REGISTER_VERSION	LITERAL1
+REGISTER_CONFIG	LITERAL1
+REGISTER_COMMAND	LITERAL1
+RESET_COMMAND	LITERAL1
+QUICKSTART_MODE	LITERAL1
+DEFER_ADDRESS	LITERAL1
+MAX17043_mV	LITERAL2
+MAX17044_mV	LITERAL2

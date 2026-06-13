@@ -2,6 +2,12 @@
 
 **[BACK TO PROJECT README](README.md)**
 
+### 01/01/2026 Paper Publication Update
+
+🎉 **The Q8bot design paper is now available on IEEE Xplore.** Please see the publication section for links.
+
+For research or projects related to Q8bot, please consider citing our work! Citations help support continued open-source development and help the project reach a wider audience.
+
 ### 11/06/2025 Python Controller Improvements
 
 I've published python-tool v1.2.0 in Releases. It adds support for common joysticks, including Xbox controllers and Nintendo Switch Joy‑Con. Note that you'll still need a laptop and a wireless dongle to run Q8bot—the joystick provides more granular movement control than the discrete WASD keyboard commands.

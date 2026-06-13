@@ -1,0 +1,23 @@
+name: dynamixel2arduino_ci
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  dynamixel2arduino_ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Arduino CI Script
+        run: |
+          source <(curl -SLs https://raw.githubusercontent.com/ROBOTIS-GIT/Dynamixel2Arduino/master/install.sh) ${{github.ref}}
+          build_platform openrb-150
+          build_platform uno
+          build_platform mega2560
+          build_platform mkrzero
+          build_platform portenta

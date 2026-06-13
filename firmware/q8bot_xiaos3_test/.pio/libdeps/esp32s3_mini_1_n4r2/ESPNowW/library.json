@@ -1,0 +1,25 @@
+{
+    "name": "ESPNowW",
+    "keywords": "ESPNow, IOT, esp, ESPNowW, wireless",
+    "description": "The ESPNowW is a ESPNow wrapper library designed for Arduino/Platformio",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/regenbogencode/ESPNowW.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Regenbogencode",
+        "email": "regenbogencode@gmail.com",
+        "maintainer": true
+      }
+    ],
+    "dependencies":
+    {
+
+    },
+    "version": "1.0.2",
+    "frameworks": "arduino",
+    "platforms": "esp32,esp8266"
+  }
