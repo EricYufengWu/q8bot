@@ -1,9 +1,13 @@
+#include <cstdint>
+
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/queue.h>
 #include <freertos/semphr.h>
 #include <freertos/event_groups.h>
+
+#define MAX_DATA_LEN 100
 
 // ESP-NOW Messaging Types
 enum MsgType : uint8_t{
@@ -20,12 +24,17 @@ struct PairingMessage{
 struct CharMessage{
   uint8_t msgType = DATA;
   uint8_t id;
-  char data[100];
+  char data[MAX_DATA_LEN];
+};
+struct ByteMessage {
+  uint8_t msgType = DATA;
+  uint8_t id;
+  uint8_t data[MAX_DATA_LEN];
 };
 struct IntMessage{
   uint8_t msgType = DATA;
   uint8_t id;
-  uint16_t data[100];
+  uint16_t data[MAX_DATA_LEN];
 };
 struct HeartbeatMessage{
   uint8_t msgType = HEARTBEAT;
@@ -34,25 +43,25 @@ struct HeartbeatMessage{
 };
 
 // ESP-NOW Comms
-PairingMessage pairingData;
-CharMessage sendMsg;
-IntMessage recvMsg;
-HeartbeatMessage heartbeatMsg;
-int chan = 1;  // Must be the same(similar) across server and client
-bool paired = false;
-uint8_t serverMac[6];
-uint8_t clientMac[6];  // This device
-uint8_t broadcastMAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-unsigned long lastPairAttempt;
+static PairingMessage pairingData;
+static ByteMessage sendMsg;
+static IntMessage recvMsg;
+static HeartbeatMessage heartbeatMsg;
+static int chan = 1;  // Must be the same(similar) across server and client
+static bool paired = false;
+static uint8_t serverMac[6];
+static uint8_t clientMac[6];  // This device
+static uint8_t broadcastMAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static unsigned long lastPairAttempt;
 
 // Heartbeat tracking
-unsigned long lastHeartbeatSent = 0;
-unsigned long lastHeartbeatReceived = 0;
+static unsigned long lastHeartbeatSent = 0;
+static unsigned long lastHeartbeatReceived = 0;
 const unsigned long HEARTBEAT_INTERVAL = 2000;      // Send every 5s
 const unsigned long HEARTBEAT_TIMEOUT = 5000;      // Unpair after 15s no response
 
 // Debug mode - default false
-bool debugMode = false;
+static bool debugMode = false;
 
 // ============================================================================
 // FreeRTOS Data Structures

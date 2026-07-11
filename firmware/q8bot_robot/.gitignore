@@ -4,3 +4,6 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode/extensions.json
+compile_commands.json
+.cache
+include/_gait_lut_generated.h

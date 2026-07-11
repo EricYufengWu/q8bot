@@ -9,6 +9,9 @@
 #include <Arduino.h>
 #include <Dynamixel2Arduino.h>
 
+#include "gait_lut.h"
+#include "systemParams.h"
+
 using namespace ControlTableItem;
 
 class q8Dynamixel
@@ -30,7 +33,10 @@ class q8Dynamixel
     void bulkWrite(int32_t values[8]);
     uint16_t* syncRead();
     void jump();
-    uint8_t parseData(const char* myData);
+    void handleDataMessage(ESPNowMessage msg);
+    bool getGaitActive();
+    void performNextGaitMove();
+    // uint8_t parseData(const char* myData);
 
   private:
     Dynamixel2Arduino& _dxl; // Member variable to store the object of Dynamixel2Arduino
@@ -67,6 +73,9 @@ class q8Dynamixel
     int32_t _highArray[8];
     const float _jumpRest[2]  = {30, 150};
     int32_t _restArray[8];
+    gait_t _gait = TROT_f;
+    uint32_t _gaitStepIdx = 0;
+    bool _using_gait = false;
 
     // Struct definitions for br (bulk read) and bw (bulk write)
     struct br_data_xel{

@@ -22,7 +22,7 @@ L1 = 25             # Upper leg length
 L2 = 40             # Lower leg length
 
 # Pygame config
-SPEED = 200
+SPEED = 20
 res = 0.2
 
 # Helper Functions
@@ -110,14 +110,17 @@ gait_names = list(GAITS.keys())
 gait_manager = GaitManager(leg, GAITS)
 
 # Starting location of leg end effector in x and y
-first_gait_params = GAITS[gait_names[0]]
+curr_gait = gait_names[0]
+first_gait_params = GAITS[curr_gait]
 pos_x = first_gait_params[1]
 pos_y = first_gait_params[2]
 move_xy(pos_x, pos_y, 1000)
 
+gait_and_direction = ""
+
 # Pre-calculate trajectories for default gait
-if not gait_manager.load_gait(gait_names[0]):
-    log.error(f"Failed to load default gait: {gait_names[0]}")
+if not gait_manager.load_gait(curr_gait):
+    log.error(f"Failed to load default gait: {curr_gait}")
     sys.exit(1)
 
 time.sleep(2)
@@ -140,27 +143,20 @@ while True:
         # Get requested direction from input handler
         requested_direction = input_handler.get_movement_direction()
 
-        if requested_direction:
-            # Start or switch movement direction
-            if gait_manager.start_movement(requested_direction):
-                # Execute current trajectory
-                pos = gait_manager.tick()
-                if pos:
-                    q8.move_all(pos, 0, record)
-            else:
-                # Failed to start movement
-                movement = False
-        else:
-            # No movement input - transition to idle
-            move_xy(pos_x, pos_y, 0)
+        if requested_direction and curr_gait + requested_direction != gait_and_direction:
+            q8.start_gait(curr_gait, requested_direction)
+            gait_and_direction = curr_gait + requested_direction
+        elif not requested_direction:
+            q8.stop_gait()
             q8.finish_recording()
             record = False
-            gait_manager.stop()
             movement = False
+            gait_and_direction = ""
     else:
         # Check for movement input
         if input_handler.is_movement_input():
             movement = True
+
         # Check action inputs using generalized interface
         elif input_handler.is_action_pressed('reset'):
             log.info("Gait Reset")
@@ -175,6 +171,7 @@ while True:
             # Cycle to next gait
             gait_names.append(gait_names.pop(0))
             new_gait = gait_names[0]
+            curr_gait = new_gait
 
             # Load new gait
             if gait_manager.load_gait(new_gait):

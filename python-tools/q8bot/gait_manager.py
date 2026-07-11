@@ -6,28 +6,40 @@ This module manages gait trajectories, movement state, and direction switching
 for cyclic locomotion patterns.
 '''
 
-from gait_generator import (
-    generate_trot_trajectories,
-    generate_walk_trajectories,
-    generate_bound_trajectories,
-    generate_pronk_trajectories,
-    generate_crawl_trajectories
-)
+from collections import OrderedDict
 
+if __name__ == "gait_manager":
+    # Not PIO LUT Generator Script
+    from gait_generator import (
+        generate_trot_trajectories,
+        generate_walk_trajectories,
+        generate_bound_trajectories,
+        generate_pronk_trajectories,
+        generate_crawl_trajectories
+    )
+else:
+    # PIO LUT Generator Script (__name__ is q8bot.gait_manager)
+    from .gait_generator import (
+        generate_trot_trajectories,
+        generate_walk_trajectories,
+        generate_bound_trajectories,
+        generate_pronk_trajectories,
+        generate_crawl_trajectories
+    )
 
 # Gait parameters dictionary
 # Format: 'NAME': [STACKTYPE, x0, y0, xrange, yrange, yrange2, s1_count, s2_count]
-GAITS = {
-    'TROT':      ['trot', 9.75, 43.36, 40, 20, 0, 15, 30],
-    'TROT_HIGH': ['trot', 9.75, 60, 20, 10, 0, 15, 30],
-    'TROT_LOW':  ['trot', 9.75, 25, 20, 10, 0, 15, 30],
-    'TROT_FAST': ['trot', 9.75, 43.36, 50, 20, 0, 12, 24],
-    'WALK':      ['walk', 9.75, 43.36, 30, 20, 0, 20, 140],
-    'CRAWL':     ['crawl', 9.75, 40, 10, 20, 0, 50, 25],
-    'BOUND':     ['bound', 9.75, 33.36, 40, 0, 20, 50, 10],
-    'PRONK':     ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10],
-}
+GAITS = OrderedDict()
+GAITS['TROT'] = ['trot', 9.75, 43.36, 40, 20, 0, 15, 30]
+GAITS['TROT_HIGH'] = ['trot', 9.75, 60, 20, 10, 0, 15, 30]
+GAITS['TROT_LOW']  = ['trot', 9.75, 25, 20, 10, 0, 15, 30]
+GAITS['TROT_FAST'] = ['trot', 9.75, 43.36, 50, 20, 0, 12, 24]
+GAITS['WALK']      = ['walk', 9.75, 43.36, 30, 20, 0, 20, 140]
+GAITS['CRAWL']     = ['crawl', 9.75, 40, 10, 20, 0, 50, 25]
+GAITS['BOUND']     = ['bound', 9.75, 33.36, 40, 0, 20, 50, 10]
+GAITS['PRONK']     = ['pronk', 9.75, 33.36, 40, 0, 20, 60, 10]
 
+GAIT_DIRECTIONS = ["f", "b", "l", "r", "fl", "fr", "fl_0.75", "fl_0.5", "fr_0.75", "fr_0.5", "bl_0.75", "bl_0.5", "br_0.75", "br_0.5"]
 
 class GaitManager:
     """

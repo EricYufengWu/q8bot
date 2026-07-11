@@ -4,22 +4,24 @@
 #include <esp_now.h>
 #include <Wire.h>
 #include <Dynamixel2Arduino.h>
-#include <MAX17043.h>
 
 // Q8bot-specific Modules
 #include "q8Dynamixel.h"
 #include "userParams.h"
 #include "systemParams.h"
 #include "pinMapping.h"
-#include "macStorage.h"
+#include "helpers.h"
+#include "communications.h"
+
+// Initialize constants
+const uint32_t GAIT_FREQUENCY = 200;
+const uint32_t gaitInterval_ms = 1000 / GAIT_FREQUENCY;
 
 // Initialize global objects
 esp_now_peer_info_t peerInfo;
 HardwareSerial          ser(0);
 Dynamixel2Arduino       q8dxl(ser, DXL_DIR_PIN);
 q8Dynamixel             q8(q8dxl);
-bool started = false;  // Track robot start state
-macStorage storage;
 
 // FreeRTOS Handles
 QueueHandle_t rxQueue = NULL;
@@ -29,72 +31,7 @@ EventGroupHandle_t eventGroup = NULL;
 // Robot State
 volatile RobotState robotState = STATE_UNPAIRED;
 
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
-void queuePrint(SerialMsgType type, const char* format, ...) {
-  SerialMessage msg;
-  msg.type = type;
-  va_list args;
-  va_start(args, format);
-  vsnprintf(msg.text, sizeof(msg.text), format, args);
-  va_end(args);
-  xQueueSend(debugQueue, &msg, 0);  // Non-blocking
-}
-
-bool addPeer(const uint8_t* mac) {
-  esp_now_peer_info_t peer = {};
-  memcpy(peer.peer_addr, mac, 6);
-  peer.channel = chan;
-  peer.encrypt = false;
-  return esp_now_add_peer(&peer) == ESP_OK;
-}
-
-void unpair() {
-  queuePrint(MSG_INFO, "[HEARTBEAT] Connection lost - returning to pairing mode\n");
-
-  esp_now_del_peer(clientMac);
-  storage.clearPeerMAC();
-  queuePrint(MSG_DEBUG, "[STORAGE] Cleared controller MAC from EEPROM\n");
-  memset(clientMac, 0, sizeof(clientMac));
-  paired = false;
-  started = false;
-
-  // Update robot state and event group
-  robotState = STATE_UNPAIRED;
-  xEventGroupClearBits(eventGroup, EVENT_PAIRED | EVENT_STARTED);
-  xEventGroupSetBits(eventGroup, EVENT_UNPAIRED);
-}
-
-void displayReading()
-{
-  // MAX17043 Demo code. Used once and good for debugging
-  Serial.println("Device Reading:");
-  // Serial.print("Address:       0x"); Serial.println(FuelGauge.address(), HEX);
-  // Serial.print("Version:       "); Serial.println(FuelGauge.version());
-  // Serial.print("ADC:           "); Serial.println(FuelGauge.adc());
-  Serial.print("Voltage:       "); Serial.print(FuelGauge.voltage()); Serial.println(" mV");
-  Serial.print("Percent:       "); Serial.print(FuelGauge.percent()); Serial.println("%");
-  // Serial.print("Is Sleeping:   "); Serial.println(FuelGauge.isSleeping() ? "Yes" : "No");
-  // Serial.print("Alert:         "); Serial.println(FuelGauge.alertIsActive() ? "Yes" : "No");
-  // Serial.print("Threshold:     "); Serial.print(FuelGauge.getThreshold()); Serial.println("%");
-  // Serial.print("Compensation:  0x"); Serial.println(FuelGauge.compensation(), HEX);
-  Serial.println();
-}
-
-void addElementToArray(uint16_t*& array, size_t& currentSize, uint16_t newElement) {
-    // Allocate a new array with one extra element
-    uint16_t* newArray = new uint16_t[currentSize + 1];
-    newArray[0] = newElement;
-    memcpy(newArray + 1, array, currentSize * sizeof(uint16_t));
-    // Delete the old array (free the memory)
-    delete[] array;
-    // Update the original pointer and size
-    array = newArray;
-    currentSize++;
-}
-
+MAX1704X FuelGauge = MAX1704X(MAX17043_mV);
 
 // ============================================================================
 // ESPNOW Callbacks: ISR-Like, Highest Priority
@@ -171,97 +108,7 @@ void espnowRxTask(void* parameter) {
       }
       // Handle DATA message
       else if (msgType == DATA && paired) {
-        // Validate DATA message length
-        if (msg.len < sizeof(CharMessage)) continue;
-
-        lastHeartbeatReceived = millis();  // Any DATA also counts as "alive"
-        memcpy(&theirMsg, msg.data, sizeof(theirMsg));
-        uint8_t result = q8.parseData(theirMsg.data);
-
-        // myMsg params
-        myMsg.id = 0;  // Server ID
-
-        if (result == 0) {
-          // No special instruction
-          continue;
-        } else {
-          // Controller requests battery level or data
-          switch (result) {
-            case 1: {
-              // Send battery level
-              queuePrint(MSG_DEBUG, "[DATA] Send battery level\n");
-              myMsg.data[0] = (uint16_t)FuelGauge.percent();
-              esp_now_send(clientMac, (uint8_t*)&myMsg, sizeof(myMsg));
-              break;
-            }
-
-            case 2: {
-              // Sync read position data
-              uint16_t* posArray = q8.syncRead();
-              if (rData != nullptr) {
-                // If rData is not nullptr, resize posArray to append new data
-                uint16_t* newData = new uint16_t[masterSize + smallerSize];
-                if (newData == nullptr) {
-                  queuePrint(MSG_DEBUG, "[ERROR] Memory allocation failed, dropping data\n");
-                  delete[] posArray;
-                  break;
-                }
-                memcpy(newData, rData, masterSize * sizeof(uint16_t));
-                for (size_t j = 0; j < smallerSize; ++j) {
-                  newData[masterSize + j] = posArray[j];
-                }
-                delete[] rData;
-                rData = newData;
-                masterSize += smallerSize;
-              } else {
-                // If rData is nullptr, initialize it for the first time
-                rData = new uint16_t[smallerSize];
-                if (rData == nullptr) {
-                  queuePrint(MSG_DEBUG, "[ERROR] Memory allocation failed\n");
-                  delete[] posArray;
-                  break;
-                }
-                for (size_t j = 0; j < smallerSize; ++j) {
-                  rData[j] = posArray[j];
-                }
-                masterSize = smallerSize;
-              }
-              delete[] posArray;
-              break;
-            }
-
-            case 3: {
-              // Send all recorded data in chunks
-              if (rData != nullptr) {
-                queuePrint(MSG_DEBUG, "[DATA] Sending %d recorded data points\n", masterSize);
-
-                size_t totalSize = masterSize;  // total data in rData
-                size_t chunkSize = 100;         // Chunk size for each ESPNow send
-                size_t offset = 0;              // To track the position in rData
-
-                // Loop to send the data in chunks
-                while (offset < totalSize) {
-                  // If rData is less than chunk size then use its size instead.
-                  size_t currentChunkSize = (totalSize - offset < chunkSize) ? (totalSize - offset) : chunkSize;
-                  memcpy(myMsg.data, &rData[offset], currentChunkSize * sizeof(uint16_t));
-                  // If the chunk is smaller than 100, fill the remaining spaces with zeros
-                  if (currentChunkSize < chunkSize) {
-                    memset(&myMsg.data[currentChunkSize], 0, (chunkSize - currentChunkSize));
-                  }
-                  // Send the chunk via ESP-NOW
-                  esp_now_send(clientMac, (uint8_t*)&myMsg, sizeof(myMsg));
-                  // Update offset and Reset myData
-                  offset += currentChunkSize;
-                  memset(myMsg.data, 0, sizeof(myMsg.data));
-                }
-                delete[] rData;
-                rData = nullptr;
-                masterSize = 0;
-              }
-              break;
-            }
-          }
-        }
+        q8.handleDataMessage(msg);
       }
     }
   }
@@ -426,6 +273,16 @@ void serialOutputTask(void* parameter) {
   }
 }
 
+void gaitTask(void* parameter) {
+  while (true) {
+    unsigned long timeSinceLastMsg = millis() - lastHeartbeatReceived;
+    if (q8.getGaitActive() && timeSinceLastMsg < HEARTBEAT_TIMEOUT_ROBOT) {
+      q8.performNextGaitMove();
+    }
+
+    vTaskDelay(pdMS_TO_TICKS(gaitInterval_ms));
+  }
+}
 
 // ============================================================================
 // Arduino Setup. Configures FreeRTOS tasks, ESP-NOW, and other hardware.
@@ -484,6 +341,19 @@ void setup() {
   );
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create ESP-NOW RX task");
+    initSuccess = false;
+  }
+
+  taskCreated = xTaskCreate(
+    gaitTask,             // Task function
+    "Gait",               // Task name
+    4096,                 // Stack size (bytes) - larger for gait logic
+    NULL,                 // Parameters
+    4,                    // Priority (max - manages movement)
+    NULL                  // Task handle
+  );
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create gait task");
     initSuccess = false;
   }
 

@@ -1,3 +1,6 @@
+#ifndef SYSTEMPARAMS_H
+#define SYSTEMPARAMS_H
+
 #include <Arduino.h>
 
 // ESP-NOW Messaging Types
@@ -22,6 +25,11 @@ struct DataMessage{
   uint8_t id;
   uint16_t data[100];
 };
+struct ByteMessage{
+  uint8_t msgType = DATA;
+  uint8_t id;
+  uint8_t data[100];
+};
 struct HeartbeatMessage{
   uint8_t msgType = HEARTBEAT;
   uint8_t id;
@@ -29,31 +37,31 @@ struct HeartbeatMessage{
 };
 
 // Dynamixel Variables
-bool recordData = false;
-size_t masterSize;
-size_t smallerSize = 4;
-uint16_t* rData = nullptr;
+static bool recordData = false;
+static size_t masterSize;
+static size_t smallerSize = 4;
+static uint16_t* rData = nullptr;
 
 // MAX17043 Variables
-float raw;
-char intStr[10];
+static float raw;
+static char intStr[10];
 
 // ESP-Now Comms
-bool incoming = false;
-PairingMessage pairingData;
-CharMessage theirMsg;
-DataMessage myMsg;
-int chan = 1;
-int paired = false;
-uint8_t clientMac[6];  // This is the controller MCU.
-uint8_t serverMac[6];  // This us. The robot is the server.
+static bool incoming = false;
+static PairingMessage pairingData;
+static ByteMessage theirMsg;
+static DataMessage myMsg;
+static int chan = 1;
+static int paired = false;
+static uint8_t clientMac[6];  // This is the controller MCU.
+static uint8_t serverMac[6];  // This us. The robot is the server.
 
 // Heartbeat tracking (robot side)
-unsigned long lastHeartbeatReceived = 0;
+static unsigned long lastHeartbeatReceived = 0;
 const unsigned long HEARTBEAT_TIMEOUT_ROBOT = 5000;  // Unpair after 20s no heartbeat from controller
 
 // Debug mode
-bool debugMode = false;
+static bool debugMode = false;
 
 // FreeRTOS Handles (to be initialized in setup)
 extern QueueHandle_t rxQueue;
@@ -91,3 +99,5 @@ struct SerialMessage {
   SerialMsgType type;
   char text[128];
 };
+
+#endif
