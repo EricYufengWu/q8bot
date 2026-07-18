@@ -43,7 +43,7 @@ bool incoming = false;
 PairingMessage pairingData;
 CharMessage theirMsg;
 DataMessage myMsg;
-int chan = 1;
+int chan = 11;
 int paired = false;
 uint8_t clientMac[6];  // This is the controller MCU.
 uint8_t serverMac[6];  // This us. The robot is the server.

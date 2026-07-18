@@ -38,7 +38,7 @@ PairingMessage pairingData;
 CharMessage sendMsg;
 IntMessage recvMsg;
 HeartbeatMessage heartbeatMsg;
-int chan = 1;  // Must be the same(similar) across server and client
+int chan = 11;  // Must be the same(similar) across server and client
 bool paired = false;
 uint8_t serverMac[6];
 uint8_t clientMac[6];  // This device
