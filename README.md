@@ -5,9 +5,13 @@
 
 ## 🚀 **Interested in the next generation of Q8bot?**
 
-Q8botOne is launching soon on **Crowd Supply**. Click "Notify Me" to follow the project and be notified when the campaign goes live:
-
+Q8botOne, a complete upgrade to the original Q8bot, is now launched as a crowdfunding project on **Crowd Supply**:
 https://www.crowdsupply.com/zerowire-robotics/q8botone
+
+<p align="center">
+  <img src="docs/public/ShortforGIF-ezgif.com-optimize.gif" alt="Image 1" width="75%">
+</p>
+
 
 
 **For a full history of updates, please go to [UPDATES.md](UPDATES.md)**
@@ -18,8 +22,7 @@ Q8bot is a miniature quadruped robot with the size and weight comparable to a mo
 
 <p align="center">
   <img src="docs/public/Q8bot_Hero_With_Dimension.jpg" alt="Image 1" width="98.5%">
-  <img src="docs/public/Q8bot_10s.gif" alt="Image 2" width="49%">
-  <img src="docs/public/Q8bot_Components.jpg" alt="Image 3" width="49%">
+  <img src="docs/public/Q8bot_Components.jpg" alt="Image 3" width="98.5%">
 </p>
 
 
@@ -48,11 +51,9 @@ Q8bot is 100% open source: In this repository, you will find everything you need
     <a href="https://www.pcbway.com/project/shareproject/Q8bot_PCB_Robot_dfa65114.html"><img src="https://www.pcbway.com/project/img/images/frompcbway-1220.png" alt="PCB from PCBWay" /></a>
 </p>
 
-I’m working on turning Q8bot into a purchasable kit, though I’m not sure when or if it will happen. In the meantime, I encourage you to build your own Q8bot! This palm-sized quadruped is perfect for robotics education, swarm robotics research, or simply as a fun engineering project. If you have any questions, feel free to reach out and I will try my best to help. **If you have built your own Q8bot, please consider sending photos or videos to me! I would love to feature your creation here publically with your permission!**
+Building a Q8bot yourself is perfect for robotics education, swarm robotics research, or simply as a fun engineering project. If you have any questions, feel free to reach out and I will try my best to help. **If you have built your own Q8bot, please consider sending photos or videos to me! I would love to feature your creation here publically with your permission!**
 
-Personal: yufeng.wu0902@gmail.com
-
-School: ericyufengwu@ucla.edu
+If you have any questions, you can always open a GitHub issue here, or send me a message at yufeng.wu0902@gmail.com.
 
 
 ## Building Instruction
@@ -63,34 +64,6 @@ The building instructions have moved to a dedicated folder:
 [Assembling the Robot](docs/instructions/robot_assembly.md)
 
 [Software Setup](docs/instructions/software_setup.md)
-
-## Compatibility & Recommended Versions
-
-Below is a reference matrix showing which hardware, firmware, and Python tool versions
-have been tested together.
-
-### 🧩 Compatibility Matrix
-
-| Component ↔ | **Hardware v2.2** | **Hardware v2.4** | Notes |
-|--------------|------------------|------------------|--------|
-| **Firmware v1.0.0 – v1.9.x** | ✅ Compatible | ✅ Compatible | Legacy firmware (pre-ESP-NOW). |
-| **Firmware v2.0.0 – v2.0.1** | ✅ Compatible | ✅ **Recommended** | ESP-NOW stack; tested primarily on HW v2.4. |
-| **Python Tools v1.0.0** | ✅ Compatible | ✅ Compatible | Initial host stack. |
-| **Python Tools v1.1.0+** | ✅ Compatible | ✅ **Recommended** | Latest host utilities; tested with FW v2.0.1 + HW v2.4. |
-
-✅ = Compatible  ✅ **Recommended** = Officially tested combination  
-⚠️ Legacy = Functional but not regularly tested
-
-### 🧭 Recommended Configuration
-
-| Component | Version | Tag / Link |
-|------------|----------|------------|
-| **Hardware** | v2.5 | [hw-v2.5](https://github.com/EricYufengWu/q8bot/releases/tag/hw-v2.5) |
-| **Firmware** | v2.0.1 | [fw-v2.0.1](https://github.com/EricYufengWu/q8bot/releases/tag/fw-v2.0.1) |
-| **Python Tools** | v1.1.0 | [python-tools-v1.1.0](https://github.com/EricYufengWu/q8bot/releases/tag/python-tools-v1.1.0) |
-
----
-
 
 
 ## Note on Project Ownership
