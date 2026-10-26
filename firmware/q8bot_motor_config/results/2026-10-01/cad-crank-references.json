@@ -1,0 +1,58 @@
+{
+  "document": "Q8bot_rev2_5_SQuRo_Leg",
+  "cranks": [
+    {
+      "part": "SQ3_ElbowCrank_P:3",
+      "axis_world_mm": [
+        -50,
+        0
+      ],
+      "pin_world_mm": [
+        -59.33470597012715,
+        12.2358229985266
+      ],
+      "angle_deg_from_nose_down": 52.66000000000005,
+      "legacy_firmware_ticks": 4695
+    },
+    {
+      "part": "SQ3_ShoulderCrank_P:3",
+      "axis_world_mm": [
+        -30.500000000000004,
+        0
+      ],
+      "pin_world_mm": [
+        -20.476901285107857,
+        12.368665738531678
+      ],
+      "angle_deg_from_nose_down": 129.02000000000004,
+      "legacy_firmware_ticks": 5564
+    },
+    {
+      "part": "SQ3_ElbowCrank_P:4",
+      "axis_world_mm": [
+        30.5,
+        -1.1102230246251565e-15
+      ],
+      "pin_world_mm": [
+        18.935563403258456,
+        -10.154600248160683
+      ],
+      "angle_deg_from_nose_down": -41.28599999999994,
+      "legacy_firmware_ticks": 3627
+    },
+    {
+      "part": "SQ3_ShoulderCrank_P:4",
+      "axis_world_mm": [
+        50,
+        2.220446049250313e-15
+      ],
+      "pin_world_mm": [
+        41.32934656256077,
+        13.351635441691158
+      ],
+      "angle_deg_from_nose_down": 57.00000000000002,
+      "legacy_firmware_ticks": 4745
+    }
+  ],
+  "notes": "Read-only Fusion inspection; nose is negative world X and down is positive world Y. Rear targets require physical servo mapping and use the existing firmware's asymmetric int(angle*4096/360+0.5)+4096 conversion. Geometry measurements are not bench validation."
+}

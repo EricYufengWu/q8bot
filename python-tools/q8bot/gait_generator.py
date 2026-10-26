@@ -490,8 +490,11 @@ def _generate_base_trajectories(leg, x0, y0, xrange, yrange, yrange2, s1_count, 
         # Solve inverse kinematics
         q1, q2, check = leg.ik_solve(x, y, True, 1)
 
-        # Validate IK solution
-        if len(str(q1)) > 5 or len(str(q2)) > 5:
+        # Validate IK solution. The solver's own flag is authoritative; the
+        # string-length test additionally rejects angles too wide for the
+        # fixed-width command packet. Without the flag an unreachable target
+        # silently yields the previous pose, which a new leg design would hit.
+        if not check or len(str(q1)) > 5 or len(str(q2)) > 5:
             xr_new, yr_new = xrange - 1, yrange - 1
             if xr_new > 0 and yr_new > 0:
                 return _generate_base_trajectories(

@@ -8,6 +8,8 @@ import serial.tools.list_ports
 import logging
 import sys
 
+import eth_theme as eth
+
 
 class Q8Logger:
     """
@@ -93,11 +95,10 @@ class Q8Logger:
         if Q8Logger._pygame_surface is None or Q8Logger._pygame_font is None:
             return
 
-        # Define colors
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        YELLOW = (255, 255, 0)
-        RED = (255, 0, 0)
+        # Corporate design colours, tinted to stay legible on the dark ground.
+        WHITE = eth.LOG_INFO
+        YELLOW = eth.LOG_WARNING
+        RED = eth.LOG_ERROR
 
         # Get surface dimensions
         surface_width = Q8Logger._pygame_surface.get_width()

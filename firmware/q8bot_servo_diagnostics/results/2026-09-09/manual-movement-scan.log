@@ -1,0 +1,342 @@
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4546
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 6073
+  Goal position (ticks): 6073
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4546
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 6073
+  Goal position (ticks): 6073
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 6073
+  Goal position (ticks): 6073
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53

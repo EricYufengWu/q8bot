@@ -1,0 +1,908 @@
+
+[HOST] Connected to /dev/cu.usbmodem2101. Automatic KEEP only.
+Commands: STATUS, LEGS, CENTERHEAD, ALIGNFL, ALIGNFR, RELEASE, !, EXIT
+mode:DIO, clock div:1
+load:0x3fcd5810,len:0x438
+load:0x403cc710,len:0x90c
+load:0x403ce710,len:0x2624
+entry 0x403cc710
+SQuRo bench assembly: no automatic movement; startup releases powered servos.
+CENTERHEAD: ID19 -> 4096. ALIGNFL/ALIGNFR: front elbow/shoulder -> 4695/5564.
+Confirm physical mapping and detach linkages before alignment. Rear movement is unavailable.
+Send KEEP at least every 10 seconds while active. RELEASE or ! stops. Hold limit: 5 minutes.
+
+[HOST 2026-10-01T17:28:10] Sending STATUS
+HEAD STATUS: 0 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Leg motors answering at 1 Mbps: 0 of 8
+
+[HOST 2026-10-01T17:29:48] Sending STATUS
+
+[HOST 2026-10-01T17:29:48] Sending LEGS
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID19 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 4
+  Homing offset: 2048
+  Torque: 0
+  Position ticks: 3983
+  Goal ticks: 3983
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 19
+  Leg motors answering at 1 Mbps: 8 of 8
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=5336 errors=0 voltage_0.1V=50 temp_C=22
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5812 errors=0 voltage_0.1V=50 temp_C=23
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3770 errors=0 voltage_0.1V=50 temp_C=20
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5236 errors=0 voltage_0.1V=50 temp_C=23
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=3991 errors=0 voltage_0.1V=49 temp_C=23
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6687 errors=0 voltage_0.1V=49 temp_C=22
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4201 errors=0 voltage_0.1V=49 temp_C=23
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5844 errors=0 voltage_0.1V=49 temp_C=22
+
+[HOST 2026-10-01T17:29:53] Sending CENTERHEAD
+ASSEMBLY MOVING ID19: 3983 -> 4096 ticks over 5 seconds, PWM cap 133.
+ASSEMBLY moving ID19 pos=3983 current_mA=0 pwm=0 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3983 current_mA=12 pwm=1 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3983 current_mA=12 pwm=4 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3983 current_mA=13 pwm=10 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3986 current_mA=10 pwm=14 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3988 current_mA=15 pwm=48 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=3996 current_mA=10 pwm=21 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4004 current_mA=15 pwm=21 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4007 current_mA=17 pwm=28 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4021 current_mA=15 pwm=18 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4025 current_mA=16 pwm=25 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4038 current_mA=14 pwm=15 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4043 current_mA=15 pwm=20 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4056 current_mA=15 pwm=12 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4060 current_mA=15 pwm=17 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4071 current_mA=4 pwm=12 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4076 current_mA=13 pwm=26 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4078 current_mA=14 pwm=20 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4087 current_mA=14 pwm=10 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4091 current_mA=13 pwm=9 voltage=5.0 temp=20
+ASSEMBLY moving ID19 pos=4091 current_mA=13 pwm=9 voltage=5.0 temp=20
+ASSEMBLY READY: measured targets reached; holding up to 5 minutes. RELEASE or ! stops.
+ASSEMBLY holding ID19 pos=4091 current_mA=14 pwm=-18 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=14 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=14 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=14 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=20
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=12 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+ASSEMBLY holding ID19 pos=4092 current_mA=13 pwm=7 voltage=5.0 temp=21
+
+[HOST 2026-10-01T17:30:58] Sending RELEASE
+
+[HOST 2026-10-01T17:30:58] Sending STATUS
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID19 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 4
+  Homing offset: 2048
+  Torque: 0
+  Position ticks: 4092
+  Goal ticks: 4092
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 22
+  Leg motors answering at 1 Mbps: 8 of 8
+
+[HOST 2026-10-01T17:32:05] Sending ALIGNFL
+ASSEMBLY MOVING ID11: 5336 -> 4695 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY MOVING ID12: 5812 -> 5564 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY moving ID11 pos=5336 current_mA=0 pwm=0 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5812 current_mA=0 pwm=0 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5336 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5812 current_mA=-13 pwm=-4 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5324 current_mA=-15 pwm=-10 voltage=4.9 temp=24
+ASSEMBLY moving ID12 pos=5811 current_mA=-12 pwm=-10 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5307 current_mA=-5 pwm=-18 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5802 current_mA=-13 pwm=4 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5275 current_mA=-14 pwm=-6 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5793 current_mA=-13 pwm=-1 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5233 current_mA=-15 pwm=-13 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5777 current_mA=-10 pwm=-13 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5195 current_mA=-17 pwm=-23 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5760 current_mA=-13 pwm=-13 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5156 current_mA=-17 pwm=-2 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5743 current_mA=-13 pwm=-13 voltage=4.9 temp=25
+ASSEMBLY moving ID11 pos=5106 current_mA=-12 pwm=-16 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5725 current_mA=-14 pwm=2 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=5058 current_mA=1 pwm=-10 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5709 current_mA=-12 pwm=15 voltage=5.0 temp=26
+ASSEMBLY moving ID11 pos=5019 current_mA=-16 pwm=-15 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5692 current_mA=-12 pwm=-10 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4972 current_mA=-11 pwm=-11 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5676 current_mA=-13 pwm=-11 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4931 current_mA=-16 pwm=12 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5659 current_mA=-12 pwm=15 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4886 current_mA=-3 pwm=-10 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5640 current_mA=-3 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4845 current_mA=-13 pwm=-15 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5625 current_mA=-3 pwm=-10 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4799 current_mA=-10 pwm=-24 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5609 current_mA=-13 pwm=-11 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4760 current_mA=-5 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5594 current_mA=-12 pwm=17 voltage=4.9 temp=25
+ASSEMBLY moving ID11 pos=4735 current_mA=-16 pwm=-13 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5584 current_mA=-13 pwm=-11 voltage=5.0 temp=26
+ASSEMBLY moving ID11 pos=4714 current_mA=-15 pwm=17 voltage=4.9 temp=24
+ASSEMBLY moving ID12 pos=5577 current_mA=-13 pwm=-13 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4701 current_mA=-14 pwm=-7 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5572 current_mA=-12 pwm=-11 voltage=5.0 temp=25
+ASSEMBLY moving ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY moving ID12 pos=5569 current_mA=-12 pwm=-8 voltage=5.0 temp=26
+ASSEMBLY READY: measured targets reached; holding up to 5 minutes. RELEASE or ! stops.
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=24
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+[HOST] Command rejected. No movement sent.
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-16 pwm=-8 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-15 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4700 current_mA=-14 pwm=-8 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-16 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5566 current_mA=-13 pwm=23 voltage=4.9 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-16 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=4.9 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-16 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4699 current_mA=-15 pwm=-7 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4697 current_mA=-14 pwm=-18 voltage=5.0 temp=26
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4693 current_mA=15 pwm=3 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4692 current_mA=14 pwm=4 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4692 current_mA=14 pwm=4 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4687 current_mA=16 pwm=12 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4680 current_mA=17 pwm=23 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID11 pos=4676 current_mA=18 pwm=29 voltage=5.0 temp=25
+ASSEMBLY holding ID12 pos=5565 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY ABORT: ID11 telemetry/read check failed.
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+
+[HOST 2026-10-01T17:37:31] Sending RELEASE
+
+[HOST 2026-10-01T17:37:31] Sending LEGS
+
+[HOST 2026-10-01T17:37:31] Sending STATUS
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4495 errors=0 voltage_0.1V=50 temp_C=25
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5514 errors=0 voltage_0.1V=50 temp_C=26
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3770 errors=0 voltage_0.1V=50 temp_C=23
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5237 errors=0 voltage_0.1V=50 temp_C=26
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=3991 errors=0 voltage_0.1V=49 temp_C=26
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6688 errors=0 voltage_0.1V=50 temp_C=26
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4201 errors=0 voltage_0.1V=49 temp_C=26
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5841 errors=0 voltage_0.1V=49 temp_C=25
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID19 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 4
+  Homing offset: 2048
+  Torque: 0
+  Position ticks: 4090
+  Goal ticks: 4090
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 22
+  Leg motors answering at 1 Mbps: 8 of 8
+
+[HOST 2026-10-01T17:41:03] Sending ALIGNFR
+ASSEMBLY MOVING ID13: 3770 -> 4695 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY MOVING ID14: 5237 -> 5564 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY moving ID13 pos=3770 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5237 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3771 current_mA=14 pwm=-9 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5237 current_mA=10 pwm=-3 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3783 current_mA=16 pwm=-21 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5239 current_mA=11 pwm=-10 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3820 current_mA=13 pwm=-14 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5253 current_mA=10 pwm=-32 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3863 current_mA=14 pwm=-15 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5267 current_mA=5 pwm=-9 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3918 current_mA=13 pwm=-18 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5286 current_mA=3 pwm=-10 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=3980 current_mA=13 pwm=-17 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5307 current_mA=12 pwm=-12 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4038 current_mA=14 pwm=-26 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5333 current_mA=11 pwm=-7 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4104 current_mA=14 pwm=-45 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5354 current_mA=12 pwm=-9 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4158 current_mA=18 pwm=-34 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5378 current_mA=12 pwm=-6 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4224 current_mA=16 pwm=-29 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5398 current_mA=11 pwm=-9 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4287 current_mA=19 pwm=-25 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5420 current_mA=11 pwm=-22 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4351 current_mA=14 pwm=-23 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5442 current_mA=11 pwm=-7 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4412 current_mA=16 pwm=-26 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5465 current_mA=-2 pwm=-6 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4479 current_mA=12 pwm=-7 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5486 current_mA=11 pwm=-7 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4541 current_mA=14 pwm=-7 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5507 current_mA=11 pwm=-9 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4597 current_mA=12 pwm=-14 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5527 current_mA=11 pwm=19 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4639 current_mA=9 pwm=-12 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5542 current_mA=2 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4667 current_mA=13 pwm=-14 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5553 current_mA=11 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4684 current_mA=15 pwm=15 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5559 current_mA=10 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY moving ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY moving ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY READY: measured targets reached; holding up to 5 minutes. RELEASE or ! stops.
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=9 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=10 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5562 current_mA=11 pwm=-1 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-6 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4701 current_mA=-13 pwm=8 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4702 current_mA=-15 pwm=10 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4703 current_mA=-14 pwm=11 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-14 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4700 current_mA=-15 pwm=7 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-12 pwm=5 voltage=5.0 temp=23
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=27
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=27
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-14 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=-1 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-14 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-14 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=27
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-14 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-14 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4697 current_mA=-13 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-3 pwm=2 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4702 current_mA=-16 pwm=10 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4695 current_mA=12 pwm=-16 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4686 current_mA=15 pwm=-15 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4694 current_mA=12 pwm=-3 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4694 current_mA=13 pwm=24 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=27
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4694 current_mA=12 pwm=-3 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4688 current_mA=14 pwm=-12 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4684 current_mA=15 pwm=-18 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4695 current_mA=5 pwm=-16 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4692 current_mA=9 pwm=-6 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4694 current_mA=13 pwm=-3 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4700 current_mA=-14 pwm=7 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4703 current_mA=-15 pwm=11 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4703 current_mA=-13 pwm=11 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4713 current_mA=-17 pwm=27 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-12 pwm=7 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=27
+ASSEMBLY holding ID13 pos=4700 current_mA=-9 pwm=7 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4701 current_mA=-14 pwm=8 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4696 current_mA=0 pwm=0 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4698 current_mA=-13 pwm=4 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4699 current_mA=-13 pwm=5 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID13 pos=4714 current_mA=-17 pwm=29 voltage=5.0 temp=24
+ASSEMBLY holding ID14 pos=5563 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY ABORT: ID13 telemetry/read check failed.
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+
+[HOST 2026-10-01T18:24:13] Sending !
+[HOST] Serial release could not be confirmed: write failed: [Errno 6] Device not configured
+[HOST] Console closed. Check release result above before handling the outputs.

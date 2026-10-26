@@ -1,0 +1,20 @@
+CONFIG18 SUCCESS: ID18, 1 Mbps, mode4, drive5, offset-4096, torque OFF.
+IDs 11–17 settings unchanged. Mounting-position alignment is still required.
+REPLACEMENT STATUS: 1 candidate(s) at ID1/ID18 and 57600/1000000 baud.
+  Candidate ID18 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 5
+  Homing offset: -4096
+  Torque: 0
+  Position ticks: 6002
+  Hardware errors: 0
+REPLACEMENT STATUS: 1 candidate(s) at ID1/ID18 and 57600/1000000 baud.
+  Candidate ID18 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 5
+  Homing offset: -4096
+  Torque: 0
+  Position ticks: 6002
+  Hardware errors: 0

@@ -1,0 +1,266 @@
+
+[HOST 2026-10-01T17:11:19] Connected at 115200. Commands: STATUS, CONFIGHEAD, LEGS, EXIT.
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40053b2c
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5810,len:0x438
+load:0x403cc710,len:0x90c
+load:0x403ce710,len:0x2624
+entry 0x403cc710
+Q8bot head servo setup. No automatic writes or movement.
+CONFIGHEAD configures ID19; STATUS reads the head; LEGS reads IDs 11-18.
+Keep all eight leg servos connected, with only one new head servo on the bus.
+[HOST 2026-10-01T17:11:24] Sending STATUS
+HEAD STATUS: 0 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Leg motors answering at 1 Mbps: 0 of 8
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[HOST 2026-10-01T17:15:00] Sending STATUS
+[HOST 2026-10-01T17:15:00] Sending LEGS
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID1 at 57600 baud
+  Model: 1190
+  Operating mode: 3
+  Drive mode: 0
+  Homing offset: 0
+  Torque: 0
+  Position ticks: 1935
+  Goal ticks: 1935
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 18
+  Leg motors answering at 1 Mbps: 8 of 8
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=5336 errors=0 voltage_0.1V=50 temp_C=19
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5812 errors=0 voltage_0.1V=50 temp_C=19
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3770 errors=0 voltage_0.1V=50 temp_C=18
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5236 errors=0 voltage_0.1V=50 temp_C=20
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=3991 errors=0 voltage_0.1V=50 temp_C=20
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6687 errors=0 voltage_0.1V=50 temp_C=19
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4201 errors=0 voltage_0.1V=49 temp_C=19
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5844 errors=0 voltage_0.1V=49 temp_C=19
+[scan] 1 head candidate(s) at ID1/ID19.
+[HOST 2026-10-01T17:15:04] Sending CONFIGHEAD
+CONFIGHEAD SUCCESS: ID19, 1 Mbps, mode4, drive4, offset+2048, torque OFF.
+  Present position 3983 ticks (-9.9 deg from centre). Goal parked here.
+  IDs 11-18 settings unchanged. Recheck the head goal after hand adjustment or power cycling.
+[HOST 2026-10-01T17:15:09] Sending STATUS
+[HOST 2026-10-01T17:15:09] Sending LEGS
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID19 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 4
+  Homing offset: 2048
+  Torque: 0
+  Position ticks: 3983
+  Goal ticks: 3983
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 18
+  Leg motors answering at 1 Mbps: 8 of 8
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=5336 errors=0 voltage_0.1V=50 temp_C=19
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5812 errors=0 voltage_0.1V=50 temp_C=20
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3770 errors=0 voltage_0.1V=50 temp_C=19
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5236 errors=0 voltage_0.1V=50 temp_C=20
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=3991 errors=0 voltage_0.1V=50 temp_C=20
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6688 errors=0 voltage_0.1V=50 temp_C=20
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4201 errors=0 voltage_0.1V=49 temp_C=20
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5844 errors=0 voltage_0.1V=49 temp_C=20
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 1 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[scan] 0 head candidate(s) at ID1/ID19.
+[HOST] Serial connection closed.

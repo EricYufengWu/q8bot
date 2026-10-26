@@ -9,9 +9,19 @@ Start with nothing connected and open the serial monitor
 - Serial monitor should prompt confuguration successful
 - Connect second new Dynamixel to the slot for ID 12 (front left horizontal)
 - Serial monitor should prompt configuration successful
-- Repeat until all 8 motors are configured and have baudrate set at 1M
-- Program will now switch hardware serial to 1Mb and command all joints to 
-go to the starting condition and prompt you to install the legs.
+- Repeat until all 8 leg motors are configured and have baudrate set at 1M
+- Connect the head Dynamixel last, for ID 19. It is daisy chained from the
+  nearest leg servo: the head sits on the front centreline, roughly 35 mm from
+  either front-outer servo, so run its cable to the free connector on the front
+  outer motor (ID 11 or ID 13, whichever side is convenient). Both are the same
+  distance; the Dynamixel bus does not care about the order on the chain.
+- Program will now switch hardware serial to 1Mb and command all joints to
+go to the starting condition and prompt you to install the legs. The head is
+commanded to its centre and held there.
+
+The head is not a ninth commanded joint: the ESP-NOW packet still carries the
+eight leg angles, and the robot firmware broadcasts torque to ID 254, so ID 19
+holds the centre position set here without any protocol change.
 */
 
 #include <Arduino.h>
@@ -30,12 +40,16 @@ const uint8_t STARTING_ID = 1;
 using namespace ControlTableItem;
 Dynamixel2Arduino dxl(ser, 8);
 
-const uint8_t idList[8] = {11, 12, 13, 14, 15, 16, 17, 18};
-const uint8_t driveMode[8] = {4, 4, 5, 5, 4, 4, 5, 5};
+// IDs 11-18 are the four leg pairs; ID 19 is the head, daisy chained from the
+// nearest front-outer leg servo. The head takes the same +2048 homing offset as
+// the other "first of pair" motors, so its mechanical centre reads as 0 deg
+// (4096 ticks) in the same convention the robot firmware uses.
+const uint8_t idList[9] = {11, 12, 13, 14, 15, 16, 17, 18, 19};
+const uint8_t driveMode[9] = {4, 4, 5, 5, 4, 4, 5, 5, 4};
 const uint8_t operateMode = 4;
-const uint32_t homingOffset[8] = {2048, 4096, 4294965248, 4294963200, 2048, 4096, 4294965248, 4294963200};
+const uint32_t homingOffset[9] = {2048, 4096, 4294965248, 4294963200, 2048, 4096, 4294965248, 4294963200, 2048};
 const uint8_t baudRate = 3; // Corresponds to 1Mb baudrate
-const int32_t idlePos[8]   = {4618, 5622, 4618, 5622, 4618, 5622, 4618, 5622};
+const int32_t idlePos[9]   = {4618, 5622, 4618, 5622, 4618, 5622, 4618, 5622, 4096};
 const uint16_t moveTime = 1000;
 uint8_t count = 0;
 bool pingValue;
@@ -53,7 +67,7 @@ void setup() {
 }
 
 void loop() {
-  // Repeat param config for all 8 Dynamixel motors here.
+  // Repeat param config for all 9 Dynamixel motors here (8 leg + 1 head).
   if (count < sizeof(idList)) {
     // First check whether a motor with desired ID already exists. If so move to the next ID.
     dxl.begin(FINAL_BAUD);
@@ -87,7 +101,7 @@ void loop() {
       // Delay and wait for the next check
       delay(5000);
     }
-  // When 8 motors have been configured, exit main loop and perform a final check.
+  // When all motors have been configured, exit main loop and perform a final check.
   } else {
     Serial.println("Leave all motors connected. Switching to new baudrate.");
     delay(5000);
@@ -112,7 +126,8 @@ void finishSetup() {
   }
 
   // Motor setup complete
-  Serial.println("Motor setup complete. You may continue to install legs on your Q8bot.");
+  Serial.println("Motor setup complete. ID 19 (head) is centred and held.");
+  Serial.println("You may continue to install legs on your Q8bot.");
   Serial.println("When finished, switch the robot off to disable torque.");
   while (1) {
     delay(100);

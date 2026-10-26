@@ -8,6 +8,7 @@
 
 // Q8bot-specific Modules
 #include "q8Dynamixel.h"
+#include "legProbe.h"
 #include "userParams.h"
 #include "systemParams.h"
 #include "pinMapping.h"
@@ -18,11 +19,14 @@ esp_now_peer_info_t peerInfo;
 HardwareSerial          ser(0);
 Dynamixel2Arduino       q8dxl(ser, DXL_DIR_PIN);
 q8Dynamixel             q8(q8dxl);
+LegProbe::Prober<Dynamixel2Arduino> prober(q8dxl);
 bool started = false;  // Track robot start state
 macStorage storage;
 
 // FreeRTOS Handles
 QueueHandle_t rxQueue = NULL;
+QueueHandle_t probeQueue = NULL;
+struct ProbeRequest { float excursion[8]; int32_t pwm; bool head; };
 QueueHandle_t debugQueue = NULL;
 EventGroupHandle_t eventGroup = NULL;
 
@@ -230,6 +234,55 @@ void espnowRxTask(void* parameter) {
               break;
             }
 
+            case 6: {
+              // Telemetry: read-only snapshot of all nine servos
+              prober.telemetry(myMsg.data);
+              esp_now_send(clientMac, (uint8_t*)&myMsg, sizeof(myMsg));
+              break;
+            }
+
+            case 7:
+            case 11: {
+              // Leg or head probe: runs in probeTask so heartbeats keep flowing
+              ProbeRequest request;
+              memcpy(request.excursion, q8.probeExcursion(), sizeof(request.excursion));
+              request.pwm = q8.probePwm();
+              request.head = result == 11;
+              bool queued = false;
+              if (!prober.busy) {
+                // Lock before queueing, so no packet can reach the bus first.
+                prober.busy = true;
+                q8.lockMotion(true);
+                queued = xQueueSend(probeQueue, &request, 0) == pdTRUE;
+                if (!queued) { prober.busy = false; q8.lockMotion(false); }
+              }
+              if (!queued) {
+                memset(myMsg.data, 0, sizeof(myMsg.data));
+                myMsg.data[0] = LegProbe::TAG_PROBE;
+                myMsg.data[1] = LegProbe::REFUSED_BUSY;
+                esp_now_send(clientMac, (uint8_t*)&myMsg, sizeof(myMsg));
+              }
+              break;
+            }
+
+            case 8: {
+              prober.requestAbort();
+              queuePrint(MSG_INFO, "[PROBE] Abort requested\n");
+              break;
+            }
+
+            case 9: {
+              prober.applyCap(q8.capPwm(), myMsg.data);
+              esp_now_send(clientMac, (uint8_t*)&myMsg, sizeof(myMsg));
+              break;
+            }
+
+            case 10: {
+              // Head yaw; sent often while a key is held, so no reply.
+              prober.moveHead(q8.headDeg(), q8.headMs());
+              break;
+            }
+
             case 3: {
               // Send all recorded data in chunks
               if (rData != nullptr) {
@@ -267,6 +320,25 @@ void espnowRxTask(void* parameter) {
   }
 }
 
+// FreeRTOS Task: Leg Probe (Priority 2). Blocking sweeps run here, not in the
+// ESP-NOW task, so heartbeats and abort requests are still received.
+void probeTask(void* parameter) {
+  ProbeRequest request;
+  DataMessage reply;
+  while (true) {
+    if (xQueueReceive(probeQueue, &request, portMAX_DELAY) == pdTRUE) {
+      reply.id = 0;
+      uint16_t status = request.head
+          ? prober.runHead(request.excursion[0], request.pwm, reply.data)
+          : prober.run(request.excursion, request.pwm, reply.data);
+      prober.busy = false;
+      q8.lockMotion(false);
+      esp_now_send(clientMac, (uint8_t*)&reply, sizeof(reply));
+      queuePrint(MSG_INFO, "[PROBE] Finished with status %u\n", status);
+    }
+  }
+}
+
 // FreeRTOS Task: Heartbeat Monitor (Priority 2)
 void heartbeatMonitorTask(void* parameter) {
   TickType_t lastWake = xTaskGetTickCount();
@@ -284,7 +356,9 @@ void heartbeatMonitorTask(void* parameter) {
 #ifndef PERMANENT_PAIRING_MODE
         if (timeSinceLastMsg > HEARTBEAT_TIMEOUT_ROBOT) {
           queuePrint(MSG_DEBUG, "[HEARTBEAT] Timeout detected (%lums since last message)\n", timeSinceLastMsg);
-          q8.toggleTorque(0);        // Disable torque hardware
+          // A running probe owns the bus; it releases torque itself on abort.
+          if (prober.busy) prober.requestAbort();
+          else q8.toggleTorque(0);   // Disable torque hardware
           q8.resetTorqueState();     // Sync internal flag to match disabled state
           unpair();
         }
@@ -498,6 +572,26 @@ void setup() {
   );
   if (taskCreated != pdPASS) {
     Serial.println("[RTOS] Failed to create heartbeat monitor task");
+    initSuccess = false;
+  }
+
+  probeQueue = xQueueCreate(1, sizeof(ProbeRequest));
+  if (probeQueue == NULL) {
+    Serial.println("[RTOS] Failed to create probe queue");
+    initSuccess = false;
+  }
+
+  // Create leg probe task (Priority 2)
+  taskCreated = xTaskCreate(
+    probeTask,          // Task function
+    "LegProbe",         // Task name
+    4096,               // Stack size (bytes)
+    NULL,               // Parameters
+    2,                  // Priority (below ESP-NOW RX, so aborts get through)
+    NULL                // Task handle
+  );
+  if (taskCreated != pdPASS) {
+    Serial.println("[RTOS] Failed to create leg probe task");
     initSuccess = false;
   }
 

@@ -1,0 +1,405 @@
+TEST18 START start=5789 target=5755 pwm_cap=133
+TEST18 out t=8 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=28 torque=1
+TEST18 out t=56 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 out t=104 pos=5789 current_mA=-4 pwm=2 voltage=4.9 temp=27 torque=1
+TEST18 out t=152 pos=5789 current_mA=-4 pwm=4 voltage=4.9 temp=27 torque=1
+TEST18 out t=200 pos=5789 current_mA=-4 pwm=5 voltage=4.9 temp=27 torque=1
+TEST18 out t=248 pos=5789 current_mA=-5 pwm=8 voltage=4.9 temp=27 torque=1
+TEST18 out t=296 pos=5789 current_mA=-4 pwm=13 voltage=4.9 temp=27 torque=1
+TEST18 out t=344 pos=5789 current_mA=-4 pwm=16 voltage=4.9 temp=27 torque=1
+TEST18 out t=392 pos=5789 current_mA=-4 pwm=19 voltage=4.9 temp=27 torque=1
+TEST18 out t=440 pos=5789 current_mA=-4 pwm=22 voltage=4.9 temp=27 torque=1
+TEST18 out t=488 pos=5789 current_mA=-4 pwm=25 voltage=4.9 temp=27 torque=1
+TEST18 out t=536 pos=5789 current_mA=-4 pwm=29 voltage=4.9 temp=27 torque=1
+TEST18 out t=584 pos=5789 current_mA=-4 pwm=33 voltage=4.9 temp=27 torque=1
+TEST18 out t=632 pos=5789 current_mA=-4 pwm=36 voltage=4.9 temp=27 torque=1
+TEST18 out t=680 pos=5789 current_mA=-4 pwm=40 voltage=4.9 temp=27 torque=1
+TEST18 out t=728 pos=5789 current_mA=-4 pwm=43 voltage=4.9 temp=27 torque=1
+TEST18 out t=776 pos=5789 current_mA=-4 pwm=46 voltage=4.9 temp=27 torque=1
+TEST18 out t=824 pos=5789 current_mA=-5 pwm=49 voltage=4.9 temp=27 torque=1
+TEST18 out t=872 pos=5789 current_mA=-4 pwm=50 voltage=4.9 temp=27 torque=1
+TEST18 out t=920 pos=5789 current_mA=-4 pwm=52 voltage=4.9 temp=27 torque=1
+TEST18 out t=968 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1016 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1064 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1112 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1160 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1208 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1256 pos=5789 current_mA=-3 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1304 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1352 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 out t=1400 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 return t=8 pos=5789 current_mA=-4 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 return t=55 pos=5789 current_mA=-5 pwm=54 voltage=4.9 temp=27 torque=1
+TEST18 return t=103 pos=5789 current_mA=-4 pwm=52 voltage=4.9 temp=27 torque=1
+TEST18 return t=151 pos=5789 current_mA=-4 pwm=50 voltage=4.9 temp=27 torque=1
+TEST18 return t=199 pos=5789 current_mA=-4 pwm=36 voltage=4.9 temp=27 torque=1
+TEST18 return t=247 pos=5789 current_mA=-4 pwm=46 voltage=4.9 temp=27 torque=1
+TEST18 return t=295 pos=5789 current_mA=-4 pwm=41 voltage=4.9 temp=27 torque=1
+TEST18 return t=343 pos=5789 current_mA=-4 pwm=38 voltage=4.9 temp=27 torque=1
+TEST18 return t=391 pos=5789 current_mA=-5 pwm=35 voltage=4.9 temp=27 torque=1
+TEST18 return t=439 pos=5789 current_mA=-4 pwm=32 voltage=4.9 temp=27 torque=1
+TEST18 return t=487 pos=5789 current_mA=-4 pwm=29 voltage=4.9 temp=27 torque=1
+TEST18 return t=535 pos=5789 current_mA=-5 pwm=25 voltage=4.9 temp=27 torque=1
+TEST18 return t=583 pos=5789 current_mA=-2 pwm=21 voltage=4.9 temp=27 torque=1
+TEST18 return t=631 pos=5789 current_mA=-4 pwm=18 voltage=4.9 temp=27 torque=1
+TEST18 return t=679 pos=5789 current_mA=-4 pwm=15 voltage=4.9 temp=27 torque=1
+TEST18 return t=727 pos=5789 current_mA=-5 pwm=11 voltage=4.9 temp=27 torque=1
+TEST18 return t=775 pos=5789 current_mA=-4 pwm=8 voltage=4.9 temp=27 torque=1
+TEST18 return t=823 pos=5789 current_mA=-4 pwm=5 voltage=4.9 temp=27 torque=1
+TEST18 return t=871 pos=5789 current_mA=-5 pwm=4 voltage=4.9 temp=27 torque=1
+TEST18 return t=919 pos=5789 current_mA=-4 pwm=2 voltage=4.9 temp=27 torque=1
+TEST18 return t=967 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1015 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1063 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1111 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1159 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1207 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1255 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1303 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1351 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+TEST18 return t=1399 pos=5789 current_mA=0 pwm=0 voltage=4.9 temp=27 torque=1
+ID18 settings restored; torque OFF.
+TEST18 FINISHED (inspect tracking; this is not a loaded-strength test).
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4546
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5789
+  Goal position (ticks): 5789
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4546
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5789
+  Goal position (ticks): 5789
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5698
+  Goal position (ticks): 5698
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5693
+  Goal position (ticks): 5693
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5689
+  Goal position (ticks): 5689
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4546
+  Goal position (ticks): 4546
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5789
+  Goal position (ticks): 5789
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53

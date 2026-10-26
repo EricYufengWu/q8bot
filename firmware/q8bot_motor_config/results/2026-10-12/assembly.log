@@ -1,0 +1,743 @@
+
+[HOST] Connected to /dev/cu.usbmodem2101. Automatic KEEP only.
+Commands: STATUS, LEGS, CENTERHEAD, ALIGNFL, ALIGNFR, ALIGNBL, ALIGNBR, RELEASE, !, EXIT
+Build:Feb  7 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4201618c
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fcd5810,len:0x438
+load:0x403cc710,len:0x90c
+load:0x403ce710,len:0x2624
+entry 0x403cc710
+SQuRo bench assembly: no automatic movement; startup releases powered servos.
+CENTERHEAD: ID19 -> 4096. ALIGNFL/ALIGNFR: front elbow/shoulder -> 4695/5564.
+ALIGNBL/ALIGNBR: rear elbow/shoulder -> 3627/4745. Outer rear servos must be ID16/18.
+Confirm physical mapping and detach the selected pair's linkage before alignment.
+Send KEEP at least every 10 seconds while active. RELEASE or ! stops. Hold limit: 5 minutes.
+
+[HOST 2026-10-12T15:43:14] Sending STATUS
+HEAD STATUS: 1 candidate(s) at ID1/ID19 and 57600/1000000 baud.
+  Candidate ID19 at 1000000 baud
+  Model: 1190
+  Operating mode: 4
+  Drive mode: 4
+  Homing offset: 2048
+  Torque: 0
+  Position ticks: 4081
+  Goal ticks: 4081
+  Hardware errors: 0
+  Voltage (0.1 V): 50
+  Temperature (C): 19
+
+[HOST 2026-10-12T15:43:17] Sending LEGS
+  Leg motors answering at 1 Mbps: 8 of 8
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4072 errors=0 voltage_0.1V=50 temp_C=20
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5937 errors=0 voltage_0.1V=50 temp_C=20
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4178 errors=0 voltage_0.1V=50 temp_C=19
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5957 errors=0 voltage_0.1V=50 temp_C=20
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4084 errors=0 voltage_0.1V=49 temp_C=20
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6877 errors=0 voltage_0.1V=50 temp_C=20
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4141 errors=0 voltage_0.1V=49 temp_C=20
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5884 errors=0 voltage_0.1V=49 temp_C=20
+
+[HOST 2026-10-12T15:48:02] Sending ALIGNBR
+ASSEMBLY MOVING ID17: 4141 -> 3627 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY MOVING ID18: 5884 -> 4745 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY moving ID17 pos=4141 current_mA=0 pwm=0 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5884 current_mA=0 pwm=0 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4139 current_mA=3 pwm=4 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5879 current_mA=-12 pwm=17 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4132 current_mA=-14 pwm=8 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5859 current_mA=-12 pwm=-2 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4113 current_mA=-6 pwm=5 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=5820 current_mA=0 pwm=10 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4088 current_mA=-14 pwm=7 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5767 current_mA=-10 pwm=15 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4057 current_mA=-14 pwm=7 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5701 current_mA=-13 pwm=21 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=4025 current_mA=-11 pwm=36 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=5621 current_mA=-11 pwm=16 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3989 current_mA=-9 pwm=8 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5545 current_mA=-11 pwm=18 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3954 current_mA=-3 pwm=8 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5473 current_mA=-14 pwm=50 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3921 current_mA=-4 pwm=10 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=5391 current_mA=-10 pwm=16 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3886 current_mA=-13 pwm=11 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=5311 current_mA=-3 pwm=15 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3855 current_mA=-15 pwm=18 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=5236 current_mA=-10 pwm=18 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3825 current_mA=-12 pwm=-3 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5158 current_mA=-7 pwm=13 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3781 current_mA=-15 pwm=10 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5085 current_mA=-10 pwm=21 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3747 current_mA=-4 pwm=10 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=5011 current_mA=-11 pwm=22 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3712 current_mA=-15 pwm=11 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=4934 current_mA=-10 pwm=31 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3679 current_mA=-15 pwm=7 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=4879 current_mA=-18 pwm=52 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3657 current_mA=-9 pwm=8 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=4820 current_mA=-15 pwm=25 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3640 current_mA=-12 pwm=5 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=4781 current_mA=-15 pwm=31 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3628 current_mA=0 pwm=0 voltage=4.9 temp=22
+ASSEMBLY moving ID18 pos=4756 current_mA=-11 pwm=11 voltage=4.9 temp=22
+ASSEMBLY moving ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY moving ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=22
+ASSEMBLY READY: measured targets reached; holding up to 5 minutes. RELEASE or ! stops.
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=22
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=22
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-9 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=5.0 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=23
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-10 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-11 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=25 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4748 current_mA=-12 pwm=5 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4747 current_mA=-11 pwm=4 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4747 current_mA=-11 pwm=4 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4747 current_mA=-11 pwm=4 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4747 current_mA=-10 pwm=4 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=23
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3625 current_mA=7 pwm=-1 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3627 current_mA=-14 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4747 current_mA=-10 pwm=4 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-11 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-11 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-12 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-11 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=1 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-11 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-12 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4746 current_mA=-10 pwm=2 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4749 current_mA=-11 pwm=7 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4760 current_mA=-14 pwm=24 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4769 current_mA=-17 pwm=38 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4755 current_mA=-6 pwm=40 voltage=4.9 temp=24
+ASSEMBLY holding ID17 pos=3626 current_mA=0 pwm=0 voltage=4.9 temp=24
+ASSEMBLY holding ID18 pos=4753 current_mA=-12 pwm=13 voltage=4.9 temp=24
+ASSEMBLY ABORT: ID18 telemetry/read check failed.
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+  read_ok=1 pos=4778 target=4745 current_mA=-20 pwm=79 voltage_0.1V=49 temp=24 torque=1 fault=0
+
+[HOST 2026-10-12T15:58:35] Sending RELEASE
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+
+[HOST 2026-10-12T15:58:38] Sending LEGS
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4062 errors=0 voltage_0.1V=50 temp_C=25
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5830 errors=0 voltage_0.1V=50 temp_C=25
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4181 errors=0 voltage_0.1V=50 temp_C=23
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5940 errors=0 voltage_0.1V=50 temp_C=25
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4084 errors=0 voltage_0.1V=50 temp_C=26
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6878 errors=0 voltage_0.1V=50 temp_C=26
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3810 errors=0 voltage_0.1V=49 temp_C=25
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=4839 errors=0 voltage_0.1V=49 temp_C=25
+
+[HOST 2026-10-12T15:59:13] Sending LEGS
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4062 errors=0 voltage_0.1V=50 temp_C=24
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5830 errors=0 voltage_0.1V=50 temp_C=25
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4180 errors=0 voltage_0.1V=50 temp_C=23
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5940 errors=0 voltage_0.1V=50 temp_C=25
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4084 errors=0 voltage_0.1V=49 temp_C=26
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6878 errors=0 voltage_0.1V=50 temp_C=26
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3810 errors=0 voltage_0.1V=49 temp_C=25
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=4839 errors=0 voltage_0.1V=49 temp_C=25
+
+[HOST 2026-10-12T16:01:49] Sending LEGS
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4062 errors=0 voltage_0.1V=50 temp_C=25
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5830 errors=0 voltage_0.1V=50 temp_C=26
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4181 errors=0 voltage_0.1V=50 temp_C=23
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5940 errors=0 voltage_0.1V=50 temp_C=25
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4084 errors=0 voltage_0.1V=49 temp_C=26
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=6286 errors=0 voltage_0.1V=50 temp_C=26
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3810 errors=0 voltage_0.1V=49 temp_C=26
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=4839 errors=0 voltage_0.1V=49 temp_C=26
+
+[HOST 2026-10-12T16:01:53] Sending ALIGNBL
+ASSEMBLY MOVING ID15: 4084 -> 3627 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY MOVING ID16: 6286 -> 4745 ticks over 5 seconds, PWM cap 266.
+ASSEMBLY moving ID15 pos=4084 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=6286 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=4082 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=6279 current_mA=-12 pwm=-7 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=4074 current_mA=-2 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=6246 current_mA=-4 pwm=-7 voltage=4.9 temp=26
+ASSEMBLY moving ID15 pos=4059 current_mA=-8 pwm=-32 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=6194 current_mA=-12 pwm=-11 voltage=4.9 temp=26
+ASSEMBLY moving ID15 pos=4039 current_mA=-3 pwm=-8 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=6122 current_mA=-9 pwm=-13 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=4013 current_mA=-12 pwm=-11 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=6028 current_mA=-14 pwm=-44 voltage=4.9 temp=26
+ASSEMBLY moving ID15 pos=3980 current_mA=-10 pwm=-8 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5922 current_mA=-9 pwm=-25 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3949 current_mA=-10 pwm=-8 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5820 current_mA=-12 pwm=-18 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3920 current_mA=-7 pwm=-11 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5715 current_mA=-13 pwm=6 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3889 current_mA=-12 pwm=-11 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=5609 current_mA=-12 pwm=12 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3856 current_mA=-11 pwm=-8 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5506 current_mA=-12 pwm=-15 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3824 current_mA=-6 pwm=-7 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5404 current_mA=-11 pwm=-6 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3794 current_mA=-11 pwm=-8 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=5301 current_mA=-11 pwm=-16 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3765 current_mA=-12 pwm=15 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=5196 current_mA=-8 pwm=-41 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3733 current_mA=-6 pwm=-35 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=5097 current_mA=-14 pwm=-35 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3702 current_mA=-11 pwm=18 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=4989 current_mA=-13 pwm=-15 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3677 current_mA=-10 pwm=-36 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=4901 current_mA=-13 pwm=-15 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3654 current_mA=-11 pwm=-7 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=4832 current_mA=-6 pwm=-15 voltage=4.9 temp=26
+ASSEMBLY moving ID15 pos=3639 current_mA=-11 pwm=21 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=4782 current_mA=-12 pwm=-11 voltage=4.9 temp=26
+ASSEMBLY moving ID15 pos=3629 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY moving ID16 pos=4752 current_mA=-6 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY moving ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY moving ID16 pos=4747 current_mA=-12 pwm=-4 voltage=5.0 temp=26
+ASSEMBLY READY: measured targets reached; holding up to 5 minutes. RELEASE or ! stops.
+ASSEMBLY holding ID15 pos=3628 current_mA=-9 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-7 pwm=12 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-6 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-9 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-7 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=1 pwm=-15 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-8 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=3 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=-1 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-9 pwm=12 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=5 pwm=-27 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-9 pwm=22 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=2 pwm=0 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=-1 pwm=26 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=-4 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-9 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-13 pwm=25 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3628 current_mA=-9 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=-1 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3626 current_mA=1 pwm=26 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3626 current_mA=9 pwm=1 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3626 current_mA=11 pwm=1 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3626 current_mA=10 pwm=1 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=1 pwm=-13 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3626 current_mA=9 pwm=1 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=-3 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3623 current_mA=9 pwm=6 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3623 current_mA=11 pwm=6 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3604 current_mA=15 pwm=35 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-11 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3605 current_mA=16 pwm=34 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-10 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3627 current_mA=0 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-10 pwm=-2 voltage=5.0 temp=26
+ASSEMBLY holding ID15 pos=3629 current_mA=-12 pwm=-4 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-7 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3612 current_mA=11 pwm=25 voltage=4.9 temp=26
+ASSEMBLY holding ID16 pos=4745 current_mA=2 pwm=0 voltage=4.9 temp=26
+ASSEMBLY holding ID15 pos=3601 current_mA=16 pwm=40 voltage=5.0 temp=26
+ASSEMBLY holding ID16 pos=4746 current_mA=-12 pwm=-2 voltage=4.9 temp=26
+ASSEMBLY ABORT: ID15 telemetry/read check failed.
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+  read_ok=1 pos=3583 target=3627 current_mA=26 pwm=68 voltage_0.1V=50 temp=26 torque=1 fault=0
+
+[HOST 2026-10-12T16:05:47] Sending RELEASE
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+
+[HOST 2026-10-12T16:05:50] Sending LEGS
+LEG STATUS (read-only): positions do not establish the physical crank mapping.
+ID11 model=1190 id=11 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=4057 errors=0 voltage_0.1V=50 temp_C=26
+ID12 model=1190 id=12 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=5149 errors=0 voltage_0.1V=49 temp_C=26
+ID13 model=1190 id=13 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=4728 errors=0 voltage_0.1V=50 temp_C=24
+ID14 model=1190 id=14 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=5364 errors=0 voltage_0.1V=50 temp_C=26
+ID15 model=1190 id=15 baud_reg=3 mode=4 drive=4 offset=2048 torque=0 position=3764 errors=0 voltage_0.1V=50 temp_C=27
+ID16 model=1190 id=16 baud_reg=3 mode=4 drive=4 offset=4096 torque=0 position=4365 errors=0 voltage_0.1V=50 temp_C=27
+ID17 model=1190 id=17 baud_reg=3 mode=4 drive=5 offset=-2048 torque=0 position=3618 errors=0 voltage_0.1V=49 temp_C=26
+ID18 model=1190 id=18 baud_reg=3 mode=4 drive=5 offset=-4096 torque=0 position=4468 errors=0 voltage_0.1V=49 temp_C=26
+
+[HOST 2026-10-12T16:06:27] Sending !
+ASSEMBLY RELEASED: torque OFF; profiles/output restored.
+[HOST] Console closed. Check release result above before handling the outputs.

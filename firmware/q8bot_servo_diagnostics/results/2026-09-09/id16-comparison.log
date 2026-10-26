@@ -1,0 +1,387 @@
+TEST16 START start=5689 target=5655 pwm_cap=133
+TEST16 out t=8 pos=5689 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=56 pos=5689 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=104 pos=5689 current_mA=-13 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=152 pos=5689 current_mA=-9 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=200 pos=5688 current_mA=-12 pwm=-4 voltage=5.0 temp=26 torque=1
+TEST16 out t=248 pos=5685 current_mA=-8 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=296 pos=5682 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=345 pos=5680 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=392 pos=5679 current_mA=-12 pwm=8 voltage=5.0 temp=26 torque=1
+TEST16 out t=440 pos=5677 current_mA=-12 pwm=-4 voltage=5.0 temp=26 torque=1
+TEST16 out t=488 pos=5677 current_mA=-13 pwm=-7 voltage=5.0 temp=26 torque=1
+TEST16 out t=536 pos=5675 current_mA=-13 pwm=-7 voltage=5.0 temp=26 torque=1
+TEST16 out t=584 pos=5673 current_mA=-11 pwm=-7 voltage=5.0 temp=26 torque=1
+TEST16 out t=632 pos=5670 current_mA=-11 pwm=-5 voltage=5.0 temp=26 torque=1
+TEST16 out t=680 pos=5665 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=728 pos=5663 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=776 pos=5661 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=824 pos=5660 current_mA=-11 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=872 pos=5658 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 out t=920 pos=5658 current_mA=-11 pwm=-2 voltage=4.9 temp=26 torque=1
+TEST16 out t=968 pos=5657 current_mA=-11 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1016 pos=5657 current_mA=-12 pwm=-2 voltage=4.9 temp=26 torque=1
+TEST16 out t=1064 pos=5657 current_mA=-11 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1112 pos=5657 current_mA=-11 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1160 pos=5657 current_mA=-12 pwm=-2 voltage=4.9 temp=26 torque=1
+TEST16 out t=1208 pos=5656 current_mA=-1 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1256 pos=5657 current_mA=-12 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1304 pos=5656 current_mA=1 pwm=0 voltage=4.9 temp=26 torque=1
+TEST16 out t=1352 pos=5657 current_mA=-11 pwm=-2 voltage=5.0 temp=26 torque=1
+TEST16 out t=1400 pos=5657 current_mA=-9 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 return t=8 pos=5656 current_mA=1 pwm=-27 voltage=5.0 temp=26 torque=1
+TEST16 return t=56 pos=5657 current_mA=-5 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 return t=103 pos=5657 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 return t=151 pos=5658 current_mA=0 pwm=0 voltage=5.0 temp=26 torque=1
+TEST16 return t=199 pos=5659 current_mA=0 pwm=0 voltage=4.9 temp=26 torque=1
+TEST16 return t=248 pos=5660 current_mA=11 pwm=1 voltage=5.0 temp=26 torque=1
+TEST16 return t=295 pos=5661 current_mA=11 pwm=16 voltage=5.0 temp=26 torque=1
+TEST16 return t=343 pos=5661 current_mA=13 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=391 pos=5662 current_mA=12 pwm=9 voltage=4.9 temp=26 torque=1
+TEST16 return t=439 pos=5662 current_mA=12 pwm=12 voltage=4.9 temp=26 torque=1
+TEST16 return t=487 pos=5664 current_mA=13 pwm=-15 voltage=5.0 temp=26 torque=1
+TEST16 return t=535 pos=5667 current_mA=12 pwm=10 voltage=5.0 temp=26 torque=1
+TEST16 return t=583 pos=5667 current_mA=13 pwm=15 voltage=5.0 temp=26 torque=1
+TEST16 return t=631 pos=5669 current_mA=13 pwm=15 voltage=5.0 temp=26 torque=1
+TEST16 return t=679 pos=5671 current_mA=13 pwm=15 voltage=5.0 temp=26 torque=1
+TEST16 return t=727 pos=5672 current_mA=13 pwm=17 voltage=5.0 temp=26 torque=1
+TEST16 return t=775 pos=5678 current_mA=12 pwm=10 voltage=4.9 temp=26 torque=1
+TEST16 return t=823 pos=5680 current_mA=13 pwm=10 voltage=4.9 temp=26 torque=1
+TEST16 return t=871 pos=5680 current_mA=13 pwm=-15 voltage=4.9 temp=26 torque=1
+TEST16 return t=919 pos=5681 current_mA=13 pwm=12 voltage=4.9 temp=26 torque=1
+TEST16 return t=967 pos=5682 current_mA=13 pwm=12 voltage=4.9 temp=26 torque=1
+TEST16 return t=1015 pos=5683 current_mA=12 pwm=10 voltage=4.9 temp=26 torque=1
+TEST16 return t=1063 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1111 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1159 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1207 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1255 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1303 pos=5685 current_mA=12 pwm=7 voltage=4.9 temp=26 torque=1
+TEST16 return t=1351 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+TEST16 return t=1399 pos=5685 current_mA=12 pwm=7 voltage=5.0 temp=26 torque=1
+Servo settings restored; torque OFF.
+TEST16 FINISHED (inspect tracking; this is not a loaded-strength test).
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5645
+  Goal position (ticks): 5645
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5626
+  Goal position (ticks): 5626
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5685
+  Goal position (ticks): 5685
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5777
+  Goal position (ticks): 5777
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+
+=== Servo scan ===
+ID 11
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4544
+  Goal position (ticks): 4544
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 12
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5645
+  Goal position (ticks): 5645
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 13
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4541
+  Goal position (ticks): 4541
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 14
+  Hardware error flags: 0
+  Supply voltage (V): 5.00
+  Temperature (C): 29
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5626
+  Goal position (ticks): 5626
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 15
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 16
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 26
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5685
+  Goal position (ticks): 5685
+  Drive mode: 4
+  Operating mode: 4
+  Homing offset: 4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 17
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 28
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 4545
+  Goal position (ticks): 4545
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -2048
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
+ID 18 (reported faulty)
+  Hardware error flags: 0
+  Supply voltage (V): 4.90
+  Temperature (C): 27
+  Current (mA): 0
+  Torque enabled: 0
+  Present position (ticks): 5777
+  Goal position (ticks): 5777
+  Drive mode: 5
+  Operating mode: 4
+  Homing offset: -4096
+  Profile duration (ms, if time-based): 0
+  Profile acceleration time (ms, if time-based): 0
+  Shutdown mask: 53
+  Position P gain: 400
+  Position I gain: 0
+  Position D gain: 400
+  PWM limit: 885
+  Goal PWM / output cap: 885
+  Current limit (mA): 1750
