@@ -16,7 +16,8 @@ sys.path.insert(0, str(ROOT / 'q8bot'))
 import pygame
 from calibration_panel import CalibrationPanel
 from control_panel import ControlPanel, WINDOW_SIZE
-from leg_calibration import CONFIRM, FAILED, HOLD, MOVING, PICK, LegCalibration
+import espnow
+from leg_calibration import CHECKING, CONFIRM, FAILED, HOLD, MOVING, PICK, LegCalibration
 from leg_designs import BIOMIMETIC, FULL_RANGE, LEG_DESIGNS, Q8, deg_to_ticks
 from sitting_pose import SittingPose
 from squro_solver import MEASURED_PIVOTS, squro_solver
@@ -247,10 +248,50 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(self.cal.stage, MOVING)  # Still inside the move window.
         self.clock[0] += LegCalibration.MOVE_MS / 1000
         self.cal.update()
+        self.assertEqual(self.cal.stage, CHECKING)
+        self.robot.request_telemetry.assert_called_once()
+        self.assertFalse(self.cal.finish())       # not before every joint is confirmed
+        self.cal.feed(self.telemetry(BIOMIMETIC.mount_positions()))
         self.assertEqual(self.cal.stage, HOLD)
         self.assertTrue(self.cal.finish())
         self.assertFalse(self.cal.active)
         self.assertEqual(self.cal.fitted_key, 'BIOMIMETIC')
+
+    def telemetry(self, angles, **flags):
+        from test_leg_detection import telemetry_values
+        return espnow.decode_reply(telemetry_values(list(angles) + [0.0], **flags))
+
+    def moved_and_checked(self, reply):
+        self.cal.open_picker()
+        self.cal.cursor = self.cal.ORDER.index('BIOMIMETIC')
+        self.cal.choose()
+        self.cal.confirm()
+        self.clock[0] += LegCalibration.MOVE_MS / 1000
+        self.cal.update()
+        if reply is not None:
+            self.cal.feed(reply)
+
+    def test_a_joint_short_of_the_mounting_pose_fails_with_its_name(self):
+        short = BIOMIMETIC.mount_positions()
+        short[6] -= 30.0                          # BR elbow stuck
+        self.moved_and_checked(self.telemetry(short))
+        self.assertEqual(self.cal.stage, FAILED)
+        self.assertEqual(self.cal.diagnosis.category, 'torque')
+        self.assertIn('BR elbow (ID 17) is 30 deg short', self.cal.diagnosis.detail)
+        self.assertIn('Not enough torque', self.cal.label())
+        self.assertEqual(self.cal.reports()[0], 'Calibration stopped: Mounting pose not reached.')
+        self.assertTrue(self.cal.confirm())       # retry from FAILED
+
+    def test_a_silent_servo_or_robot_fails_as_communication(self):
+        self.moved_and_checked(self.telemetry(BIOMIMETIC.mount_positions(), missing={11}))
+        self.assertEqual(self.cal.diagnosis.category, 'communication')
+        self.assertIn('FL elbow (ID 11)', self.cal.diagnosis.detail)
+        self.cal.cancel()
+        self.moved_and_checked(None)
+        self.clock[0] += LegCalibration.REPLY_TIMEOUT + 0.1
+        self.cal.update()
+        self.assertEqual(self.cal.stage, FAILED)
+        self.assertIn('did not answer', self.cal.diagnosis.detail)
 
     def test_unavailable_design_is_refused_and_keeps_the_picker_open(self):
         self.cal.open_picker()

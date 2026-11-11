@@ -3,6 +3,7 @@ import os
 os.environ.setdefault('SDL_VIDEODRIVER', 'dummy')
 os.environ.setdefault('SDL_AUDIODRIVER', 'dummy')
 import json
+import math
 import runpy
 import sys
 import tempfile
@@ -22,6 +23,11 @@ from leg_detection import near_change_point
 from test_leg_detection import HANGING, SQURO_WALLS
 from test_startup_gui import FakeLink, key
 from test_stand_up import RESTING
+
+
+def peak_lift(profile):
+    """The lift at the highest swing frame: an odd frame count straddles the sine's peak."""
+    return profile.lift * max(math.sin((i + 1) * math.pi / profile.swing) for i in range(profile.swing))
 
 
 class Clock:
@@ -149,21 +155,27 @@ class TrotTests(unittest.TestCase):
         self.assertGreaterEqual(sg.FAST.stride, 2 * sg.SLOW.stride)
         self.assertGreaterEqual(sg.FAST.speed, 5 * sg.SLOW.speed)
         self.assertLess(sg.FAST.cycle_s, sg.SLOW.cycle_s / 2)
-        # Front feet reach further forward and hind feet further back.
-        self.assertGreater(sg.FAST.reach_front, sg.SLOW.reach_front)
-        self.assertGreater(sg.FAST.reach_hind, sg.SLOW.reach_hind)
 
-    def test_the_fast_gait_lifts_high_reaches_far_and_walks_low(self):
+    def test_both_gaits_walk_where_the_robot_stands(self):
+        standing = sg.standing_positions(BIOMIMETIC)
+        for profile in sg.PROFILES:
+            self.assertEqual(profile.depth, sg.STAND_DEPTH)          # never lower than standing
+            for leg, solver in enumerate(BIOMIMETIC.leg_solvers()):
+                foot = solver.pivots(*standing[leg * 2: leg * 2 + 2])['F']
+                centre = sg.walking_stance(solver, leg, profile)
+                self.assertAlmostEqual(foot[0], centre[0], delta=0.05)   # no slide into the trot
+                self.assertAlmostEqual(foot[1], centre[1], delta=0.05)
+
+    def test_the_fast_gait_lifts_high_and_walks_tall(self):
         self.assertGreaterEqual(sg.FAST.lift, 20.0)
-        self.assertGreaterEqual(sg.FAST.speed, 120.0)
-        self.assertLess(sg.FAST.depth, sg.STANCE_DEPTH)
+        self.assertGreaterEqual(sg.FAST.speed, 140.0)
+        self.assertGreaterEqual(sg.FAST.depth, sg.STANCE_DEPTH)   # no lower than the CAD stance
+        self.assertGreaterEqual(sg.MIN_CLEARANCE, 20.0)           # elbows never carry the robot
         front = BIOMIMETIC.solver()
         path = sg.foot_path(sg.walking_stance(front, 0, sg.FAST), +1, sg.FAST)
-        ahead = max(x for x, _ in path) - front.spec.stance[0]
-        self.assertGreaterEqual(ahead, 39.0)                    # front foot lands 40 mm ahead
         # The highest foot point clears the ground by the full lift.
         lowest_ground = sg.FAST.depth - front.contact_radius
-        self.assertAlmostEqual(lowest_ground - min(y for _, y in path), sg.FAST.lift, delta=0.3)
+        self.assertAlmostEqual(lowest_ground - min(y for _, y in path), peak_lift(sg.FAST), delta=0.01)
 
     def test_unsafe_gaits_are_refused_with_a_reason(self):
         crowded = sg.GaitProfile('X', 'crowded', stride=56, lift=12, swing=12, stance=24,
@@ -181,9 +193,73 @@ class TrotTests(unittest.TestCase):
 
     def test_closest_front_and_hind_parts_have_room_even_standing(self):
         solvers = BIOMIMETIC.leg_solvers()
-        home = BIOMIMETIC.mount_positions()
-        pivots = [s.pivots(*home[i * 2: i * 2 + 2]) for i, s in enumerate(solvers)]
-        self.assertGreater(sg.leg_gap(pivots[0], pivots[2], solvers[0].contact_radius), sg.MIN_LEG_GAP)
+        for home in (sg.standing_positions(BIOMIMETIC), BIOMIMETIC.mount_positions()):
+            pivots = [s.pivots(*home[i * 2: i * 2 + 2]) for i, s in enumerate(solvers)]
+            self.assertGreater(sg.leg_gap(pivots[0], pivots[2], solvers[0].contact_radius), sg.MIN_LEG_GAP)
+            m = sg.margins(BIOMIMETIC, [home], 1000, sg.STAND_DEPTH)
+            self.assertGreaterEqual(m['change'], sg.CHANGE_POINT_MARGIN)
+            self.assertGreaterEqual(m['fold'], sg.MIN_FOLD)
+
+    def test_direction_changes_wait_for_the_feet_to_meet(self):
+        for profile in sg.PROFILES:
+            trajectories = sg.build_trot(BIOMIMETIC, profile)
+            n = len(trajectories['f'])
+            for pair, frames in sg.direction_switches(trajectories).items():
+                ordered = sorted(frames)
+                waits = [(b - a) % n or n for a, b in zip(ordered, ordered[1:] + ordered[:1])]
+                self.assertLessEqual(max(waits), n // 2, (profile.key, pair))   # at most half a cycle
+
+    def test_turning_while_walking_never_jumps(self):
+        clock = Clock()
+        trot = sg.SquroTrot(BIOMIMETIC, clock=clock)
+        for profile in sg.PROFILES:
+            frames = trot.trajectories[profile.key]
+            n = len(frames['f'])
+            walking_step = max(max(abs(a - b) for a, b in zip(t[i], t[(i + 1) % n]))
+                               for t in frames.values() for i in range(n))
+            for old in sg.DIRECTIONS:
+                for new in sg.DIRECTIONS:
+                    if old == new:
+                        continue
+                    for start in range(n):
+                        trot.start_movement(old)
+                        trot.tick()                                  # ease in
+                        sent = []
+                        for _ in range(start + 1):
+                            clock.now += 1.0
+                            sent.append(trot.tick()[0])
+                        trot.start_movement(new)
+                        self.assertEqual(trot.direction, old)       # not straight away
+                        for _ in range(n // 2 + 1):
+                            clock.now += 1.0
+                            sent.append(trot.tick()[0])
+                        self.assertEqual(trot.direction, new, (profile.key, old, new, start))
+                        self.assertIsNone(trot.pending)
+                        for a, b in zip(sent, sent[1:]):
+                            self.assertLessEqual(max(abs(x - y) for x, y in zip(a, b)),
+                                                 walking_step + 1e-9, (profile.key, old, new, start))
+                        trot.stop()
+            trot.switch_gait()
+
+    def test_a_turn_taken_back_before_the_handover_is_dropped(self):
+        clock = Clock()
+        trot = sg.SquroTrot(BIOMIMETIC, clock=clock)
+        trot.switch_gait()                                          # fast trot
+        trot.start_movement('f')
+        trot.tick()
+        clock.now += 1.0
+        trot.tick()                                                 # frame 1, switches at 4 and 17
+        trot.start_movement('b')
+        self.assertEqual(trot.pending, 'b')
+        trot.start_movement('f')
+        self.assertIsNone(trot.pending)
+        for _ in range(30):
+            clock.now += 1.0
+            trot.tick()
+        self.assertEqual(trot.direction, 'f')
+        trot.start_movement('l')
+        trot.stop()
+        self.assertIsNone(trot.pending)
 
     def test_diagonal_pairs_alternate_and_one_pair_is_always_down(self):
         solvers = BIOMIMETIC.leg_solvers()
@@ -205,11 +281,11 @@ class TrotTests(unittest.TestCase):
             for leg, solver in enumerate(BIOMIMETIC.leg_solvers()):
                 centre = sg.walking_stance(solver, leg, profile)
                 shift = centre[0] - solver.spec.stance[0]
-                self.assertEqual(shift, profile.reach_front if leg < 2 else -profile.reach_hind)
+                self.assertAlmostEqual(shift, profile.reach_front if leg < 2 else -profile.reach_hind)
                 path = sg.foot_path(centre, +1, profile)
                 xs = [x for x, _ in path]
                 self.assertAlmostEqual(max(xs) - min(xs), profile.stride, delta=profile.stride / profile.swing + 0.1)
-                self.assertAlmostEqual(min(y for _, y in path), centre[1] - profile.lift, delta=0.3)
+                self.assertAlmostEqual(min(y for _, y in path), centre[1] - peak_lift(profile), delta=0.01)
 
     def test_eases_in_paces_frames_switches_only_when_stopped(self):
         clock = Clock()
@@ -228,7 +304,7 @@ class TrotTests(unittest.TestCase):
         trot.start_movement('b')                           # phase carries over
         self.assertEqual(trot.frame, frame)
         home, ms = trot.stop()
-        self.assertEqual((home, ms), (BIOMIMETIC.mount_positions(), sg.SLOW.ease_ms))
+        self.assertEqual((home, ms), (sg.standing_positions(BIOMIMETIC), sg.SLOW.ease_ms))
         self.assertTrue(trot.switch_gait())
         self.assertEqual(trot.current_gait, 'TROT_FAST')
         trot.start_movement('f')
@@ -278,7 +354,7 @@ class GuiTests(Home):
         self.assertTrue(any(c[2] == sg.SLOW.frame_ms for c in trot), 'no trot frames were sent')
         ease = [i for i, c in enumerate(moves) if c[2] == sg.SLOW.ease_ms]
         self.assertGreaterEqual(len(ease), 2)                         # ease in, ease out
-        self.assertEqual(moves[ease[-1]][1], BIOMIMETIC.mount_positions())
+        self.assertEqual(moves[ease[-1]][1], sg.standing_positions(BIOMIMETIC))
         # T while walking did not start lying down; no head key, no head command.
         self.assertEqual(link.calls[-1], ('torque', 0))
         self.assertNotIn('head', link.kinds())

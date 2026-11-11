@@ -98,6 +98,8 @@ class StartupFlow:
 
     def update(self):
         self.detector.update()
+        for note in self.detector.take_notes():
+            self.log.warning(note)
         stage = self.detector.stage
         if self.stage == 'connecting':
             if stage == 'ready':
@@ -107,15 +109,23 @@ class StartupFlow:
         elif self.stage == 'detecting':
             if stage == 'done':
                 self.stage = 'result'
-                found = self.detector.result['design']
+                result = self.detector.result
+                found = result['design']
                 if found:
                     self.cursor = self._index(found)
-                    self.log.info(f'Detected {found} legs.')
+                    self.log.info(f'Detected {found} legs ({result["reason"]}).')
                 else:
-                    self.log.info(f'Legs not recognised: {self.detector.result["reason"]}.')
+                    self.log.info(f'Legs not recognised: {result["reason"]}.')
+                    if result.get('closest'):
+                        # Usually the same legs, adjusted: offer them for re-recording.
+                        self.cursor = self._index(result['closest'])
+                        self.log.info('If these legs were changed, press R twice to record '
+                                      'their new stops, then Enter.')
             elif stage == 'failed':
                 self.stage = 'failed'
                 self.log.error(f'Leg detection stopped: {self.detector.error}.')
+                if self.detector.diagnosis:
+                    self.log.error(self.detector.diagnosis.text())
 
     def _index(self, key):
         for index, design in enumerate(self.designs):

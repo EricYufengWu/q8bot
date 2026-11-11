@@ -8,18 +8,26 @@ be re-established after a leg swap without reflashing the robot.
 
 Nothing here blocks: ``update`` advances at most one stage per frame, so the
 window keeps redrawing and Esc keeps working while the servos are moving.
+
+Once the move has had time, the servos are read back: the pose is held only
+if every joint got there, otherwise calibration fails with a diagnosis
+(servo_health) - a servo not answering, a servo fault, or a joint short of
+its goal.
 """
 
 import time
 
 from leg_designs import DEFAULT_DESIGN, LEG_DESIGNS, design_for
+from servo_health import Diagnosis, check, no_answer
 
-PICK, CONFIRM, MOVING, HOLD, FAILED = 'PICK', 'CONFIRM', 'MOVING', 'HOLD', 'FAILED'
+PICK, CONFIRM, MOVING, CHECKING, HOLD, FAILED = (
+    'PICK', 'CONFIRM', 'MOVING', 'CHECKING', 'HOLD', 'FAILED')
 
 
 class LegCalibration:
     POSE_NAME = 'CALIBRATION'
     MOVE_MS = 2500
+    REPLY_TIMEOUT = 1.5
     # Torque stays on through the hold so the cranks keep their reference.
     ORDER = tuple(LEG_DESIGNS)
 
@@ -32,6 +40,9 @@ class LegCalibration:
         self.chosen_key = None            # The design being calibrated.
         self.move_until = 0.0
         self.error = None
+        self.diagnosis = None
+        self._deadline = 0.0
+        self._reports = []
 
     # --- state -----------------------------------------------------------
     @property
@@ -81,19 +92,43 @@ class LegCalibration:
             return False
         design = self.chosen()
         if not self.robot.move_all(design.mount_positions(), self.MOVE_MS, False):
-            self.stage = FAILED
-            self.error = 'Could not send the mounting pose.'
+            self._failed('Could not send the mounting pose.', Diagnosis(
+                'communication', 'the controller did not take the command',
+                'Check that the controller dongle is plugged in, then retry.'))
             return False
         self.stage = MOVING
         self.error = None
+        self.diagnosis = None
         self.move_until = self.clock() + self.MOVE_MS / 1000
         return True
 
     def update(self):
-        """Advance from MOVING to HOLD once the commanded move has had time."""
+        """Once the commanded move has had time, read the servos back."""
         if self.stage == MOVING and self.clock() >= self.move_until:
-            self.stage = HOLD
+            self.stage = CHECKING
+            self.robot.request_telemetry()
+            self._deadline = self.clock() + self.REPLY_TIMEOUT
+        elif self.stage == CHECKING and self.clock() > self._deadline:
+            self._failed('No reply after the move.', no_answer())
         return None
+
+    def feed(self, reply):
+        """HOLD only when every joint reached the mounting pose."""
+        if reply['kind'] != 'telemetry' or self.stage != CHECKING:
+            return
+        problem = check(reply, self.chosen().mount_positions())
+        if problem:
+            self._failed('Mounting pose not reached.', problem)
+        else:
+            self.stage = HOLD
+
+    def reports(self):
+        reports, self._reports = self._reports, []
+        return reports
+
+    def _failed(self, error, diagnosis):
+        self.stage, self.error, self.diagnosis = FAILED, error, diagnosis
+        self._reports += [f'Calibration stopped: {error}', diagnosis.text()]
 
     def finish(self):
         """Commit the swap: the chosen design becomes the fitted one."""
@@ -124,9 +159,12 @@ class LegCalibration:
                     'Enter: drive to mounting pose   Esc: cancel')
         if self.stage == MOVING:
             return f'{design.title}  |  Driving to mounting pose...  |  Esc: cancel'
+        if self.stage == CHECKING:
+            return f'{design.title}  |  Checking every joint got there...  |  Esc: cancel'
         if self.stage == HOLD:
             return (f'{design.title}  |  HOLDING mounting pose - fit the linkages  |  '
                     'Enter: done   Esc: cancel')
         if self.stage == FAILED:
-            return f'{design.title}  |  {self.error}  |  Enter: retry   Esc: cancel'
+            reason = self.diagnosis.title if self.diagnosis else self.error
+            return f'{design.title}  |  {reason}  |  Enter: retry   Esc: cancel'
         return ''

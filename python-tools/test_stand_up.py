@@ -7,6 +7,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / 'q8bot'))
 import espnow
+import squro_gait as sg
 import stand_up as su
 from leg_designs import BIOMIMETIC
 from leg_detection import near_change_point
@@ -23,20 +24,33 @@ def pose_at(depth):
 
 
 RESTING = pose_at(29.0)   # feet and front elbows on the floor, unpowered
+STAND = (su.STAND_REACH_FRONT, su.STAND_REACH_HIND)
 
 
 class PlanTests(unittest.TestCase):
-    def test_rise_from_rest_ends_in_the_cad_stance(self):
-        waypoints, error = su.plan_motion(BIOMIMETIC, RESTING, su.STANCE_DEPTH)
+    def test_rise_from_rest_ends_in_the_standing_pose(self):
+        waypoints, error = su.plan_motion(BIOMIMETIC, RESTING, su.STAND_DEPTH, STAND)
         self.assertIsNone(error)
         self.assertEqual(len(waypoints), su.STEPS)
-        # The CAD stance is the mounting pose, front and hind.
-        for got, want in zip(waypoints[-1], BIOMIMETIC.mount_positions()):
+        # The pose the trot starts from and returns to.
+        for got, want in zip(waypoints[-1], sg.standing_positions(BIOMIMETIC)):
             self.assertAlmostEqual(got, want, delta=0.05)
 
+    def test_rise_keeps_front_and_hind_legs_as_far_apart_as_resting(self):
+        solvers = BIOMIMETIC.leg_solvers()
+
+        def gap(positions):
+            pivots = [s.pivots(*positions[i * 2: i * 2 + 2]) for i, s in enumerate(solvers)]
+            return sg.leg_gap(pivots[0], pivots[2], solvers[0].contact_radius)
+
+        waypoints, _ = su.plan_motion(BIOMIMETIC, RESTING, su.STAND_DEPTH, STAND)
+        self.assertGreaterEqual(min(gap(w) for w in waypoints), gap(RESTING) - 0.1)
+        self.assertGreater(gap(waypoints[-1]), sg.MIN_LEG_GAP)
+
     def test_every_waypoint_is_safe(self):
-        for start, depth in ((RESTING, su.STANCE_DEPTH), (pose_at(su.STANCE_DEPTH), su.CROUCH_DEPTH)):
-            waypoints, error = su.plan_motion(BIOMIMETIC, start, depth)
+        for start, depth, reach in ((RESTING, su.STAND_DEPTH, STAND),
+                                    (sg.standing_positions(BIOMIMETIC), su.CROUCH_DEPTH, (0.0, 0.0))):
+            waypoints, error = su.plan_motion(BIOMIMETIC, start, depth, reach)
             self.assertIsNone(error)
             previous = start
             for positions in waypoints:
@@ -48,7 +62,7 @@ class PlanTests(unittest.TestCase):
                 previous = positions
 
     def test_crouch_keeps_elbows_knees_and_belly_off_the_floor(self):
-        waypoints, _ = su.plan_motion(BIOMIMETIC, pose_at(su.STANCE_DEPTH), su.CROUCH_DEPTH)
+        waypoints, _ = su.plan_motion(BIOMIMETIC, sg.standing_positions(BIOMIMETIC), su.CROUCH_DEPTH)
         last = waypoints[-1]
         for leg, solver in enumerate(BIOMIMETIC.leg_solvers()):
             self.assertGreaterEqual(su._clearance(solver, *last[leg * 2: leg * 2 + 2]), 5.0)
@@ -67,7 +81,7 @@ class PlanTests(unittest.TestCase):
         self.assertTrue(ok)
         start = list(RESTING)
         start[0:2] = [float(b1), float(b2)]
-        waypoints, error = su.plan_motion(BIOMIMETIC, start, su.STANCE_DEPTH)
+        waypoints, error = su.plan_motion(BIOMIMETIC, start, su.STAND_DEPTH, STAND)
         self.assertIsNone(waypoints)
         self.assertIn('FL is folded the other way', error)
 
@@ -96,10 +110,12 @@ class FakeRobot:
 
     def arm(self, positions):
         self.armed = list(positions)
+        self.angles = list(positions)
         return True
 
     def move_all(self, positions, duration, record):
         self.moves.append((list(positions), duration))
+        self.angles = list(positions)          # the servos follow
         return True
 
 
@@ -122,8 +138,8 @@ class SequenceTests(unittest.TestCase):
         self.drive(sequence, robot, clock)
         self.assertEqual(sequence.stage, 'standing', sequence.error)
         self.assertTrue(sequence.active)
-        # Output capped before torque came on, full again once standing.
-        self.assertEqual(robot.caps, [su.STAND_PWM, su.FULL_PWM])
+        # Full output confirmed before torque came on, and kept.
+        self.assertEqual(robot.caps, [su.FULL_PWM])
         # Armed on the measured pose, so nothing jumped at torque-on.
         for got, want in zip(robot.armed, RESTING):
             self.assertAlmostEqual(got, want, delta=1e-6)
@@ -136,7 +152,7 @@ class SequenceTests(unittest.TestCase):
         self.drive(sequence, robot, clock)
         self.assertEqual(sequence.stage, 'crouched', sequence.error)
         self.assertFalse(sequence.active)
-        self.assertEqual(robot.caps[-1], su.STAND_PWM)
+        self.assertEqual(robot.caps, [su.FULL_PWM, su.FULL_PWM])     # never below full
         self.assertEqual(len(robot.moves), su.STEPS)
 
     def test_unconfirmed_cap_stops_before_torque(self):
@@ -146,8 +162,97 @@ class SequenceTests(unittest.TestCase):
         sequence.toggle()
         self.drive(sequence, robot, clock)
         self.assertEqual(sequence.stage, 'failed')
+        self.assertIn('servo ID 18 did not confirm', sequence.error)   # bit 7 missing
         self.assertIsNone(robot.armed)
         self.assertEqual(robot.moves, [])
+
+    def test_a_silent_servo_is_named_and_reported(self):
+        clock = [0.0]
+
+        class OneSilent(FakeRobot):
+            def request_telemetry(self):
+                super().request_telemetry()
+                self.replies[-1]['servos'][16]['responding'] = False
+
+        robot = OneSilent(list(RESTING))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.toggle()
+        failure = sequence.feed(robot.replies.pop(0))
+        self.assertEqual(failure, 'no answer from BL shoulder (ID 16)')
+        self.assertEqual(sequence.stage, 'failed')
+        self.assertEqual(sequence.diagnosis.category, 'communication')
+        self.assertEqual(sequence.diagnosis.servos, (16,))
+        self.assertIsNone(robot.armed)
+        reports = sequence.reports()
+        self.assertEqual(reports[0], 'Stand-up stopped: no answer from BL shoulder (ID 16).')
+        self.assertTrue(reports[1].startswith('Communication problem'))
+        self.assertEqual(sequence.reports(), [])                      # each line once
+
+    def test_a_joint_left_short_of_the_stance_is_a_torque_problem(self):
+        clock = [0.0]
+
+        class Weak(FakeRobot):
+            def move_all(self, positions, duration, record):
+                kept = self.angles[3]                                # FR shoulder cannot lift
+                sent = super().move_all(positions, duration, record)
+                self.angles[3] = kept
+                return sent
+
+        robot = Weak(list(RESTING))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.toggle()
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.stage, 'failed')
+        self.assertFalse(sequence.active)                            # no trot from here
+        self.assertIn('did not reach its standing pose', sequence.error)
+        self.assertEqual(sequence.diagnosis.category, 'torque')
+        self.assertIn('FR shoulder (ID 14)', sequence.diagnosis.detail)
+
+    def test_a_latched_overload_is_named_before_torque_comes_on(self):
+        clock = [0.0]
+
+        class Overloaded(FakeRobot):
+            def request_telemetry(self):
+                super().request_telemetry()
+                self.replies[-1]['servos'][17].update(fault=True, error=32)
+
+        robot = Overloaded(list(RESTING))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.toggle()
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.stage, 'failed')
+        self.assertIsNone(robot.armed)
+        self.assertEqual(sequence.diagnosis.category, 'torque')
+        self.assertIn('BR elbow (ID 17) reports overload', sequence.diagnosis.detail)
+        self.assertIn('battery off and on', sequence.diagnosis.action)
+
+    def test_an_unconfirmed_cap_is_diagnosed_from_a_read_back(self):
+        clock = [0.0]
+        robot = FakeRobot(list(RESTING), confirm=0xFF & ~(1 << 2))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.toggle()
+        self.drive(sequence, robot, clock)
+        self.assertIn('servo ID 13 did not confirm', sequence.error)
+        # Every servo answered the read-back: an intermittent link.
+        self.assertEqual(sequence.diagnosis.category, 'communication')
+        self.assertIn('now and then', sequence.diagnosis.action)
+        self.assertIn('T: Retry', sequence.label())
+
+    def test_an_unplannable_start_is_a_pose_problem(self):
+        clock = [0.0]
+        solver = BIOMIMETIC.solver()
+        foot = solver.pivots(*RESTING[0:2])['F']
+        other = solver.__class__(solver.spec)
+        other.branch = -solver.branch
+        b1, b2, _ = other.ik_solve(*foot)
+        start = list(RESTING)
+        start[0:2] = [float(b1), float(b2)]
+        robot = FakeRobot(start)
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.toggle()
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.diagnosis.category, 'pose')
+        self.assertIn('FL is folded the other way', sequence.diagnosis.detail)
 
     def test_silence_fails_cleanly(self):
         clock = [0.0]
@@ -163,6 +268,42 @@ class SequenceTests(unittest.TestCase):
         self.assertEqual(sequence.stage, 'failed')
         self.assertIn('no reply', sequence.error)
         self.assertIsNone(robot.armed)
+
+    def test_hold_after_calibration_restores_full_output(self):
+        clock = [0.0]
+        robot = FakeRobot(list(RESTING))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.hold(BIOMIMETIC.mount_positions())
+        # Not standing (so no trot) until every servo confirms full output.
+        self.assertNotEqual(sequence.stage, 'standing')
+        self.assertEqual(robot.caps, [su.FULL_PWM])
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.stage, 'standing', sequence.error)
+        self.assertTrue(sequence.active)
+        self.assertEqual(robot.moves, [])           # holds the pose, nothing moves
+
+    def test_hold_refuses_to_stand_on_an_unconfirmed_cap(self):
+        clock = [0.0]
+        robot = FakeRobot(list(RESTING), confirm=0x7F)
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.hold(BIOMIMETIC.mount_positions())
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.stage, 'failed')
+        self.assertIn('output cap', sequence.error)
+
+    def test_hold_fails_cleanly_without_a_reply(self):
+        clock = [0.0]
+
+        class Silent(FakeRobot):
+            def set_output_cap(self, pwm):
+                self.caps.append(pwm)
+
+        robot = Silent(list(RESTING))
+        sequence = su.StandUp(BIOMIMETIC, robot, clock=lambda: clock[0])
+        sequence.hold(BIOMIMETIC.mount_positions())
+        self.drive(sequence, robot, clock)
+        self.assertEqual(sequence.stage, 'failed')
+        self.assertIn('no reply', sequence.error)
 
 
 class ArmTests(unittest.TestCase):

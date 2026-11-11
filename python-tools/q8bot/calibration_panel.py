@@ -8,7 +8,7 @@ import pygame
 
 import eth_theme as eth
 import leg_geometry
-from leg_calibration import CONFIRM, FAILED, HOLD, MOVING, PICK
+from leg_calibration import CHECKING, CONFIRM, FAILED, HOLD, MOVING, PICK
 from leg_designs import design_for
 from pose_preview import PREVIEW_SIZE
 
@@ -67,7 +67,7 @@ class CalibrationPanel:
     def _render_calibration(self, surface, calibration):
         design = calibration.chosen()
         stage = calibration.stage
-        heading = {CONFIRM: 'READY TO CALIBRATE', MOVING: 'MOVING',
+        heading = {CONFIRM: 'READY TO CALIBRATE', MOVING: 'MOVING', CHECKING: 'CHECKING',
                    HOLD: 'HOLDING MOUNTING POSE', FAILED: 'CALIBRATION FAILED'}[stage]
         accent = eth.LOG_ERROR if stage == FAILED else (
             eth.POSE_ACCENT if stage == HOLD else eth.ACCENT)
@@ -81,9 +81,16 @@ class CalibrationPanel:
         self._draw_linkage(surface, design, (28, 130, 330, 300), accent)
 
         x = 396
+        if stage == FAILED and calibration.diagnosis:
+            # Why, in place of the steps: they are not what is needed now.
+            diagnosis = calibration.diagnosis
+            self._text(surface, diagnosis.title, 26, eth.LOG_ERROR, (x, 138))
+            detail = f'{diagnosis.detail[0].upper()}{diagnosis.detail[1:]}. {diagnosis.action}'
+            self._wrap(surface, detail, 20, eth.TEXT_SECONDARY, (x, 172), 350)
+            return
         for index, step in enumerate(design.steps):
             y = 138 + index * 52
-            done = stage in (HOLD, MOVING) and index < 2
+            done = stage in (HOLD, MOVING, CHECKING) and index < 2
             colour = eth.TEXT_MUTED if done else eth.TEXT_SECONDARY
             pygame.draw.circle(surface, accent if not done else eth.CHIP, (x + 8, y + 8), 7)
             self._text(surface, str(index + 1), 17,

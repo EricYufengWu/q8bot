@@ -18,7 +18,13 @@ Two things keep the sweeps safe:
 
 Stop angles depend on the physical parts, so they are recorded per design
 on the robot ("learning") rather than computed. Until a design has a
-recording, detection can say only that nothing recorded matches.
+recording, detection can say only that nothing recorded matches. Parts get
+adjusted, so a design still matches when a minority of its stops have moved;
+when none matches, the closest is offered for re-recording.
+
+A sweep that fails on a transient cause (a servo briefly not answering, a leg
+nudged) is retried after every servo has been checked; a persistent cause
+stops detection with a diagnosis (servo_health) instead.
 """
 
 import json
@@ -27,8 +33,9 @@ import os
 import time
 from pathlib import Path
 
-from espnow import PROBE_STATUS_OK
+from espnow import PROBE_STATUS_OK, PROBE_RESTORE_FAILED
 from leg_designs import LEG_DESIGNS, design_for, selectable
+from servo_health import HEAD_ID, LEG_IDS, LEGS, after_probe, check, no_answer
 
 PROBE_PWM = 140              # Goal PWM during sweeps, ~16 % duty
 MAX_SWEEP = 120.0            # deg per direction
@@ -37,10 +44,11 @@ CHANGE_POINT_MARGIN = 15.0   # deg kept from any parallelogram change point
 KNEE_GAP = 8.0               # mm kept between the five-bar knee pins
 CONTACT_TOLERANCE = 8.0      # deg; a recorded stop must recur within this
 MIN_MATCHES = 4              # agreeing stops needed before naming a design
+MAX_DISAGREE = 0.25          # share of compared stops that may have moved
 MAX_RUNS = 5                 # recordings kept per design
-LEGS = ('FL', 'FR', 'BL', 'BR')
+RETRYABLE = {1, 5, 7, 8, 10}  # busy, setup failed, stopped answering, nudged, timed out
+MAX_RETRIES = 3              # per sweep
 ROUNDS = (('q1', +1), ('q1', -1), ('q2', +1), ('q2', -1))
-HEAD_ID = 19
 HEAD_RANGE = 90.0            # deg either side of centre the head is ever swept
 HEAD_MARGIN = 8.0            # deg kept inside a measured head contact
 HEAD_ROUNDS = (+1, -1)
@@ -225,6 +233,17 @@ def compare(runs, measurement):
     return matches, mismatches
 
 
+def score(runs, measurement):
+    """(matches, mismatches) against the better of all recordings pooled and
+    each recording alone: recordings of adjusted parts need not agree."""
+    options = [compare(runs, measurement)] + [compare([run], measurement) for run in runs]
+    return max(options, key=lambda s: (s[0] - s[1], s[0]))
+
+
+def fits(matches, mismatches):
+    return matches >= MIN_MATCHES and mismatches <= MAX_DISAGREE * (matches + mismatches)
+
+
 class SignatureStore:
     """Recorded stop angles per design, kept between sessions."""
 
@@ -256,21 +275,30 @@ def classify(measurement, store, designs=None):
         if not runs:
             continue
         recorded.append(design.key)
-        scores[design.key] = compare(runs, measurement)
-    fits = sorted(((matches, key) for key, (matches, wrong) in scores.items()
-                   if wrong == 0 and matches >= MIN_MATCHES), reverse=True)
+        scores[design.key] = score(runs, measurement)
+    fitting = sorted(((matches - wrong, key) for key, (matches, wrong) in scores.items()
+                      if fits(matches, wrong)), reverse=True)
+    near = sorted(((matches - wrong, matches, key) for key, (matches, wrong) in scores.items()
+                   if matches > 0), reverse=True)
+    closest = near[0][2] if near else None
     if contacts < MIN_MATCHES:
         verdict, reason = None, f'only {contacts} joints met a stop; too few to identify'
     elif not recorded:
         verdict, reason = None, 'no design has a recording yet'
-    elif not fits:
+    elif not fitting:
         verdict, reason = None, 'no recorded design matches these stops'
-    elif len(fits) > 1 and fits[0][0] - fits[1][0] < 2:
-        verdict, reason = None, f'{fits[0][1]} and {fits[1][1]} both match'
+        if closest:
+            matches, wrong = scores[closest]
+            reason += (f'; closest is {design_for(closest).title}, {matches} agree and '
+                       f'{wrong} disagree')
+    elif len(fitting) > 1 and fitting[0][0] - fitting[1][0] < 2:
+        verdict, reason = None, f'{fitting[0][1]} and {fitting[1][1]} both match'
     else:
-        verdict, reason = fits[0][1], f'{fits[0][0]} stops agree, none disagree'
+        verdict = fitting[0][1]
+        matches, wrong = scores[verdict]
+        reason = f'{matches} stops agree, {wrong} disagree'
     return {'design': verdict, 'reason': reason, 'scores': scores,
-            'recorded': recorded, 'contacts': contacts}
+            'recorded': recorded, 'contacts': contacts, 'closest': closest}
 
 
 # --- remembered design -------------------------------------------------------
@@ -308,7 +336,11 @@ class LegDetector:
         self.measurement = {}
         self.result = None
         self.error = None
+        self.diagnosis = None        # servo_health.Diagnosis once detection has failed
+        self.notes = []              # retries, for the log
+        self.retries = 0             # of the current sweep
         self.restore_failed = False
+        self._failure = None         # (status, text) of the sweep being retried or diagnosed
         self.round = 0
         self.head = {}               # {+1/-1: {kind, start, stop, bound}}
         self.head_round = None       # index into HEAD_ROUNDS while the head is swept
@@ -317,12 +349,13 @@ class LegDetector:
 
     @property
     def active(self):
-        return self.stage in ('telemetry', 'probing')
+        return self.stage in ('telemetry', 'probing', 'rechecking', 'diagnosing')
 
     def request_telemetry(self):
         self.robot.request_telemetry()
         self.stage = 'telemetry'
         self.error = None
+        self.diagnosis = None
         self._deadline = self.clock() + self.TELEMETRY_TIMEOUT
 
     def start(self):
@@ -335,6 +368,8 @@ class LegDetector:
         self.head = {}
         self.head_round = None
         self.round = 0
+        self.retries = 0
+        self.diagnosis = None
         return self._send_round()
 
     def abort(self):
@@ -347,11 +382,19 @@ class LegDetector:
             self.telemetry = reply
             self.problems = telemetry_problems(reply)
             self.stage = 'ready'
+        elif reply['kind'] == 'telemetry' and self.stage == 'rechecking':
+            problem = check(reply, ids=self._sweep_ids())
+            if problem:
+                return self._fail(self._failure[1], problem)
+            self.telemetry = reply       # fresh angles: an aborted sweep lets the legs drop
+            self._resend()
+        elif reply['kind'] == 'telemetry' and self.stage == 'diagnosing':
+            status, text = self._failure
+            self._fail(text, after_probe(status, text, reply, self._sweep_ids()))
         elif reply['kind'] == 'probe' and self.stage == 'probing':
             if reply['status'] != PROBE_STATUS_OK:
-                self.stage, self.error = 'failed', reply['status_text']
-                self.restore_failed = reply['status'] == 11
-                return
+                return self._sweep_failed(reply)
+            self.retries = 0
             if self.head_round is not None:
                 return self._head_reply(reply)
             part, direction = ROUNDS[self.round]
@@ -364,9 +407,43 @@ class LegDetector:
             if self.stage == 'telemetry':
                 self.stage = 'no_reply'
                 self.error = 'the robot did not answer; firmware without detection, or robot off'
+            elif self.stage in ('rechecking', 'diagnosing'):
+                self._fail(self._failure[1], no_answer())
             else:
                 self.robot.abort_probe()
-                self.stage, self.error = 'failed', 'no reply from the robot during a sweep'
+                self._fail('no reply from the robot during a sweep', no_answer())
+
+    def _sweep_failed(self, reply):
+        """Retry a transient failure after checking every servo; diagnose the rest."""
+        status, text = reply['status'], reply['status_text']
+        self.restore_failed = status == PROBE_RESTORE_FAILED
+        self._failure = (status, text)
+        retry = status in RETRYABLE and self.retries < MAX_RETRIES
+        if retry:
+            self.retries += 1
+            self.notes.append(f'{self._sweep_label()}: {text}; checking the servos, '
+                              f'then retry {self.retries} of {MAX_RETRIES}')
+        self.stage = 'rechecking' if retry else 'diagnosing'
+        self.robot.request_telemetry()
+        self._deadline = self.clock() + self.TELEMETRY_TIMEOUT
+
+    def _fail(self, error, diagnosis):
+        self.stage, self.error, self.diagnosis = 'failed', error, diagnosis
+
+    def _resend(self):
+        return self._send_head_round() if self.head_round is not None else self._send_round()
+
+    def _sweep_ids(self):
+        return (HEAD_ID,) if self.head_round is not None else LEG_IDS
+
+    def _sweep_label(self):
+        if self.head_round is not None:
+            return f'Head sweep {self.head_round + 1} of {len(HEAD_ROUNDS)}'
+        return f'Sweep {self.round + 1} of {len(ROUNDS)}'
+
+    def take_notes(self):
+        notes, self.notes = self.notes, []
+        return notes
 
     def record(self, design_key):
         """Store the last measurement as a recording of ``design_key``."""
@@ -433,11 +510,14 @@ class LegDetector:
         return True
 
     def progress(self):
+        if self.stage in ('rechecking', 'diagnosing'):
+            return f'{self._sweep_label()}: {self._failure[1]}. Checking every servo...'
+        retry = f' (retry {self.retries} of {MAX_RETRIES})' if self.retries else ''
         if self.stage == 'probing' and self.head_round is not None:
             direction = HEAD_ROUNDS[self.head_round]
-            return f'Head sweep {self.head_round + 1} of {len(HEAD_ROUNDS)}, {"+" if direction > 0 else "-"} direction'
+            return f'{self._sweep_label()}, {"+" if direction > 0 else "-"} direction{retry}'
         if self.stage == 'probing':
             part, direction = ROUNDS[self.round]
             joint = 'elbow (q1)' if part == 'q1' else 'shoulder (q2)'
-            return f'Sweep {self.round + 1} of {len(ROUNDS)}: {joint}, {"+" if direction > 0 else "-"} direction'
+            return f'{self._sweep_label()}: {joint}, {"+" if direction > 0 else "-"} direction{retry}'
         return self.stage

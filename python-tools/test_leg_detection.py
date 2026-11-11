@@ -164,6 +164,33 @@ class FakeRobot:
         self.aborted = True
 
 
+class Flaky(FakeRobot):
+    """Fails the first sweeps with the given statuses; can then lose or fault a servo."""
+
+    def __init__(self, angles, walls, failures=(), silent_after=None, fault_after=None):
+        super().__init__(angles, walls)
+        self.failures = list(failures)
+        self.silent_after, self.fault_after = silent_after, fault_after
+        self.failed = 0
+        self.mute = False
+
+    def request_telemetry(self):
+        if self.mute:
+            return
+        missing = {self.silent_after} if self.failed and self.silent_after else set()
+        faults = {self.fault_after} if self.failed and self.fault_after else set()
+        self.replies.append(espnow.decode_reply(
+            telemetry_values(self.angles + [0.0], faults=faults, missing=missing)))
+
+    def start_probe(self, excursions, pwm):
+        if self.failures:
+            self.probes.append(list(excursions))
+            self.failed += 1
+            self.replies.append(espnow.decode_reply(probe_values(self.failures.pop(0), {})))
+            return
+        super().start_probe(excursions, pwm)
+
+
 SQURO_WALLS = {(i, d): w for i, d, w in [
     (0, 1, 60), (0, -1, -40), (1, 1, 150), (1, -1, 60), (2, 1, 60), (2, -1, -40),
     (3, 1, 150), (3, -1, 60), (4, 1, -10), (4, -1, -80), (5, 1, 110), (5, -1, 10),
@@ -189,7 +216,7 @@ class DetectionTests(unittest.TestCase):
         clock = [0.0]
         detector = ld.LegDetector(robot, store=store or ld.SignatureStore(), clock=lambda: clock[0])
         detector.request_telemetry()
-        for _ in range(20):
+        for _ in range(40):
             while robot.replies:
                 detector.feed(robot.replies.pop(0))
             if detector.stage == 'ready':
@@ -243,17 +270,73 @@ class DetectionTests(unittest.TestCase):
         detector.update()
         self.assertEqual(detector.stage, 'no_reply')
 
-    def test_a_failed_sweep_stops_detection(self):
-        robot = FakeRobot(HANGING, SQURO_WALLS)
+    def test_a_sweep_failing_every_time_stops_detection_with_a_diagnosis(self):
+        robot = Flaky(HANGING, SQURO_WALLS, failures=[8] * (ld.MAX_RETRIES + 1))
+        detector = self.run_detection(robot)
+        self.assertEqual(detector.stage, 'failed')
+        self.assertIn('pushed out of place', detector.error)
+        self.assertEqual(detector.diagnosis.category, 'disturbed')
+        self.assertEqual(len(detector.take_notes()), ld.MAX_RETRIES)   # each retry logged
+
+    def test_a_servo_dropping_out_once_is_retried_and_detection_completes(self):
+        store = ld.SignatureStore()
+        self.run_detection(FakeRobot(HANGING, SQURO_WALLS), store).record('BIOMIMETIC')
+        robot = Flaky(HANGING, SQURO_WALLS, failures=[7, 5])
+        detector = self.run_detection(robot, store)
+        self.assertEqual(detector.stage, 'done', detector.error)
+        self.assertEqual(detector.result['design'], 'BIOMIMETIC')
+        notes = detector.take_notes()
+        self.assertEqual(len(notes), 2)
+        self.assertIn('stopped answering', notes[0])
+        # The failed sweep was sent again, and every round completed.
+        self.assertEqual(len([p for p in robot.probes if p[0] != 'head']), len(ld.ROUNDS) + 2)
+
+    def test_a_servo_still_silent_after_a_failure_is_named(self):
+        robot = Flaky(HANGING, SQURO_WALLS, failures=[7], silent_after=16)
+        detector = self.run_detection(robot)
+        self.assertEqual(detector.stage, 'failed')
+        self.assertEqual(detector.diagnosis.category, 'communication')
+        self.assertIn('BL shoulder (ID 16)', detector.diagnosis.detail)
+        self.assertEqual(len(robot.probes), 1)                       # not retried blindly
+
+    def test_a_fault_after_a_sweep_is_diagnosed_not_retried(self):
+        robot = Flaky(HANGING, SQURO_WALLS, failures=[6], fault_after=12)
+        detector = self.run_detection(robot)
+        self.assertEqual(detector.stage, 'failed')
+        self.assertEqual(detector.diagnosis.category, 'torque')
+        self.assertIn('FL shoulder (ID 12) reports overload', detector.diagnosis.detail)
+
+    def test_no_reply_to_the_check_is_a_communication_problem(self):
         clock = [0.0]
+        robot = Flaky(HANGING, SQURO_WALLS, failures=[7])
         detector = ld.LegDetector(robot, store=ld.SignatureStore(), clock=lambda: clock[0])
         detector.request_telemetry()
         detector.feed(robot.replies.pop())
         detector.start()
-        robot.replies.clear()
-        detector.feed(espnow.decode_reply(probe_values(8, {})))
+        robot.mute = True
+        detector.feed(robot.replies.pop())
+        self.assertEqual(detector.stage, 'rechecking')
+        self.assertIn('Checking every servo', detector.progress())
+        clock[0] = 5.0
+        detector.update()
         self.assertEqual(detector.stage, 'failed')
-        self.assertIn('pushed out of place', detector.error)
+        self.assertEqual(detector.diagnosis.text(), ld.no_answer().text())
+
+    def test_slightly_changed_legs_still_match_and_changed_ones_are_offered(self):
+        store = ld.SignatureStore()
+        self.run_detection(FakeRobot(HANGING, SQURO_WALLS), store).record('BIOMIMETIC')
+        # One stop moved by a part adjustment: still the same legs.
+        nudged = dict(SQURO_WALLS)
+        nudged[(0, 1)] += 20.0
+        detector = self.run_detection(FakeRobot(HANGING, nudged), store)
+        self.assertEqual(detector.result['design'], 'BIOMIMETIC', detector.result)
+        self.assertIn('1 disagree', detector.result['reason'])
+        # Half the stops moved: not named, but offered as the closest.
+        moved = {k: (w + 25.0 if k[0] in (0, 2, 4) else w) for k, w in SQURO_WALLS.items()}
+        detector = self.run_detection(FakeRobot(HANGING, moved), store)
+        self.assertIsNone(detector.result['design'])
+        self.assertEqual(detector.result['closest'], 'BIOMIMETIC')
+        self.assertIn('closest is Biomimetic', detector.result['reason'])
 
     def test_cancel_aborts_the_running_sweep(self):
         robot = FakeRobot(HANGING, SQURO_WALLS)

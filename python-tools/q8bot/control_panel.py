@@ -6,7 +6,7 @@ from calibration_panel import CalibrationPanel
 from control_config import KEYBOARD_MAPPING
 from leg_designs import DEFAULT_DESIGN, design_for
 from pose_preview import DESCRIPTIONS, PREVIEW_SIZE, make_preview, preview_key
-from startup_panel import StartupPanel
+from startup_panel import StartupPanel, diagnosis_body
 
 WINDOW_SIZE = (1280, 800)
 
@@ -193,7 +193,16 @@ class ControlPanel:
     def _draw_stand_mode(self, window, design, pose):
         self.active_preview = 'STANDING'
         window.blit(self.controls, (20, 158))
-        window.blit(self._standing_picture(design), (440, 158))
+        if getattr(pose, 'stage', None) == 'failed':
+            diagnosis = pose.diagnosis
+            card = (self.startup_view.render_card('STOPPED', diagnosis.title, diagnosis_body(diagnosis))
+                    if diagnosis else
+                    self.startup_view.render_card('STOPPED', 'Checking the servos',
+                                                  f'{pose.error[0].upper()}{pose.error[1:]}. Reading '
+                                                  'every servo back to find out why...'))
+            window.blit(card, (440, 158))
+        else:
+            window.blit(self._standing_picture(design), (440, 158))
         self._text(window, f'Fitted legs: {design.title}', 23, eth.TEXT_SECONDARY, (444, 652))
         trot = getattr(self, '_trot', None)
         if trot is None:

@@ -27,7 +27,7 @@ from leg_designs import LEG_DESIGNS, design_for
 from leg_detection import LegDetector, head_limits, save_last_design
 from head_control import HeadControl
 from squro_gait import SquroTrot
-from stand_up import StandUp
+from stand_up import StandUp, FULL_PWM
 from startup_flow import StartupFlow
 
 # Pygame config
@@ -139,6 +139,7 @@ def begin_operation(design):
     if not load_design(design):
         sys.exit(1)
     if design.supports_gaits:
+        q8.set_output_cap(FULL_PWM)    # whatever cap the servos still hold must not carry over
         q8.enable_torque()
         move_xy(pos_x, pos_y, 1000)
         time.sleep(2)
@@ -152,9 +153,10 @@ def refit(design):
     if not load_design(design):
         return
     if design.supports_gaits:
+        q8.set_output_cap(FULL_PWM)
         move_xy(pos_x, pos_y, 1000)
     else:
-        stand_up.hold(design.mount_positions())
+        stand_up.hold(design.mount_positions())    # restores full output itself
     log.info(f"{design.title} legs fitted.")
 
 def advance_calibration():
@@ -380,9 +382,7 @@ while True:
             movement = True
         else:
             movement = False
-        failure = stand_up.update()
-        if failure:
-            log.error(f"Stand-up stopped: {failure}")
+        stand_up.update()
     elif sitting_pose.blocks_movement() or rearing_pose.blocks_movement():
         # Keep the static pose; battery checks and exit remain available.
         if input_handler.is_action_pressed('battery'):
@@ -468,8 +468,13 @@ while True:
     # Drain replies while sitting as well as while operating a gait.
     replies, lines = drain()
     for reply in replies:
+        calibration.feed(reply)
         if stand_up is not None:
             stand_up.feed(reply)
+        elif reply['kind'] == 'cap' and reply['confirmed'] != 0xFF:
+            log.error("Not every leg servo confirmed full output; press X to recover the servos.")
+    for line in calibration.reports() + (stand_up.reports() if stand_up is not None else []):
+        log.error(line)
     for raw_data in lines:
         if request == "battery" and raw_data and raw_data[0].isdigit():
             log.info(f"Battery: {int(raw_data[0])}%")

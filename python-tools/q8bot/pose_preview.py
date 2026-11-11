@@ -12,6 +12,7 @@ import eth_theme as eth
 import leg_geometry
 from gait_manager import GaitManager
 from leg_designs import DEFAULT_DESIGN, design_for
+from squro_gait import STAND_DEPTH, standing_positions
 
 PREVIEW_SIZE = (800, 480)
 DESCRIPTIONS = {
@@ -29,7 +30,7 @@ DESCRIPTIONS = {
 COLORS = eth.GAIT_COLORS
 # Pictures rendered on demand rather than shipped as assets. STANDING is drawn
 # with each leg's own solver, so SQuRo hind legs appear knee-forward.
-EXTRA = {'STANDING': ('Standing', 'Front pads and hind toes on the ground. CAD stance.')}
+EXTRA = {'STANDING': ('Standing', 'Front pads and hind toes on the ground, at walking height.')}
 
 
 def preview_key(gait, active, pose_name='SITTING'):
@@ -39,7 +40,7 @@ def preview_key(gait, active, pose_name='SITTING'):
 def _pose_positions(name, design, leg):
     """The eight joint angles and four body heights this picture shows."""
     if name == 'STANDING':
-        positions = design.mount_positions()
+        positions = standing_positions(design) if design.per_leg else design.mount_positions()
         heights = [solver.contact_depth(*positions[i * 2: i * 2 + 2])
                    if hasattr(solver, 'contact_depth') else solver.fk_solve(*positions[i * 2: i * 2 + 2])[1]
                    for i, solver in enumerate(design.leg_solvers())]
@@ -68,7 +69,7 @@ def _pose_positions(name, design, leg):
 
 def _detail(name, design):
     if name == 'STANDING':
-        return 'Ground 64.2 mm below the servo axes  /  front and hind poses differ'
+        return f'Ground {STAND_DEPTH:g} mm below the servo axes  /  feet at the stride centres'
     if name == 'SITTING':
         _, front, rear = design.sitting
         return f'Front {front:g} mm  /  Rear {rear:g} mm'

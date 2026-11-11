@@ -9,9 +9,22 @@ from pose_preview import PREVIEW_SIZE
 JOINTS = ('elbow', 'shoulder')
 
 
+def diagnosis_body(diagnosis):
+    return f'{diagnosis.detail[0].upper()}{diagnosis.detail[1:]}. {diagnosis.action}'
+
+
 class StartupPanel:
     def __init__(self):
         self.fonts = {size: pygame.font.Font(None, size) for size in (17, 18, 20, 22, 26, 44)}
+
+    def render_card(self, heading, title, body, accent=eth.LOG_ERROR):
+        """A plain message in the preview area: a stopped stand-up, say."""
+        surface = pygame.Surface(PREVIEW_SIZE)
+        surface.fill(eth.PANEL)
+        self._text(surface, heading, 18, accent, (28, 23))
+        self._text(surface, title, 44, eth.TEXT_PRIMARY, (28, 47))
+        self._wrap(surface, body, 22, eth.TEXT_SECONDARY, (28, 100))
+        return surface
 
     def _text(self, surface, text, size, color, xy):
         surface.blit(self.fonts[size].render(text, True, color), xy)
@@ -56,6 +69,8 @@ class StartupPanel:
         result = detector.result
         if flow.stage == 'result' and result and result['design']:
             title = f'Detected: {next(d.title for d in flow.designs if d.key == result["design"])}'
+        if flow.stage == 'failed' and detector.diagnosis:
+            title, body = detector.diagnosis.title, diagnosis_body(detector.diagnosis)
         self._text(surface, heading, 18, accent, (28, 23))
         self._text(surface, title, 44, eth.TEXT_PRIMARY, (28, 47))
         y = 100

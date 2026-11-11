@@ -11,10 +11,13 @@ moved off the CAD stance - front feet further forward, hind feet further back -
 which lengthens the support base and, above all, moves the front and hind legs
 of each side apart.
 
-A gait can also walk lower than the robot stands. With the legs slightly
-more bent, the front leg can reach further forward before its knee
-parallelogram straightens towards its change point; at standing height that
-straightening, not the hind leg, is what stops the front reach at ~20 mm.
+The robot stands and walks at one height (STAND_*), 6 mm above the CAD
+stance, with every elbow and knee pivot 35 mm clear of the floor: at 46 mm the
+front elbows took the robot's weight. Both gaits are centred on the standing
+stance, feet spread a little to the stride centres, so nothing is lower while
+walking than while standing and starting to walk does not slide the feet.
+Height costs stride: the straighter a leg stands, the sooner its knee
+parallelogram nears a change point as the foot reaches forward.
 
 That spacing is what limits a long stride. Front and hind legs of one side swing
 in the same plane, half a cycle apart, so a long stride carries the front leg's
@@ -30,12 +33,19 @@ screws and overshoot:
                            some parts in different layers, but play can tilt them
     CHANGE_POINT_MARGIN    25 deg from any parallelogram change point
     MIN_FOLD               40 deg between humerus/femur and ulna
-    MIN_CLEARANCE           8 mm between elbow/knee and the floor
+    MIN_CLEARANCE          20 mm between the elbow/knee pivot and the floor; the
+                           joint itself and sag under load take up part of it
+                           (at 11 mm the front elbows carried the robot)
     MAX_JOINT_SPEED       800 deg/s, about a third of the XL330-M077's no-load
                            speed, including the wrap back to frame 0
 
 and the inverse kinematics must stay on the leg's own branch. A gait that fails
 any of these refuses to load and says why.
+
+A change of direction while walking is handed over only where the two
+directions' trajectories meet (direction_switches), never as a jump between
+them: every frame sent is then a checked one, and no step is larger than the
+gait's own.
 """
 
 import math
@@ -50,9 +60,16 @@ SHOULDER_AXIS_X = (-30.5, -30.5, 50.0, 50.0)
 MIN_LEG_GAP = 18.0
 CHANGE_POINT_MARGIN = 25.0
 MIN_FOLD = 40.0
-MIN_CLEARANCE = 8.0
+MIN_CLEARANCE = 20.0
 MAX_JOINT_SPEED = 800.0
 STANCE_DEPTH = 64.213      # ground below the servo axes in the CAD stance (mm)
+# Standing and walking stance: the ground 70 mm below the servo axes, front
+# feet 12 mm ahead of the CAD stance and hind feet 10 mm behind it (the fast
+# trot's stride centres). Standing there the front and hind legs of a side are
+# 38 mm apart and the elbow/knee pivots 36 mm above the floor.
+STAND_DEPTH = 70.0
+STAND_REACH_FRONT = 12.0
+STAND_REACH_HIND = 10.0
 
 DIRECTIONS = ('f', 'b', 'l', 'r')
 # Keyboard and joystick directions these trots do not have fall back, as in
@@ -85,18 +102,20 @@ class GaitProfile:
         return self.stride / (self.cycle_s * self.stance / (self.swing + self.stance))
 
 
-# Slow test trot: short stride, long cycle. The small reach is what keeps its
-# front and hind legs 18 mm apart.
+# Slow test trot: short stride, long cycle, on the standing stance.
 SLOW = GaitProfile('TROT', 'slow trot', stride=16.0, lift=8.0, swing=16, stance=32,
-                   frame_ms=40, ease_ms=400, reach_front=6.0, reach_hind=6.0)
-# Fast trot: 40 mm stride with the feet lifted 20 mm, front feet reaching 20 mm
-# further forward and hind feet 20 mm further back, walking 6 mm lower than
-# standing so the front legs have that reach. A shorter stance share (16 of 26
-# frames, still over half, so both pairs touch down together briefly) and a
-# 0.52 s cycle give ~125 mm/s. Kept 1.4 mm above the leg-gap margin and 4 deg
-# above the change-point margin rather than at the edge of either.
-FAST = GaitProfile('TROT_FAST', 'fast trot', stride=40.0, lift=20.0, swing=10, stance=16,
-                   frame_ms=20, ease_ms=500, reach_front=20.0, reach_hind=20.0, depth=58.0)
+                   frame_ms=40, ease_ms=400, reach_front=STAND_REACH_FRONT,
+                   reach_hind=STAND_REACH_HIND, depth=STAND_DEPTH)
+# Fast trot: 32 mm stride with the feet lifted 22 mm, on the standing stance.
+# A short stance share (11 of 20 frames, still over half, so both pairs touch
+# down together briefly) and a 0.40 s cycle give 145 mm/s. Found by a sweep
+# over stride, lift, reach, height and timing: at least 1.4 mm above the
+# leg-gap margin, 4 deg above the change-point margin and 40 deg/s under the
+# joint-speed limit. Higher stances cost stride and then lift (72 mm: 32 mm
+# stride, 20 mm lift); lower ones gain stride (64 mm: 36 mm at 164 mm/s).
+FAST = GaitProfile('TROT_FAST', 'fast trot', stride=32.0, lift=22.0, swing=9, stance=11,
+                   frame_ms=20, ease_ms=500, reach_front=STAND_REACH_FRONT,
+                   reach_hind=STAND_REACH_HIND, depth=STAND_DEPTH)
 PROFILES = (SLOW, FAST)
 
 
@@ -120,6 +139,19 @@ def walking_stance(solver, leg, profile):
     x0 = solver.spec.stance[0]
     y0 = profile.depth - solver.contact_radius
     return (x0 + profile.reach_front, y0) if leg < 2 else (x0 - profile.reach_hind, y0)
+
+
+def standing_positions(design):
+    """The pose the robot stands in, FL FR BL BR: every foot on the ground at
+    the centre of its stride (STAND_*)."""
+    positions = []
+    for leg, solver in enumerate(design.leg_solvers()):
+        x = solver.spec.stance[0] + (STAND_REACH_FRONT if leg < 2 else -STAND_REACH_HIND)
+        q1, q2, ok = solver.ik_solve(x, STAND_DEPTH - solver.contact_radius)
+        if not ok:
+            raise ValueError(f'{LEGS[leg]} cannot reach its standing position')
+        positions += [float(q1), float(q2)]
+    return positions
 
 
 # --- margins ---------------------------------------------------------------
@@ -235,6 +267,38 @@ def build_trot(design, profile=SLOW):
     return trajectories
 
 
+def direction_switches(trajectories):
+    """{(from, to): frames after which walking may turn from one direction to the other}.
+
+    Every direction runs the same foot paths, mirrored for the legs that walk
+    the other way, so twice a cycle - one diagonal pair mid-swing, the other
+    mid-stance - each foot is where its mirror image is. Handing over after
+    such a frame moves no joint further than either direction itself would
+    there; elsewhere the next frame could ask for ~70 deg in one step. Raises
+    ValueError if two directions never meet.
+    """
+    def step(a, b):
+        return max(abs(x - y) for x, y in zip(a, b))
+
+    n = len(trajectories['f'])
+    switches = {}
+    for old in DIRECTIONS:
+        for new in DIRECTIONS:
+            if old == new:
+                continue
+            frames = set()
+            for i in range(n):
+                j = (i + 1) % n
+                own = max(step(trajectories[old][i], trajectories[old][j]),
+                          step(trajectories[new][i], trajectories[new][j]))
+                if step(trajectories[old][i], trajectories[new][j]) <= own + 1e-9:
+                    frames.add(i)
+            if not frames:
+                raise ValueError(f'walking {old} never meets walking {new}')
+            switches[old, new] = frozenset(frames)
+    return switches
+
+
 class SquroTrot:
     """GaitManager-like driver over the gait profiles, paced by the clock."""
 
@@ -242,10 +306,12 @@ class SquroTrot:
         self.design = design
         self.profiles = list(profiles)
         self.trajectories = {p.key: build_trot(design, p) for p in self.profiles}
-        self.home = design.mount_positions()
+        self.switches = {key: direction_switches(t) for key, t in self.trajectories.items()}
+        self.home = standing_positions(design)
         self.clock = clock or time.monotonic
         self.index = 0
         self.direction = None
+        self.pending = None              # direction to hand over to, see tick()
         self.frame = 0
         self._next = 0.0
         self._easing = False
@@ -278,7 +344,10 @@ class SquroTrot:
             # From standing: ease to the first frame instead of jumping to it.
             self._easing = True
             self._next = self.clock()
-        self.direction = direction       # the phase carries over on a change
+            self.direction = direction
+        else:
+            # Walking: keep the phase and hand over where the two meet.
+            self.pending = direction if direction != self.direction else None
         return True
 
     def tick(self):
@@ -289,11 +358,13 @@ class SquroTrot:
         if now < self._next:
             return None
         profile = self.profile
-        frames = self.trajectories[profile.key][self.direction]
         if self._easing:
             self._easing = False
             self._next = now + profile.ease_ms / 1000.0
-            return frames[self.frame], profile.ease_ms
+            return self.trajectories[profile.key][self.direction][self.frame], profile.ease_ms
+        if self.pending and self.frame in self.switches[profile.key][self.direction, self.pending]:
+            self.direction, self.pending = self.pending, None
+        frames = self.trajectories[profile.key][self.direction]
         self.frame = (self.frame + 1) % len(frames)
         self._next = now + profile.frame_ms / 1000.0
         return frames[self.frame], profile.frame_ms
@@ -301,5 +372,6 @@ class SquroTrot:
     def stop(self):
         """Back to the standing pose: (positions, move_ms)."""
         self.direction = None
+        self.pending = None
         self.frame = 0
         return list(self.home), self.profile.ease_ms

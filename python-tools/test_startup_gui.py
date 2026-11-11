@@ -86,6 +86,7 @@ class FakeLink:
 
     def arm(self, positions):
         self.calls.append(('arm', list(positions)))
+        self.angles[:8] = list(positions)
         self.torque_on = True
         return True
 
@@ -101,6 +102,7 @@ class FakeLink:
 
     def move_all(self, positions, duration=0, record=True):
         self.calls.append(('move', list(positions), duration))
+        self.angles[:8] = list(positions)          # the servos follow
         return True
 
     def move_mirror(self, pair, duration=0):
